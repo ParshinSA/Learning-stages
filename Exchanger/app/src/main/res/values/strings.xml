@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Exchanger</string>
+    <string name="text_header_hint_sell">Продать</string>
+    <string name="text_header_hint_buy">Купить</string>
+    <string name="text_header_title_activity">Обен валют</string>
+    <string name="text_edit_sell_buy">0</string>
+    <string name="text_btn_exchange">Обменять</string>
+    <string name="text_erMessage_incorrectValue">Меньше минимально стоимости</string>
+</resources>
