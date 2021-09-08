@@ -5,10 +5,12 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.exchanger.databinding.FragmentAppBinding
 import kotlin.math.floor
 import kotlin.math.min
@@ -20,7 +22,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     private val bind: FragmentAppBinding
         get() = _bind!!
 
-    //    private val viewModel: ViewModelCurrency by viewModels()
+    private val viewModel: ViewModelCurrency by viewModels()
     private val myHandler = Handler(Looper.getMainLooper())
 
     // список возможных валют
@@ -34,13 +36,15 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     // отношение валюта продажи/валюта покупки
     private var course: Double = 0.0
 
-    // сохраняем предыдущее значение поля "Купить"
+    // предыдущее значения
     private var previousValueBuy = 0.0
     private var previousValueSell = 0.0
 
+    // оригинальные значения
     private var originalBuy = 0.0
     private var originalSell = 0.0
 
+    // флаг, кем устанавливается значение программа=false / пользователь=true
     private var isAddTextUser: Boolean = true
 
     override fun onCreateView(
@@ -52,9 +56,9 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
 
         editSellBuy()
         setContextMenu()
-        exchangeCurrency()
-//        observe()
-//        viewModel.getCourse()
+        logOperation()
+        observe()
+        viewModel.getCourse()
         return bind.root
     }
 
@@ -70,11 +74,11 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         }
     }
 
-//    private fun observe() {
-//        viewModel.dataBaseCurrency.observe(viewLifecycleOwner) { dbCurrency ->
-//            Log.d("ServerServer", "$dbCurrency")
-//        }
-//    }
+    private fun observe() {
+        viewModel.dataBaseCurrency.observe(viewLifecycleOwner) { dbCurrency ->
+            Log.d("ServerServer", "$dbCurrency")
+        }
+    }
 
     override fun onCreateContextMenu(
         menu: ContextMenu,
@@ -126,6 +130,58 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         textChangeListener(bind.editSell)
     }
 
+
+    private fun textChangeListener(field: EditText) {
+        field.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // сохраняем и преводим обратно в число любое введенное значение
+                var numberValue = s?.toString()?.deleteRank()?.toDoubleOrNull() ?: 0.0
+                // если вводит пользователь
+                if (isAddTextUser) {
+                    bind.btnExchange.isEnabled = false
+                    // сохраняем ввод пользователя
+                    val userValue = s?.toString() ?: "0"
+                    // получаем текушее положение курсора, при вводе пользователя
+                    val currentSelectionPos = field.selectionStart
+                    // проверяем по огранечению, модифицируем, сохраняем и устанавливаем значение
+                    when (field.id) {
+                        R.id.edit_buy -> {
+                            numberValue = min(numberValue, 999999.0) // огранечение
+                            previousValueBuy = numberValue
+                            originalBuy = numberValue // сохранение оригинальное значение
+                            // модифицируем и устанавливаем програмно с блокиратором
+                            setTextProgram(field, numberValue.myToStringRankInt())
+                        }
+                        R.id.edit_sell -> {
+                            numberValue = min(numberValue, 999999999.0)
+                            previousValueSell = numberValue
+                            originalSell = numberValue // сохранение оригинальное значение
+                            // модифицируем и устанавливаем програмно с блокиратором
+                            setTextProgram(field, numberValue.myToStringRankDouble())
+                        }
+                    }
+                    // устанавливаем курсор
+                    field.mySetSelection(currentSelectionPos, userValue)
+
+                    // убиваем запущенные процессы(таймеры), запускаем новый
+                    myHandler.removeCallbacksAndMessages(null)
+                    myHandler.postDelayed({
+                        // запрос курса
+                        getExchangeCourse()
+                        // проверка введенного значения, отправка на расчет
+                        validateValueAndCalculate(field, numberValue)
+                        bind.btnExchange.isEnabled = true
+                    }, 1000)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+    // проверка введенного значения, отправка на расчет
     private fun validateValueAndCalculate(field: EditText, userValue: Double) {
         if (userValue == 0.0) {
             setFieldZero()
@@ -145,45 +201,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         }
     }
 
-    private fun textChangeListener(field: EditText) {
-        field.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val userValue = s?.toString()?.deleteRank()?.toDoubleOrNull() ?: 0.0
-                if (isAddTextUser) {
-                    when (field.id) {
-                        R.id.edit_buy -> {
-                            if (userValue > 999999.0) setTextProgram(field, "999999")
-                            previousValueBuy = userValue
-                            originalBuy = userValue
-
-                        }
-                        R.id.edit_sell -> {
-                            if (userValue > 999999999.0) setTextProgram(field, "999999999")
-                            previousValueSell = userValue
-                            originalSell = userValue
-                        }
-                    }
-
-                    myHandler.removeCallbacksAndMessages(null)
-                    myHandler.postDelayed({
-                        getExchangeCourse()
-                        when (field.id) {
-                            R.id.edit_sell ->
-                                setTextProgram(field, userValue.myToStringRankDouble())
-                            R.id.edit_buy -> setTextProgram(field, userValue.myToStringRankInt())
-                        }
-                        validateValueAndCalculate(field, userValue)
-                    }, 1000)
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
-    }
-
-
+    // сообщение о вводе значения меньше минимума
     private fun errorMessage(boolean: Boolean) {
         if (boolean) {
             bind.erMessageIncorrectValue.visibility = View.VISIBLE
@@ -195,6 +213,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         }
     }
 
+    // расчет поля значения покупки
     private fun calculateBuy(enterValue: Double) {
         originalBuy = min((enterValue / course), 999999.0) //
 //        originalBuy = enterValue / course
@@ -207,6 +226,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         if (originalBuy == 999999.0) calculateSell(roundValue) //
     }
 
+    // расчет поля значения продажи
     private fun calculateSell(enterValue: Double) {
         originalSell = min((enterValue * course), 999999999.0) //
 //        originalSell = enterValue * course
@@ -218,7 +238,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         if (originalSell == 999999999.0) calculateBuy(originalSell) //
     }
 
-
+    // запрос курса
     private fun getExchangeCourse() {
         val thread = Thread {
             val currencyBuy = bind.typeCurrencyBuy.text.toString()
@@ -236,12 +256,15 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         thread.join()
     }
 
+    // установка текста(значение) в EditText,
+    // указываем, что устанавливает не пользователь
     private fun setTextProgram(field: EditText, text: String) {
         isAddTextUser = false
         field.setText(text)
         isAddTextUser = true
     }
 
+    // обнуление значений и полей
     private fun setFieldZero() {
         setTextProgram(bind.editBuy, "0")
         setTextProgram(bind.editSell, "0")
@@ -252,7 +275,8 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         previousValueSell = 0.0
     }
 
-    private fun exchangeCurrency() {
+    // фиксируем выполненные операции
+    private fun logOperation() {
         val (typeBuy, typeSell) = Pair(
             bind.typeCurrencyBuy.text.toString(),
             bind.typeCurrencySell.text.toString()
@@ -262,21 +286,12 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
             val text = bind.logOperation.text.toString()
             bind.logOperation.text = text +
                     "\n" +
-                    "\nКуплено $originalBuy $typeBuy," +
-                    "\nCтоимость ${originalSell.toBigDecimal()} $typeSell"
+                    "\nКуплено ${originalBuy.myToStringRankInt()} $typeBuy," +
+                    "\nCтоимость ${originalSell.myToStringRankDouble()} $typeSell"
         }
     }
+
+
 }
 
-//    private fun plusPosition(value: String): Int {
-//        val number = value.deleteRank().toInt()
-//        var counter = 0
-//        value.forEach { if (it == ' ') counter++ }
-//        return when (number) {
-//            in 0..999 -> 0
-//            in 1000..999999 -> if (counter == 1) 0 else 1
-//            in 1000000..999999999 -> if (counter == 1) 0 else 1
-//            in 1000000000..999999999999 -> if (counter == 1) 0 else 1
-//            else -> 0
-//        }
-//    }
+
