@@ -48,7 +48,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     ): View {
         _bind = FragmentAppBinding.inflate(inflater, container, false)
 
-        editSellBuyTextChangeListener()
+        fieldsSellBuyTextChangeListener()
         setContextMenu()
         logOperation()
         observe()
@@ -69,7 +69,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     }
 
     private fun observe() {
-        viewModel.dataBaseCurrency.observe(viewLifecycleOwner) { dbCurrency ->
+        viewModel.listCurrencyCurse.observe(viewLifecycleOwner) { dbCurrency ->
             allCurrencyType = dbCurrency + listOf(RemoteCurrency(type = "RUB", course = 1.0))
         }
     }
@@ -119,10 +119,10 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
             }
         }
         validateTypeCurrency()
-        setFieldZero()
+        setInFieldZero()
     }
 
-    private fun editSellBuyTextChangeListener() {
+    private fun fieldsSellBuyTextChangeListener() {
         // слушатели изменения значений(текста) в полях "покупка", "продажа"
         textChangeListener(bind.editBuy)
         textChangeListener(bind.editSell)
@@ -169,7 +169,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
                         // запрос курса CB RF
                         viewModel.getCourses()
                         // расчет курса для текущих валют
-                        getCurrentPairCurrentCourses()
+                        getCurrentCoursesForCurrentPair()
                         // проверка введенного значения, отправка на расчет
                         validateValueAndCalculate(field, numberValue)
                         bind.btnExchange.isEnabled = true
@@ -181,7 +181,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         })
     }
 
-    private fun getCurrentPairCurrentCourses() {
+    private fun getCurrentCoursesForCurrentPair() {
         val currencyBuy = bind.typeCurrencyBuy.text.toString()
         val currencySell = bind.typeCurrencySell.text.toString()
 
@@ -197,16 +197,16 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     // проверка введенного значения, отправка на расчет
     private fun validateValueAndCalculate(field: EditText, userValue: Double) {
         if (userValue == 0.0) {
-            setFieldZero()
+            setInFieldZero()
         } else {
             when (field.id) {
                 R.id.edit_buy -> calculateSell(userValue)
                 R.id.edit_sell -> {
                     if (userValue > courseCurrentPair) {
-                        errorMessage(false)
+                        errorMessageMinimalPrice(false)
                         calculateBuy(userValue)
                     } else {
-                        errorMessage(true)
+                        errorMessageMinimalPrice(true)
                         setTextProgram(field, userValue.myToStringRankDouble())
                     }
                 }
@@ -215,7 +215,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     }
 
     // сообщение о вводе значения меньше минимума
-    private fun errorMessage(boolean: Boolean) {
+    private fun errorMessageMinimalPrice(boolean: Boolean) {
         if (boolean) {
             bind.erMessageIncorrectValue.visibility = View.VISIBLE
             bind.editSell.mySetTextColor(R.color.red)
@@ -262,10 +262,10 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     }
 
     // обнуление значений и полей
-    private fun setFieldZero() {
+    private fun setInFieldZero() {
         setTextProgram(bind.editBuy, "0")
         setTextProgram(bind.editSell, "0")
-        errorMessage(false)
+        errorMessageMinimalPrice(false)
         originalSell = 0.0
         originalBuy = 0.0
         previousValueBuy = 0.0

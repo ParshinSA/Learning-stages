@@ -1,5 +1,6 @@
 package com.example.exchanger
 
+import android.util.Log
 import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
@@ -8,15 +9,17 @@ import java.lang.Exception
 
 class RepositoryCurrency {
     fun requestDataBaseCourse(
-        callbackDataBase: (List<RemoteCurrency>) -> Unit
+        callbackListCurse: (List<RemoteCurrency>) -> Unit
     ) {
         Thread {
             try {
                 val response = NetWorkResponseDBCourse.requestCall().execute()
                 val responseString = response.body?.string()
-                val parseResponseStr = parseResponse(responseString!!)
-                callbackDataBase(parseResponseStr)
+                val parseResponseString = parseResponse(responseString!!)
+                callbackListCurse(parseResponseString)
             } catch (e: IOException) {
+                emptyList<RemoteCurrency>()
+                Log.d("MyServer", "Error response e:${e.message}")
             }
         }.start()
     }
@@ -25,7 +28,7 @@ class RepositoryCurrency {
         return try {
             val jsonObject = JSONObject(responseString)
             val ojectValute = jsonObject.getJSONObject("Valute")
-//            val keysInValute = ojectValute.keys()
+//            val keysInValute = ojectValute.keys()  // получние всех ключей внутри "Valute"
             val keysInValute = listOf<String>("USD", "GBP", "EUR")
 
 
@@ -41,6 +44,7 @@ class RepositoryCurrency {
             }
             listCurrency
         } catch (e: Exception) {
+            Log.d("MyServer", "Error parse e:${e.message}")
             emptyList()
         }
     }
