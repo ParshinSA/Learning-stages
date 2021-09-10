@@ -28,7 +28,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     private var allCurrencyType = emptyList<RemoteCurrency>()
 
     // отношение валюта продажи/валюта покупки
-    private var course: Double = 0.0
+    private var courseCurrentPair: Double = 0.0
 
     // предыдущее значения
     private var previousValueBuy = 0.0
@@ -48,7 +48,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     ): View {
         _bind = FragmentAppBinding.inflate(inflater, container, false)
 
-        editSellBuy()
+        editSellBuyTextChangeListener()
         setContextMenu()
         logOperation()
         observe()
@@ -122,7 +122,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         setFieldZero()
     }
 
-    private fun editSellBuy() {
+    private fun editSellBuyTextChangeListener() {
         // слушатели изменения значений(текста) в полях "покупка", "продажа"
         textChangeListener(bind.editBuy)
         textChangeListener(bind.editSell)
@@ -173,7 +173,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
                         // проверка введенного значения, отправка на расчет
                         validateValueAndCalculate(field, numberValue)
                         bind.btnExchange.isEnabled = true
-                    }, 1000)
+                    }, 2000)
                 }
             }
 
@@ -191,7 +191,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         val sellCourseRelativeBase =
             allCurrencyType.filter { it.type == currencySell }.map { it.course }[0]
 
-        course = bayCourseRelativeBase / sellCourseRelativeBase
+        courseCurrentPair = bayCourseRelativeBase / sellCourseRelativeBase
     }
 
     // проверка введенного значения, отправка на расчет
@@ -202,7 +202,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
             when (field.id) {
                 R.id.edit_buy -> calculateSell(userValue)
                 R.id.edit_sell -> {
-                    if (userValue > course) {
+                    if (userValue > courseCurrentPair) {
                         errorMessage(false)
                         calculateBuy(userValue)
                     } else {
@@ -230,7 +230,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
 
     // расчет поля значения покупки
     private fun calculateBuy(enterValue: Double) {
-        originalBuy = min((enterValue / course), 999999.0) //
+        originalBuy = min((enterValue / courseCurrentPair), 999999.0) //
 //        originalBuy = enterValue / course
         val roundValue = floor(originalBuy)
         if (roundValue != previousValueBuy) {
@@ -243,7 +243,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
 
     // расчет поля значения продажи
     private fun calculateSell(enterValue: Double) {
-        originalSell = min((enterValue * course), 999999999.0) //
+        originalSell = min((enterValue * courseCurrentPair), 999999999.0) //
 //        originalSell = enterValue * course
         if (originalSell != previousValueSell) {
             previousValueSell = originalSell

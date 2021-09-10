@@ -1,5 +1,6 @@
 package com.example.exchanger
 
+import android.util.Log
 import android.widget.EditText
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
@@ -11,16 +12,39 @@ fun EditText.mySetTextColor(@ColorRes color: Int) {
 
 fun EditText.mySetSelection(currentSelectionPos: Int, userValue: String) {
     fun calculatePlusPosSelection(): Int {
-        val userValueNumber = userValue.deleteRank().toDoubleOrNull()?:0.0
+        val userValueNumber = userValue.deleteRank().toDoubleOrNull() ?: 0.0
         var counter = 0
         userValue.forEach { if (it == ' ') counter++ }
 
         return when (userValueNumber) {
-            in 0.0..999.0 -> 0
-            in 1000.0..999999.0 -> if (counter == 1) 0 else 1
-            in 1000000.0..999999999.0 -> if (counter == 1) 0 else 1
-            in 1000000000.0..999999999999.0 -> if (counter == 1) 0 else 1
-            else -> 0
+            in 0.0..999.0 ->
+                when (counter) {
+                    0 -> 0
+                    1 -> -1
+                    else -> Log.d("Server", "incorrect counter = $counter")
+                }
+            in 1000.0..999999.0 ->
+                when (counter) {
+                    0 -> 1
+                    1 -> 0
+                    2 -> -1
+                    else -> Log.d("Server", "incorrect counter = $counter")
+                }
+            in 1000000.0..999999999.0 ->
+                when (counter) {
+                    1 -> 1
+                    2 -> 0
+                    3 -> -1
+                    else -> Log.d("Server", "incorrect counter = $counter")
+                }
+            in 1000000000.0..999999999999.0 ->
+                when (counter) {
+                    2 -> 1
+                    3 -> 0
+                    4 -> -1
+                    else -> Log.d("Server", "incorrect counter = $counter")
+                }
+            else -> -1
         }
     }
 
@@ -28,6 +52,7 @@ fun EditText.mySetSelection(currentSelectionPos: Int, userValue: String) {
         min((currentSelectionPos + calculatePlusPosSelection()), this.text.length)
     )
 }
+
 
 fun Number.myToStringRankInt(): String {
     this.toDouble()
@@ -46,7 +71,6 @@ fun String.deleteRank(): String {
 }
 
 
-//
 //fun Number.delimiter(): String {
 //    var leftNum: String = ""
 //    var rightNum: String = ""
@@ -106,5 +130,4 @@ fun String.deleteRank(): String {
 //        }
 //        temporarilyThis.reversed()
 //    }
-//
 //}

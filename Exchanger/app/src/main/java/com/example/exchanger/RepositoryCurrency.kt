@@ -3,6 +3,7 @@ package com.example.exchanger
 import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
+
 // https://www.cbr-xml-daily.ru/daily_json.js
 
 class RepositoryCurrency {
@@ -24,7 +25,9 @@ class RepositoryCurrency {
         return try {
             val jsonObject = JSONObject(responseString)
             val ojectValute = jsonObject.getJSONObject("Valute")
-            val keysInValute = ojectValute.keys()
+//            val keysInValute = ojectValute.keys()
+            val keysInValute = listOf<String>("USD", "GBP", "EUR")
+
 
             val listCurrency = mutableListOf<RemoteCurrency>()
             keysInValute.forEach { key ->
