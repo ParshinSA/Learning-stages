@@ -7,11 +7,11 @@ import androidx.lifecycle.ViewModel
 class ViewModelCurrency : ViewModel() {
     private val repository = RepositoryCurrency()
 
-    private val dataBaseCurrencyLiveData = MutableLiveData<List<Currency22>>()
-    val dataBaseCurrency: LiveData<List<Currency22>>
+    private val dataBaseCurrencyLiveData = MutableLiveData<List<RemoteCurrency>>()
+    val dataBaseCurrency: LiveData<List<RemoteCurrency>>
         get() = dataBaseCurrencyLiveData
 
-    fun getCourse() {
+    fun getCourses() {
         repository.requestDataBaseCourse { dataBaseCurrency ->
             dataBaseCurrencyLiveData.postValue(dataBaseCurrency)
         }

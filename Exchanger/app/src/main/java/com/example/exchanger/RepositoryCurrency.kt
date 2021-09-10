@@ -1,43 +1,43 @@
 package com.example.exchanger
 
-import android.util.Log
 import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
+// https://www.cbr-xml-daily.ru/daily_json.js
 
 class RepositoryCurrency {
     fun requestDataBaseCourse(
-        callbackDataBase: (List<Currency22>) -> Unit
+        callbackDataBase: (List<RemoteCurrency>) -> Unit
     ) {
         Thread {
             try {
                 val response = NetWorkResponseDBCourse.requestCall().execute()
                 val responseString = response.body?.string()
-                Log.d("ServerServer", "request = $responseString")
                 val parseResponseStr = parseResponse(responseString!!)
                 callbackDataBase(parseResponseStr)
             } catch (e: IOException) {
-                Log.d("ServerServer", "request = null")
             }
         }.start()
     }
 
-    private fun parseResponse(responseString: String): List<Currency22> {
+    private fun parseResponse(responseString: String): List<RemoteCurrency> {
         return try {
             val jsonObject = JSONObject(responseString)
-            val currencyArray = jsonObject.getJSONArray("Value")
-            val dbCurrency = (0 until currencyArray.length()).map { index ->
-                currencyArray.getJSONObject(index)
-            }.map { currencyJSONObject ->
-                Currency22(
-                    name = currencyJSONObject.getString("CharCode"),
-                    courseToRub = currencyJSONObject.getDouble("Value")
+            val ojectValute = jsonObject.getJSONObject("Valute")
+            val keysInValute = ojectValute.keys()
+
+            val listCurrency = mutableListOf<RemoteCurrency>()
+            keysInValute.forEach { key ->
+                val currentCurrency = ojectValute.getJSONObject(key)
+                listCurrency.add(
+                    RemoteCurrency(
+                        type = key,
+                        course = currentCurrency.getDouble("Value")
+                    )
                 )
             }
-            Log.d("ServerServer", "list = $dbCurrency")
-            dbCurrency
+            listCurrency
         } catch (e: Exception) {
-            Log.d("ServerServer", "request = null")
             emptyList()
         }
     }

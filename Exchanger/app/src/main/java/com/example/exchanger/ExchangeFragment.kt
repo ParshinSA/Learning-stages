@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
@@ -26,12 +25,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     private val myHandler = Handler(Looper.getMainLooper())
 
     // список возможных валют
-    private val allCurrencyType = setOf(
-        Currency.EUR,
-        Currency.GBP,
-        Currency.RUB,
-        Currency.USD
-    )
+    private var allCurrencyType = emptyList<RemoteCurrency>()
 
     // отношение валюта продажи/валюта покупки
     private var course: Double = 0.0
@@ -58,7 +52,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         setContextMenu()
         logOperation()
         observe()
-        viewModel.getCourse()
+        viewModel.getCourses()
         return bind.root
     }
 
@@ -76,28 +70,32 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
 
     private fun observe() {
         viewModel.dataBaseCurrency.observe(viewLifecycleOwner) { dbCurrency ->
-            Log.d("ServerServer", "$dbCurrency")
+            allCurrencyType = dbCurrency + listOf(RemoteCurrency(type = "RUB", course = 1.0))
         }
     }
 
     override fun onCreateContextMenu(
         menu: ContextMenu,
-        v: View,
+        activatingView: View,
         menuInfo: ContextMenu.ContextMenuInfo?
     ) {
         menu.setHeaderTitle("Тип валюты:")
-        allCurrencyType.map { it.name }.forEach { nameTypeCurrency ->
+        allCurrencyType.map { it.type }.forEach { nameTypeCurrency ->
             menu.add(nameTypeCurrency)
                 .setOnMenuItemClickListener { item: MenuItem? ->
-                    val name = item.toString()
-                    val imageRes = allCurrencyType.filter { it.name == name }[0].icon
-                    actionOnClick(v, name, imageRes)
+                    // получаем имя кнопки = тип валюты
+                    val typeCyrency = item.toString()
+                    // находим логотип по имени
+                    val logotypeCurrency =
+                        allCurrencyType.filter { it.type == typeCyrency }[0].logotype
+                    // отправляем на установку
+                    actionOnClickItemContextMenu(activatingView, typeCyrency, logotypeCurrency)
                     true
                 }
         }
     }
 
-    private fun actionOnClick(view: View?, strRes: String, icRes: Int) {
+    private fun actionOnClickItemContextMenu(view: View?, strRes: String, icRes: Int) {
         fun validateTypeCurrency() {
             bind.btnExchange.isEnabled =
                 if (bind.typeCurrencyBuy.text == bind.typeCurrencySell.text) {
@@ -168,8 +166,10 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
                     // убиваем запущенные процессы(таймеры), запускаем новый
                     myHandler.removeCallbacksAndMessages(null)
                     myHandler.postDelayed({
-                        // запрос курса
-                        getExchangeCourse()
+                        // запрос курса CB RF
+                        viewModel.getCourses()
+                        // расчет курса для текущих валют
+                        getCurrentPairCurrentCourses()
                         // проверка введенного значения, отправка на расчет
                         validateValueAndCalculate(field, numberValue)
                         bind.btnExchange.isEnabled = true
@@ -179,6 +179,19 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+    }
+
+    private fun getCurrentPairCurrentCourses() {
+        val currencyBuy = bind.typeCurrencyBuy.text.toString()
+        val currencySell = bind.typeCurrencySell.text.toString()
+
+        val bayCourseRelativeBase =
+            allCurrencyType.filter { it.type == currencyBuy }.map { it.course }[0]
+
+        val sellCourseRelativeBase =
+            allCurrencyType.filter { it.type == currencySell }.map { it.course }[0]
+
+        course = bayCourseRelativeBase / sellCourseRelativeBase
     }
 
     // проверка введенного значения, отправка на расчет
@@ -207,9 +220,11 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
             bind.erMessageIncorrectValue.visibility = View.VISIBLE
             bind.editSell.mySetTextColor(R.color.red)
             setTextProgram(bind.editBuy, "0")
+            bind.btnExchange.isEnabled = false
         } else {
             bind.erMessageIncorrectValue.visibility = View.GONE
             bind.editSell.mySetTextColor(R.color.black)
+            bind.btnExchange.isEnabled = true
         }
     }
 
@@ -238,24 +253,6 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         if (originalSell == 999999999.0) calculateBuy(originalSell) //
     }
 
-    // запрос курса
-    private fun getExchangeCourse() {
-        val thread = Thread {
-            val currencyBuy = bind.typeCurrencyBuy.text.toString()
-            val currencySell = bind.typeCurrencySell.text.toString()
-
-            val bayCourseRelativeBase =
-                allCurrencyType.filter { it.name == currencyBuy }.map { it.courseToRub }[0]
-
-            val sellCourseRelativeBase =
-                allCurrencyType.filter { it.name == currencySell }.map { it.courseToRub }[0]
-
-            course = bayCourseRelativeBase / sellCourseRelativeBase
-        }
-        thread.start()
-        thread.join()
-    }
-
     // установка текста(значение) в EditText,
     // указываем, что устанавливает не пользователь
     private fun setTextProgram(field: EditText, text: String) {
@@ -273,6 +270,9 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         originalBuy = 0.0
         previousValueBuy = 0.0
         previousValueSell = 0.0
+        bind.btnExchange.isEnabled = false
+        bind.editBuy.clearFocus()
+        bind.editBuy.clearFocus()
     }
 
     // фиксируем выполненные операции
@@ -290,8 +290,6 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
                     "\nCтоимость ${originalSell.myToStringRankDouble()} $typeSell"
         }
     }
-
-
 }
 
 
