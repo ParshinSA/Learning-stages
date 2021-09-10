@@ -173,7 +173,7 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
                         // проверка введенного значения, отправка на расчет
                         validateValueAndCalculate(field, numberValue)
                         bind.btnExchange.isEnabled = true
-                    }, 2000)
+                    }, 1000)
                 }
             }
 
