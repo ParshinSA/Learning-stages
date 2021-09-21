@@ -1,10 +1,11 @@
-package com.example.exchanger
+package com.example.myapplication
 
 import android.util.Log
 import android.widget.EditText
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import java.lang.Math.min
+import java.math.BigDecimal
 
 fun EditText.mySetTextColor(@ColorRes color: Int) {
     this.setTextColor(ContextCompat.getColor(context, color))
@@ -66,68 +67,77 @@ fun Number.myToStringRankDouble(): String {
 
 
 fun String.deleteRank(): String {
-    return this.replace(" ", "")
+    return this
+        .replace(" ", "")
         .replace(",", ".")
+//        .replace(" ", "")
 }
 
-
-//fun Number.delimiter(): String {
-//    var leftNum: String = ""
-//    var rightNum: String = ""
-//    var delimiter: Char? = null
-//    var indexDelimiter: Int = 0
-//    var count = 0
 //
-//    val thisToString = this.toString()
+//fun Number.toDecimalInt(): String {
+//    this.toString().deleteRank()
 //
-//    thisToString.forEachIndexed { index: Int, c: Char ->
-//        if (c == '.' || c == '.') {
-//            indexDelimiter = index
-//            delimiter = c
+//    var leftPart = ""
+//    var delimiter = ""
+//    var transformThis = ""
+//
+//    this.toString().toBigDecimal().toPlainString().forEach {
+//        when {
+//            it == '.' -> delimiter = it.toString()
+//            delimiter == "" -> leftPart += it
 //        }
 //    }
 //
-//    return if (delimiter != null) {
-//        thisToString.forEachIndexed { index, c ->
-//            if (index < thisToString.length) {
-//                if (index < indexDelimiter) leftNum += c
-//                if (index > indexDelimiter) rightNum += c
-//            }
+//    var step = 3
+//    leftPart.reversed().forEach { char ->
+//        if (step > 0) {
+//            transformThis += char
+//            step--
+//        } else {
+//            transformThis += " $char"
+//            step = 3
 //        }
-//        leftNum = leftNum.reversed()
-//
-//        var temporarilyLeft = ""
-//        leftNum.forEach {
-//            if (count != 3) {
-//                temporarilyLeft += it
-//                count++
-//            } else {
-//                temporarilyLeft += " "
-//                count = 0
-//            }
-//        }
-//
-//        count = 0
-//        var temporarilyRight = ""
-//        rightNum.forEach {
-//            if (count != 2) {
-//                temporarilyRight += it
-//                count++
-//            }
-//        }
-//
-//        temporarilyLeft.reversed() + delimiter + temporarilyRight
-//    } else {
-//        var temporarilyThis = ""
-//        thisToString.reversed().forEach {
-//            if (count != 3) {
-//                temporarilyThis += it
-//                count++
-//            } else {
-//                temporarilyThis += " "
-//                count = 0
-//            }
-//        }
-//        temporarilyThis.reversed()
 //    }
+//
+//    return transformThis.reversed()
+//}
+//
+//fun Number.toDecimalDouble(): String {
+//    this.toString().deleteRank()
+//
+//    var leftPart = ""
+//    var rightPart = ""
+//    var delimiter = ""
+//    var transformThis = ""
+//
+//    this.toString().forEach {
+//        when {
+//            it == '.' -> delimiter = it.toString()
+//            delimiter == "" -> leftPart += it
+//            else -> rightPart += it
+//        }
+//    }
+//
+//    var step = 3
+//    leftPart.reversed().forEachIndexed { _, char ->
+//        if (step > 0) {
+//            transformThis += char
+//            step--
+//        } else {
+//            transformThis += " $char"
+//            step = 2
+//        }
+//    }
+//
+//    transformThis = transformThis.reversed()
+//
+//    if (delimiter != "") transformThis += delimiter
+//
+//    if (rightPart.toInt() > 0) {
+//        rightPart.forEachIndexed { index, char ->
+//            if (index <= 1) transformThis += char
+//        }
+//    }
+//
+//    return transformThis
 //}

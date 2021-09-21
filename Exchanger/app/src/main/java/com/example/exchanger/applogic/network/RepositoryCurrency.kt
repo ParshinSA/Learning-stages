@@ -1,6 +1,7 @@
-package com.example.exchanger
+package com.example.exchanger.applogic.network
 
 import android.util.Log
+import com.example.exchanger.applogic.RemoteCurrency
 import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception

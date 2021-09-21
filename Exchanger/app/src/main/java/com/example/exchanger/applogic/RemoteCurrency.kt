@@ -1,4 +1,6 @@
-package com.example.exchanger
+package com.example.exchanger.applogic
+
+import com.example.exchanger.R
 
 data class RemoteCurrency(
     val type: String,

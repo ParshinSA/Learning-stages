@@ -1,4 +1,4 @@
-package com.example.exchanger
+package com.example.exchanger.applogic.network
 
 import okhttp3.Call
 import okhttp3.HttpUrl

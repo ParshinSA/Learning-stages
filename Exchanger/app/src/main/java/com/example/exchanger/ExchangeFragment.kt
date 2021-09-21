@@ -10,12 +10,13 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.exchanger.applogic.*
+import com.example.exchanger.applogic.network.ViewModelCurrency
 import com.example.exchanger.databinding.FragmentAppBinding
 import kotlin.math.floor
 import kotlin.math.min
 
 class ExchangeFragment : Fragment(R.layout.fragment_app) {
-
     //viewBinding
     private var _bind: FragmentAppBinding? = null
     private val bind: FragmentAppBinding
@@ -84,12 +85,12 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
             menu.add(nameTypeCurrency)
                 .setOnMenuItemClickListener { item: MenuItem? ->
                     // получаем имя кнопки = тип валюты
-                    val typeCyrency = item.toString()
+                    val typeCurrency = item.toString()
                     // находим логотип по имени
                     val logotypeCurrency =
-                        allCurrencyType.filter { it.type == typeCyrency }[0].logotype
+                        allCurrencyType.filter { it.type == typeCurrency }[0].logotype
                     // отправляем на установку
-                    actionOnClickItemContextMenu(activatingView, typeCyrency, logotypeCurrency)
+                    actionOnClickItemContextMenu(activatingView, typeCurrency, logotypeCurrency)
                     true
                 }
         }
@@ -291,5 +292,4 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         }
     }
 }
-
 
