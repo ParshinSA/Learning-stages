@@ -13,7 +13,6 @@ import androidx.fragment.app.viewModels
 import com.example.myapplication.currency.CurrencyApp
 import com.example.myapplication.databinding.FragmentAppBinding
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.math.min
 
@@ -29,9 +28,6 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
 
     // флаг, кем устанавливается значение программа=false / пользователь=true
     private var isAddTextUser: Boolean = true
-
-    private var originalBuy = 0.0
-    private var originalSell = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,7 +62,6 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
     private fun observeData() {
         viewModel.dataBuy.observe(viewLifecycleOwner) { valuesBuy ->
             if (valuesBuy != 0.0) {
-                originalBuy = valuesBuy
                 setTextProgram(
                     bind.editBuy,
                     valuesBuy.myToStringRankInt()
@@ -79,7 +74,6 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
 
         viewModel.dataSell.observe(viewLifecycleOwner) { valuesSell ->
             if (valuesSell != 0.0) {
-                originalSell = valuesSell
                 setTextProgram(
                     bind.editSell,
                     valuesSell.myToStringRankDouble()
@@ -153,7 +147,6 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
             }
         }
     }
-
 
     private fun setContextMenu() {
         registerForContextMenu(bind.typeCurrencyBuy)
@@ -239,13 +232,11 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
         when (field.id) {
             R.id.edit_buy -> {
                 numberValue = min(numberValue, 999999.0) // огранечение
-                originalBuy = numberValue
                 // модифицируем и устанавливаем програмно с блокиратором
                 setTextProgram(field, numberValue.myToStringRankInt())
             }
             R.id.edit_sell -> {
-                numberValue = min(numberValue, 999999999.0) // огранечение
-                originalSell = numberValue
+                numberValue = min(numberValue, 999999999.0)
                 // модифицируем и устанавливаем програмно с блокиратором
                 setTextProgram(field, numberValue.myToStringRankDouble())
             }
@@ -284,8 +275,12 @@ class ExchangeFragment : Fragment(R.layout.fragment_app) {
             bind.logOperation.text = text +
                     "\n" +
                     "\n${SimpleDateFormat("dd/M/yyyy HH:mm:ss").format(Date())}" +
-                    "\nКуплено ${viewModel.dataBuy.value?.myToStringRankInt()} $typeBuy," +
-                    "\nCтоимость ${viewModel.dataSell.value?.myToStringRankDouble()} $typeSell"
+                    "\nКуплено ${
+                        viewModel.dataBuy.value?.toDouble()?.myToStringRankInt()
+                    } $typeBuy," +
+                    "\nCтоимость ${
+                        viewModel.dataSell.value?.toDouble()?.myToStringRankDouble()
+                    } $typeSell"
         }
     }
 }

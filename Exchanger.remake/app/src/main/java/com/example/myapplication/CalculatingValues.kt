@@ -28,6 +28,7 @@ class CalculatingValues {
             R.id.edit_buy -> {
                 calculateSell()
                 callbackSellValues(valuesSell)
+                callbackBuyValues(userValue)
             }
             R.id.edit_sell -> {
                 calculateBuy()
