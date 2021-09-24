@@ -1,6 +1,6 @@
-package com.example.myapplication.retrofitgson
+package com.example.exchanger.retrofitgson
 
-import com.example.myapplication.currency.ObjectValute
+import com.example.exchanger.currency.ObjectValute
 import retrofit2.Call
 import retrofit2.http.GET
 

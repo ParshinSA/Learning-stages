@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.exchanger
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

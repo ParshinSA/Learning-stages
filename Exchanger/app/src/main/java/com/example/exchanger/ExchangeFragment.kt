@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.exchanger
 
 import android.os.Bundle
 import android.os.Handler
@@ -10,8 +10,8 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.myapplication.currency.CurrencyApp
-import com.example.myapplication.databinding.FragmentAppBinding
+import com.example.exchanger.currency.CurrencyApp
+import com.example.exchanger.databinding.FragmentAppBinding
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.min

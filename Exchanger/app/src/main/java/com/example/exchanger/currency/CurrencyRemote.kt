@@ -1,4 +1,4 @@
-package com.example.myapplication.currency
+package com.example.exchanger.currency
 
 import com.google.gson.annotations.SerializedName
 

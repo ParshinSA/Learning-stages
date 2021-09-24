@@ -1,9 +1,9 @@
-package com.example.myapplication
+package com.example.exchanger
 
 import android.util.Log
-import com.example.myapplication.currency.AllValute
-import com.example.myapplication.currency.ObjectValute
-import com.example.myapplication.retrofitgson.NetworkRetrofit
+import com.example.exchanger.currency.AllValute
+import com.example.exchanger.currency.ObjectValute
+import com.example.exchanger.retrofitgson.NetworkRetrofit
 import okio.IOException
 import retrofit2.Call
 import retrofit2.Callback

@@ -1,14 +1,5 @@
-package com.example.myapplication.deprecate
+package com.example.exchanger.deprecate
 
-
-import android.util.Log
-import com.example.myapplication.currency.AllValute
-import com.example.myapplication.currency.CurrencyRemote
-import com.example.myapplication.retrofitgson.NetworkRetrofit
-import com.example.myapplication.currency.ObjectValute
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 // https://www.cbr-xml-daily.ru/daily_json.js
 

@@ -1,7 +1,7 @@
-package com.example.myapplication.currency
+package com.example.exchanger.currency
 
 import androidx.annotation.DrawableRes
-import com.example.myapplication.R
+import com.example.exchanger.R
 
 enum class CurrencyApp(
     @DrawableRes

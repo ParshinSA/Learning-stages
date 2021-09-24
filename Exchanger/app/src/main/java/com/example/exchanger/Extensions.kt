@@ -1,13 +1,10 @@
-package com.example.myapplication
+package com.example.exchanger
 
 import android.util.Log
 import android.widget.EditText
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import java.lang.Math.min
-import java.math.BigDecimal
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 
 fun EditText.mySetTextColor(@ColorRes color: Int) {
     this.setTextColor(ContextCompat.getColor(context, color))

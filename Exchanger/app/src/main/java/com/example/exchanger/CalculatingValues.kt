@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.exchanger
 
 import android.widget.EditText
 import kotlin.math.floor

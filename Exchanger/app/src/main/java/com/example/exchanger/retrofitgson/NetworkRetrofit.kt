@@ -1,4 +1,4 @@
-package com.example.myapplication.retrofitgson
+package com.example.exchanger.retrofitgson
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

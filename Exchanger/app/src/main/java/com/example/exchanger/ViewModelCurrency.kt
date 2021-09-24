@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.exchanger
 
 
 import android.util.Log
@@ -6,7 +6,9 @@ import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myapplication.currency.AllValute
+import com.example.exchanger.CalculatingValues
+import com.example.exchanger.RepositoryCurrency
+import com.example.exchanger.currency.AllValute
 
 class ViewModelCurrency : ViewModel() {
 

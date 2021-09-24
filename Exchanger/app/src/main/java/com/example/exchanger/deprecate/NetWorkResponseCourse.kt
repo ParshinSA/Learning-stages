@@ -1,4 +1,4 @@
-package com.example.myapplication.deprecate
+package com.example.exchanger.deprecate
 
 import okhttp3.Call
 import okhttp3.HttpUrl
