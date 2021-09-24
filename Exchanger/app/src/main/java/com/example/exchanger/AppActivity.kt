@@ -1,15 +1,15 @@
-package com.example.exchanger
+package com.example.myapplication
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
 
-class AppActivity : AppCompatActivity(R.layout.activity_app) {
+class AppActivity : AppCompatActivity(R.layout.activity_app)  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null ){
             supportFragmentManager.beginTransaction()
-                .add(R.id.app_container, ExchangeFragment())
-                .commit()
+                    .replace(R.id.app_container, ExchangeFragment())
+                    .commit()
         }
     }
 }
