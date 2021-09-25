@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
      * произведу add, commit, push
      *
      * создам новую ветвь, в нее внесу изменения
-     * (>>>  <<<) todo:изменения
+     * (>>> Вношу изменения в ветке learningGit2 <<<) todo:изменения
      * произведу add, commit, push, merge
      *
      * вернусь на ветку main
