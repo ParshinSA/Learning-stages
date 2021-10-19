@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SharedPrefs</string>
+    <string name="text_btn_count">count</string>
+    <string name="text_btn_reset">reset</string>
+    <string name="text_btn_black">black</string>
+    <string name="text_btn_red">red</string>
+    <string name="text_btn_blue">blue</string>
+    <string name="text_btn_green">green</string>
+    <string name="text_textView_counter_0">0</string>
 </resources>
