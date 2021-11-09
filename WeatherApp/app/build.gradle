@@ -74,6 +74,10 @@ dependencies {
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
+
+    // Lifecycle components
+    implementation "android.arch.lifecycle:extensions:$rootProject.lifecycle_version"
+    annotationProcessor "android.arch.lifecycle:compiler:$rootProject.lifecycle_version"
 }
 
 // 1357e31f17dff00c5e7ba287807cf428
