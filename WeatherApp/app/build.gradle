@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.weatherapplication"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -81,3 +81,4 @@ dependencies {
 }
 
 // 1357e31f17dff00c5e7ba287807cf428
+// http://openweathermap.org/img/wn/{10d}@2x.png
