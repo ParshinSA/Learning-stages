@@ -9,6 +9,6 @@
         android:id="@+id/listOfCityFragment"
         android:name="com.example.weatherapplication.ui.listofcity.ListOfCityFragment"
         android:label="ListOfCityFragment"
-        tools:layout="@layout/fragmet_list_of_city" />
+        tools:layout="@layout/fragment_list_of_city" />
 
 </navigation>
