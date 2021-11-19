@@ -7,8 +7,29 @@
 
     <fragment
         android:id="@+id/listOfCityFragment"
-        android:name="com.example.weatherapplication.ui.listofcity.ListOfCityFragment"
+        android:name="com.example.weatherapplication.ui.weather.listofcity.ListOfCityFragment"
         android:label="ListOfCityFragment"
-        tools:layout="@layout/fragment_list_of_city" />
+        tools:layout="@layout/fragment_list_of_city" >
+        <action
+            android:id="@+id/action_listOfCityFragment_to_cityInfoFragment"
+            app:destination="@id/cityInfoFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cityInfoFragment"
+        android:name="com.example.weatherapplication.ui.weather.cityinfo.CityInfoFragment"
+        tools:layout="@layout/fragment_city_info"
+        android:label="CityInfoFragment" >
+        <action
+            android:id="@+id/action_cityInfoFragment_to_listOfCityFragment"
+            app:destination="@id/listOfCityFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+        <argument
+            android:name="weatherForecast"
+            app:argType="com.example.weatherapplication.data.models.forecast.Forecast" />
+    </fragment>
 
 </navigation>

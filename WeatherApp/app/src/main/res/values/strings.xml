@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Weather Application</string>
-    <string name="text_header_list_of_city1">List of City</string>
-    <string name="text_header_list_of_city2">Select city for details</string>
+    <string name="app_name">Как там погода?</string>
+    <string name="text_header_list_of_city1">Список городов</string>
+    <string name="text_header_list_of_city2">Нажмите для подробного прогноза</string>
+    <string name="text_celsius">°C</string>
+    <string name="text_humidity">Влажность:</string>
+    <string name="text_visibility">Видимость:</string>
 </resources>

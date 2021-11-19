@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:background="@drawable/bg_city_info"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/date_time_TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Nov 9, 15:56am" />
+
+    <TextView
+        android:id="@+id/city_name_TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/date_time_TV"
+        tools:text="London, GB" />
+
+    <ImageView
+        android:id="@+id/icon_weather_IV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/icon_weather"
+        app:layout_constraintStart_toStartOf="@+id/city_name_TV"
+        app:layout_constraintTop_toBottomOf="@+id/city_name_TV"
+        app:layout_constraintWidth_percent="0.15" />
+
+    <TextView
+        android:id="@+id/temp_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/icon_weather_IV"
+        app:layout_constraintStart_toEndOf="@+id/icon_weather_IV"
+        app:layout_constraintTop_toTopOf="@id/icon_weather_IV"
+        tools:text="-15" />
+
+    <TextView
+        android:id="@+id/text_celsius_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/text_celsius"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@id/temp_TV"
+        app:layout_constraintStart_toEndOf="@id/temp_TV"
+        app:layout_constraintTop_toTopOf="@id/temp_TV" />
+
+    <TextView
+        android:id="@+id/description_TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        app:layout_constraintTop_toBottomOf="@id/icon_weather_IV"
+        tools:text="небольшая облачность" />
+
+    <ImageView
+        android:id="@+id/line_IV"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:background="#C14242"
+        app:layout_constraintStart_toStartOf="@id/description_TV"
+        app:layout_constraintTop_toBottomOf="@id/description_TV" />
+
+    <ImageView
+        android:id="@+id/icon_wind_route_IV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/navigation"
+        app:layout_constraintStart_toStartOf="@id/line_IV"
+        app:layout_constraintTop_toBottomOf="@id/description_TV"
+        app:layout_constraintWidth_percent="0.05"
+        app:tint="@color/iconColor" />
+
+    <TextView
+        android:id="@+id/info_text_wind_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/icon_wind_route_IV"
+        app:layout_constraintStart_toEndOf="@id/icon_wind_route_IV"
+        app:layout_constraintTop_toTopOf="@id/icon_wind_route_IV"
+        tools:text="1.3m/s" />
+
+    <ImageView
+        android:id="@+id/icon_pressure_IV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/barometer"
+        app:layout_constraintStart_toEndOf="@id/info_text_wind_TV"
+        app:layout_constraintTop_toBottomOf="@id/description_TV"
+        app:layout_constraintWidth_percent="0.05"
+        app:tint="@color/iconColor" />
+
+    <TextView
+        android:id="@+id/info_text_pressure_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/icon_pressure_IV"
+        app:layout_constraintStart_toEndOf="@id/icon_pressure_IV"
+        app:layout_constraintTop_toTopOf="@id/icon_pressure_IV"
+        tools:text="5.6hPa" />
+
+    <ImageView
+        android:id="@+id/icon_sunrise_IV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_sunrise"
+        app:layout_constraintStart_toStartOf="@id/icon_wind_route_IV"
+        app:layout_constraintTop_toBottomOf="@id/icon_wind_route_IV"
+        app:layout_constraintWidth_percent="0.05"
+        app:tint="@color/iconColor" />
+
+    <TextView
+        android:id="@+id/info_text_sunrise_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/icon_sunrise_IV"
+        app:layout_constraintStart_toEndOf="@id/icon_sunrise_IV"
+        app:layout_constraintTop_toTopOf="@id/icon_sunrise_IV"
+        tools:text="06:56" />
+
+    <ImageView
+        android:id="@+id/icon_sunset_IV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_sunset"
+        app:layout_constraintStart_toStartOf="@id/icon_pressure_IV"
+        app:layout_constraintTop_toBottomOf="@id/icon_pressure_IV"
+        app:layout_constraintWidth_percent="0.05"
+        app:tint="@color/iconColor" />
+
+    <TextView
+        android:id="@+id/info_text_sunset_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/icon_sunset_IV"
+        app:layout_constraintStart_toEndOf="@id/icon_sunset_IV"
+        app:layout_constraintTop_toTopOf="@id/icon_sunset_IV"
+        tools:text="19:32" />
+
+
+    <TextView
+        android:id="@+id/text_humidity_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/text_humidity"
+        app:layout_constraintStart_toStartOf="@id/icon_sunrise_IV"
+        app:layout_constraintTop_toBottomOf="@id/icon_sunrise_IV" />
+
+    <TextView
+        android:id="@+id/info_text_humidity_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@id/text_humidity_TV"
+        app:layout_constraintTop_toTopOf="@id/text_humidity_TV"
+        tools:text="76%" />
+
+    <TextView
+        android:id="@+id/text_visibility_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_visibility"
+        app:layout_constraintStart_toStartOf="@+id/text_humidity_TV"
+        app:layout_constraintTop_toBottomOf="@id/text_humidity_TV" />
+
+    <TextView
+        android:id="@+id/info_text_visibility_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@id/text_visibility_TV"
+        app:layout_constraintTop_toTopOf="@id/text_visibility_TV"
+        tools:text="10.0km" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
