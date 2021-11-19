@@ -8,7 +8,6 @@ import com.example.weatherapplication.R
 class AppActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("SystemLogging", "AppActivity / onCreate")
         setContentView(R.layout.activity_app)
     }
 }

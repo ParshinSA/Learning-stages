@@ -1,5 +1,8 @@
 package com.example.weatherapplication.ui.weather.listofcity
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
@@ -31,7 +34,6 @@ class ListOfCityFragment : Fragment(R.layout.fragment_list_of_city) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("SystemLogging", "ListOfCityFragment / onCreate")
         _bind = FragmentListOfCityBinding.inflate(inflater, container, false)
         actionInFragment()
         return bind.root
@@ -42,12 +44,12 @@ class ListOfCityFragment : Fragment(R.layout.fragment_list_of_city) {
         observeData()
         getForecast()
         swipeUpdateForecastList()
+        checkInternet()
     }
 
     private fun swipeUpdateForecastList() {
         bind.swipeLayout.setOnRefreshListener {
             getForecast()
-            Log.d("SystemLogging", "swipe")
         }
     }
 
@@ -67,12 +69,20 @@ class ListOfCityFragment : Fragment(R.layout.fragment_list_of_city) {
     }
 
     private fun showDialogError(message: String) {
-            myDialog = AlertDialog.Builder(requireContext())
-                .setTitle("Attention!")
-                .setMessage(message)
-                .create()
+        myDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Внимание!")
+            .setMessage(message)
+            .create()
 
-            myDialog!!.show()
+        myDialog!!.show()
+    }
+
+    private fun checkInternet() {
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val isConnect =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) == null
+        if (isConnect) showDialogError("Проверьте подключение к интернету")
     }
 
     private fun initRV() {
