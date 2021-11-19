@@ -24,9 +24,9 @@ class ForecastViewModel : ViewModel() {
     val forecastList: LiveData<List<Forecast>>
         get() = forecastListMutableLiveData
 
-    private val errorMessageSingleLiveEvent = SingleLiveEvent<String>()
+    private val errorMessageMutableLiveData = MutableLiveData<String>()
     val errorMessage: LiveData<String>
-        get() = errorMessageSingleLiveEvent
+        get() = errorMessageMutableLiveData
 
 
     fun getWeatherForecast(listCityId: List<City>) {
@@ -49,11 +49,10 @@ class ForecastViewModel : ViewModel() {
             forecastRepository.getForecastFromDatabase(city.id)
                 ?.let {
                     currentList = currentList + listOf(it)
-                    Log.d("SystemLogging", "xxxxx$it")
                 }
-                ?: errorMessage("Not data from internet or database, check internet connection")
-
         }
+        validateList(currentList)
+
         return currentList
     }
 
@@ -64,11 +63,8 @@ class ForecastViewModel : ViewModel() {
                 ?.let {
                     currentList = currentList + listOf(it)
                 }
-                ?: errorMessage("Not data from internet or database, check internet connection")
         }
-
-        if (currentList.isEmpty()) resetTimeLastRequestForecast()
-
+        validateList(currentList)
         return currentList
     }
 
@@ -93,7 +89,14 @@ class ForecastViewModel : ViewModel() {
     }
 
     private fun errorMessage(message: String) {
-        errorMessageSingleLiveEvent
-            .postValue(message)
+        errorMessageMutableLiveData.postValue(message)
+    }
+
+    private fun validateList(currentList: List<Forecast>) {
+        if (currentList.isEmpty()) {
+            resetTimeLastRequestForecast()
+            Log.d("SystemLogging", "validate")
+            errorMessage("Not data from internet or database, check internet connection")
+        }
     }
 }

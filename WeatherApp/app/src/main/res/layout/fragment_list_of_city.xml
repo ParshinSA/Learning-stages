@@ -23,12 +23,20 @@
         android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@+id/text_header_list_of_city1" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_of_city_RV"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_header_list_of_city2"
-        tools:listitem="@layout/item_info_weather_city" />
+        app:layout_constraintTop_toBottomOf="@+id/text_header_list_of_city2">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_of_city_RV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_info_weather_city" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

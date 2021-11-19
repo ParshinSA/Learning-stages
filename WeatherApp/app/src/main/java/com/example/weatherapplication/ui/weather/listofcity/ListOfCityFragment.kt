@@ -40,16 +40,25 @@ class ListOfCityFragment : Fragment(R.layout.fragment_list_of_city) {
     private fun actionInFragment() {
         initRV()
         observeData()
-        default()
+        getForecast()
+        swipeUpdateForecastList()
     }
 
-    private fun default() {
+    private fun swipeUpdateForecastList() {
+        bind.swipeLayout.setOnRefreshListener {
+            getForecast()
+            Log.d("SystemLogging", "swipe")
+        }
+    }
+
+    private fun getForecast() {
         viewModel.getWeatherForecast(defaultListCity)
     }
 
     private fun observeData() {
         viewModel.forecastList.observe(viewLifecycleOwner) {
             adapterRV.submitList(it)
+            bind.swipeLayout.isRefreshing = false
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
@@ -58,14 +67,12 @@ class ListOfCityFragment : Fragment(R.layout.fragment_list_of_city) {
     }
 
     private fun showDialogError(message: String) {
-        if (myDialog == null) {
             myDialog = AlertDialog.Builder(requireContext())
                 .setTitle("Attention!")
                 .setMessage(message)
                 .create()
 
             myDialog!!.show()
-        }
     }
 
     private fun initRV() {
