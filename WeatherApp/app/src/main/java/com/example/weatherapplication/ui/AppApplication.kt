@@ -1,4 +1,4 @@
-package com.example.weatherapplication.app
+package com.example.weatherapplication.ui
 
 import android.app.Application
 import com.example.weatherapplication.data.db.appdb.AppDatabase

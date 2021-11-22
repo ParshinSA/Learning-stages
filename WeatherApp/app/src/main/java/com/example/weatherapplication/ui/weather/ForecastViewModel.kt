@@ -2,7 +2,6 @@ package com.example.weatherapplication.ui.weather
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.weatherapplication.app.SingleLiveEvent
 import com.example.weatherapplication.data.db.appsp.AppSharedPreferences
 import com.example.weatherapplication.data.db.appsp.AppSharedPreferencesContract
 import com.example.weatherapplication.data.models.city.City

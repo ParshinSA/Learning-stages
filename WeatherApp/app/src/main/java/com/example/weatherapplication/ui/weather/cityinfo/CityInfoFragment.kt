@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
-import com.example.weatherapplication.app.convertToDate
+import com.example.weatherapplication.utils.convertToDate
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentCityInfoBinding
 import com.example.weatherapplication.ui.weather.listofcity.ListOfCityFragment
