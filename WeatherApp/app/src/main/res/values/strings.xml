@@ -5,4 +5,20 @@
     <string name="text_celsius">°C</string>
     <string name="text_humidity">Влажность:</string>
     <string name="text_visibility">Видимость:</string>
+
+    <string name="URL_loading_image_weather">https://openweathermap.org/img/wn/%1$s@2x.png</string>
+
+<!--    ShortForecastListFragment-->
+    <string name="ShortForecastListFragment_check_internet">"Проверьте подключение к интернету"</string>
+    <string name="ShortForecastListFragment_attention">Внимание!</string>
+
+<!--    DetailsForecastFragment-->
+    <string name="DetailsForecastFragment_date_text">%1$s</string>
+    <string name="DetailsForecastFragment_text_km">%1$d km</string>
+    <string name="DetailsForecastFragment_text_percent">%1$d %%</string>
+    <string name="DetailsForecastFragment_text_pressure">%1$d hPa</string>
+    <string name="DetailsForecastFragment_text_ms">%1$d m/s</string>
+    <string name="DetailsForecastFragment_text_name_and_country">%1$s, %2$s</string>
+    <string name="DetailsForecastFragment_updateText_text">Обновленно: %1$s</string>
+
 </resources>

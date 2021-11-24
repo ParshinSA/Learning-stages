@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.listofcity
+package com.example.weatherapplication
 
 import com.example.weatherapplication.data.models.city.City
 

@@ -1,11 +1,9 @@
-package com.example.weatherapplication.ui.weather.listofcity
+package com.example.weatherapplication.ui.weather.shortforecastlist
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,19 +11,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weatherapplication.DefaultListCity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentListOfCityBinding
-import com.example.weatherapplication.ui.weather.ForecastViewModel
+import com.example.weatherapplication.utils.logD
 
-class ListOfCityFragment : Fragment(R.layout.fragment_list_of_city) {
+class ShortForecastListFragment : Fragment(R.layout.fragment_list_of_city) {
 
     private var _bind: FragmentListOfCityBinding? = null
     private val bind: FragmentListOfCityBinding
         get() = _bind!!
 
-    private lateinit var adapterRV: ListOfCityAdapterRV
-    private val viewModel: ForecastViewModel by viewModels()
+    private lateinit var adapterRVShortForecast: ShortForecastListAdapterRV
+    private val shortForecastListViewModel: ShortForecastListViewModel by viewModels()
     private val defaultListCity = DefaultListCity.listCity
     private var myDialog: AlertDialog? = null
 
@@ -35,42 +34,57 @@ class ListOfCityFragment : Fragment(R.layout.fragment_list_of_city) {
         savedInstanceState: Bundle?
     ): View {
         _bind = FragmentListOfCityBinding.inflate(inflater, container, false)
-        actionInFragment()
         return bind.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        this.logD("onViewCreated")
+        actionInFragment()
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun actionInFragment() {
         initRV()
         observeData()
-        getForecast()
         swipeUpdateForecastList()
         checkInternet()
+        getForecastList()
     }
 
     private fun swipeUpdateForecastList() {
         bind.swipeLayout.setOnRefreshListener {
-            getForecast()
+            updateForecastList()
         }
     }
 
-    private fun getForecast() {
-        viewModel.getWeatherForecast(defaultListCity)
+    private fun getForecastList() {
+        this.logD("getForecastList")
+        shortForecastListViewModel.getForecastList(defaultListCity)
+    }
+
+    private fun updateForecastList() {
+        this.logD("updateForecastList")
+        shortForecastListViewModel.updateForecastList(defaultListCity)
     }
 
     private fun observeData() {
-        viewModel.forecastList.observe(viewLifecycleOwner) {
-            adapterRV.submitList(it)
-            bind.swipeLayout.isRefreshing = false
+        shortForecastListViewModel.forecastListLiveData.observe(viewLifecycleOwner) {
+            adapterRVShortForecast.submitList(it)
+            this.logD("submitList $it")
         }
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+        shortForecastListViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { message ->
             showDialogError(message)
+        }
+
+        shortForecastListViewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
+            bind.swipeLayout.isRefreshing = it
         }
     }
 
     private fun showDialogError(message: String) {
         myDialog = AlertDialog.Builder(requireContext())
-            .setTitle("Внимание!")
+            .setTitle(this.getString(R.string.ShortForecastListFragment_attention))
             .setMessage(message)
             .create()
 
@@ -82,17 +96,17 @@ class ListOfCityFragment : Fragment(R.layout.fragment_list_of_city) {
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val isConnect =
             connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) == null
-        if (isConnect) showDialogError("Проверьте подключение к интернету")
+        if (isConnect) shortForecastListViewModel.errorMessage(this.getString(R.string.ShortForecastListFragment_check_internet))
     }
 
     private fun initRV() {
-        adapterRV = ListOfCityAdapterRV() {
+        adapterRVShortForecast = ShortForecastListAdapterRV {
             initCityInfoFragment(
-                viewModel.forecastList.value!![it]
+                shortForecastListViewModel.forecastListLiveData.value!![it]
             )
         }
         with(bind.listOfCityRV) {
-            adapter = adapterRV
+            adapter = adapterRVShortForecast
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
@@ -105,8 +119,8 @@ class ListOfCityFragment : Fragment(R.layout.fragment_list_of_city) {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         myDialog?.dismiss()
+        super.onDestroy()
     }
 
     companion object {

@@ -11,7 +11,7 @@ object Networking {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val weatherApi: WeatherApi
+    val forecastApi: ForecastApi
         get() = retrofit.create()
 }
 

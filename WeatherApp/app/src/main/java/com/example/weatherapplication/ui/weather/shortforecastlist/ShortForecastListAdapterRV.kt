@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.listofcity
+package com.example.weatherapplication.ui.weather.shortforecastlist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +10,13 @@ import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.ItemInfoWeatherCityBinding
-import kotlin.math.round
+import java.lang.Math.round
+import kotlin.math.roundToInt
 
-class ListOfCityAdapterRV(
+class ShortForecastListAdapterRV(
     private val onItemClick: (clickOnPosition: Int) -> Unit
 ) :
-    ListAdapter<Forecast, ListOfCityAdapterRV.WeatherForecastHolder>(DiffUtilItemCallback()) {
+    ListAdapter<Forecast, ShortForecastListAdapterRV.WeatherForecastHolder>(DiffUtilItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherForecastHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -46,6 +47,8 @@ class ListOfCityAdapterRV(
         onItemClick: (idCity: Int) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
+        private val mContext = view.context
+
         init {
             view.setOnClickListener {
                 onItemClick(adapterPosition)
@@ -57,10 +60,15 @@ class ListOfCityAdapterRV(
         fun bind(item: Forecast) {
             with(viewBind) {
                 nameCityTV.text = item.cityName
-                temperatureCityTV.text = round(item.main.temp).toInt().toString()
+                temperatureCityTV.text = item.main.temp.roundToInt().toString()
 
                 Glide.with(itemView)
-                    .load("https://openweathermap.org/img/wn/${item.weather[0].sectionURL.toString()}@2x.png")
+                    .load(
+                        mContext.getString(
+                            R.string.URL_loading_image_weather,
+                            item.weather[0].sectionURL
+                        )
+                    )
                     .placeholder(R.drawable.ic_cloud)
                     .error(R.drawable.ic_no_internet)
                     .into(iconWeatherIV)

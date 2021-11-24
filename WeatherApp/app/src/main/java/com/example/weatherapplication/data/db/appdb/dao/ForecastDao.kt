@@ -4,16 +4,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.weatherapplication.data.models.save.SaveForecast
-import com.example.weatherapplication.data.models.save.SaveForecastContract
+import com.example.weatherapplication.data.models.forecast.Forecast
+import com.example.weatherapplication.data.models.forecast.ForecastContract
 
 @Dao
 interface ForecastDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertListForecast(forecasts: SaveForecast)
+    suspend fun insertListForecast(forecasts: Forecast)
 
-    @Query("SELECT * FROM ${SaveForecastContract.TABLE_NAME} WHERE ${SaveForecastContract.Columns.PK_ID_CITY} = :cityId OR null")
-    suspend fun getWeatherForecast(cityId: Int): SaveForecast?
+    @Query("SELECT * FROM ${ForecastContract.DatabaseTable.TABLE_NAME} WHERE ${ForecastContract.DatabaseTable.Columns.PK_CITY_ID} = :cityId OR null")
+    suspend fun getWeatherForecast(cityId: Int): Forecast?
 
 }

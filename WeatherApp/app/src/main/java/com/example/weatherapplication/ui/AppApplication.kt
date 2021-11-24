@@ -1,7 +1,7 @@
 package com.example.weatherapplication.ui
 
 import android.app.Application
-import com.example.weatherapplication.data.db.appdb.AppDatabase
+import com.example.weatherapplication.data.db.appdb.AppDatabaseInit
 import com.example.weatherapplication.data.db.appsp.AppSharedPreferences
 
 class AppApplication : Application() {
@@ -11,7 +11,7 @@ class AppApplication : Application() {
     }
 
     private fun init() {
-        AppDatabase.initDatabase(this)
+        AppDatabaseInit.initDatabase(this)
         AppSharedPreferences.initSharedPref(this)
     }
 }
