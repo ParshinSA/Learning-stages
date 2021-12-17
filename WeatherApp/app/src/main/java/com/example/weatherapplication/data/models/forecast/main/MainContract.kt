@@ -1,4 +1,4 @@
-package com.example.weatherapplication.data.models.main
+package com.example.weatherapplication.data.models.forecast.main
 
 object MainContract {
 

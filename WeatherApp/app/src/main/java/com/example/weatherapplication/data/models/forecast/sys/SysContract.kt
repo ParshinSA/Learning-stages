@@ -1,4 +1,4 @@
-package com.example.weatherapplication.data.models.sys
+package com.example.weatherapplication.data.models.forecast.sys
 
 object SysContract {
 

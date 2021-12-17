@@ -5,11 +5,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.example.weatherapplication.data.models.clouds.Clouds
-import com.example.weatherapplication.data.models.main.Main
-import com.example.weatherapplication.data.models.sys.Sys
-import com.example.weatherapplication.data.models.weather.Weather
-import com.example.weatherapplication.data.models.wind.Wind
+import com.example.weatherapplication.data.models.forecast.clouds.Clouds
+import com.example.weatherapplication.data.models.forecast.main.Main
+import com.example.weatherapplication.data.models.forecast.sys.Sys
+import com.example.weatherapplication.data.models.forecast.weather.Weather
+import com.example.weatherapplication.data.models.forecast.wind.Wind
 import com.example.weatherapplication.data.models.forecast.ForecastContract.GsonName
 import com.example.weatherapplication.data.models.forecast.ForecastContract.DatabaseTable.Columns
 import com.example.weatherapplication.data.models.forecast.ForecastContract.DatabaseTable.TABLE_NAME

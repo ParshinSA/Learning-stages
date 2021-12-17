@@ -1,7 +1,7 @@
-package com.example.weatherapplication.data.models.clouds
+package com.example.weatherapplication.data.models.forecast.clouds
 
 import android.os.Parcelable
-import com.example.weatherapplication.data.models.clouds.CloudsContract.GsonName
+import com.example.weatherapplication.data.models.forecast.clouds.CloudsContract.GsonName
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 

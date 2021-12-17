@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface ForecastApi {
 
-    @GET("weather")
+    @GET("https:/api.openweathermap.org/data/2.5/weather")
     suspend fun requestWeatherForecastByCityId(
         @Query("id") queryCityId: Int,
         @Query("appid") apiKey: String = ForecastApiContract.API_KEY,
@@ -16,4 +16,6 @@ interface ForecastApi {
         @Query("lang") lang: String = ForecastApiContract.LANG
     ): Forecast
 
+
+    suspend fun requestStatisticalWeatherData()
 }

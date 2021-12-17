@@ -7,7 +7,6 @@ import retrofit2.create
 object Networking {
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https:/api.openweathermap.org/data/2.5/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

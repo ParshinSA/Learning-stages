@@ -1,4 +1,4 @@
-package com.example.weatherapplication.data.models.clouds
+package com.example.weatherapplication.data.models.forecast.clouds
 
 object CloudsContract {
     object GsonName {

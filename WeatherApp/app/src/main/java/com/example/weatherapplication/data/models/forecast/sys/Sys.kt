@@ -1,8 +1,7 @@
-package com.example.weatherapplication.data.models.sys
+package com.example.weatherapplication.data.models.forecast.sys
 
 import android.os.Parcelable
-import androidx.room.PrimaryKey
-import com.example.weatherapplication.data.models.sys.SysContract.GsonName
+import com.example.weatherapplication.data.models.forecast.sys.SysContract.GsonName
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 

@@ -1,11 +1,11 @@
 package com.example.weatherapplication.data.models.forecast
 
 import androidx.room.TypeConverter
-import com.example.weatherapplication.data.models.clouds.Clouds
-import com.example.weatherapplication.data.models.main.Main
-import com.example.weatherapplication.data.models.sys.Sys
-import com.example.weatherapplication.data.models.weather.Weather
-import com.example.weatherapplication.data.models.wind.Wind
+import com.example.weatherapplication.data.models.forecast.clouds.Clouds
+import com.example.weatherapplication.data.models.forecast.main.Main
+import com.example.weatherapplication.data.models.forecast.sys.Sys
+import com.example.weatherapplication.data.models.forecast.weather.Weather
+import com.example.weatherapplication.data.models.forecast.wind.Wind
 import com.example.weatherapplication.utils.Converter
 
 object ForecastConverterTypeField {
