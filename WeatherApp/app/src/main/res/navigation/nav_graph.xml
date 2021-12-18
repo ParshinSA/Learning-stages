@@ -2,34 +2,26 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_grph"
-    app:startDestination="@id/listOfCityFragment">
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/shortForecastListFragment">
 
     <fragment
-        android:id="@+id/listOfCityFragment"
+        android:id="@+id/shortForecastListFragment"
         android:name="com.example.weatherapplication.ui.weather.shortforecastlist.ShortForecastListFragment"
-        android:label="ListOfCityFragment"
-        tools:layout="@layout/fragment_list_of_city" >
+        tools:layout="@layout/fragment_short_forecast_list"
+        android:label="ShortForecastListFragment" >
         <action
-            android:id="@+id/action_listOfCityFragment_to_cityInfoFragment"
-            app:destination="@id/cityInfoFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out" />
+            android:id="@+id/action_shortForecastListFragment_to_detailsForecastFragment"
+            app:destination="@id/detailsForecastFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/cityInfoFragment"
+        android:id="@+id/detailsForecastFragment"
         android:name="com.example.weatherapplication.ui.weather.detailsforecast.DetailsForecastFragment"
-        tools:layout="@layout/fragment_city_info"
-        android:label="CityInfoFragment" >
+        tools:layout="@layout/fragment_details_forecast"
+        android:label="DetailsForecastFragment" >
         <action
-            android:id="@+id/action_cityInfoFragment_to_listOfCityFragment"
-            app:destination="@id/listOfCityFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out" />
-        <argument
-            android:name="weatherForecast"
-            app:argType="com.example.weatherapplication.data.models.forecast.Forecast" />
+            android:id="@+id/action_detailsForecastFragment_to_shortForecastListFragment"
+            app:destination="@id/shortForecastListFragment" />
     </fragment>
-
 </navigation>

@@ -1,33 +1,32 @@
 package com.example.weatherapplication.ui.weather.detailsforecast
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
-import com.example.weatherapplication.databinding.FragmentCityInfoBinding
+import com.example.weatherapplication.databinding.FragmentDetailsForecastBinding
 import com.example.weatherapplication.ui.weather.shortforecastlist.ShortForecastListFragment
 import com.example.weatherapplication.utils.convertToDate
 import com.example.weatherapplication.utils.logD
-import java.lang.String.format
-import java.math.BigDecimal
+import com.google.android.material.transition.MaterialContainerTransform
 import kotlin.math.round
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 
-class DetailsForecastFragment : Fragment(R.layout.fragment_city_info) {
+class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
 
-    private var _bind: FragmentCityInfoBinding? = null
-    private val bind: FragmentCityInfoBinding
+    private var _bind: FragmentDetailsForecastBinding? = null
+    private val bind: FragmentDetailsForecastBinding
         get() = _bind!!
 
     private val detailsForecastViewModel: DetailsForecastViewModel by viewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,19 +34,34 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_city_info) {
         savedInstanceState: Bundle?
     ): View {
         this.logD("onCreateView")
-        _bind = FragmentCityInfoBinding.inflate(inflater, container, false)
+        _bind = FragmentDetailsForecastBinding.inflate(inflater, container, false)
         return bind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        thisTransition(view)
         action()
     }
 
+    private fun thisTransition(view: View) {
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+    }
+
     private fun action() {
+        exitTransform()
         sendForecastInViewModel()
         getArgument()
         observeData()
+    }
+
+    private fun exitTransform() {
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            drawingViewId = R.id.my_nav_host_fragment
+            duration = 200.toLong()
+            scrimColor = Color.TRANSPARENT
+        }
     }
 
     private fun observeData() {

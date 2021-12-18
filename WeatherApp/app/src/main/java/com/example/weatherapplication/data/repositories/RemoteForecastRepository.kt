@@ -7,8 +7,14 @@ class RemoteForecastRepository {
     private val databaseForecastRepository = DatabaseForecastRepository()
 
     suspend fun requestForecast(cityId: Int): Forecast {
-        return Networking.forecastApi.requestWeatherForecastByCityId(cityId).also {
-            databaseForecastRepository.saveForecastInDatabase(it)
+        return try {
+
+            Networking.forecastApi.requestWeatherForecastByCityId(cityId = cityId).also {
+                databaseForecastRepository.saveForecastInDatabase(it)
+            }
+
+        } catch (t: Throwable) {
+            error("MY THROWABLE $t")
         }
     }
 

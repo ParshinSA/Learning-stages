@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:transitionGroup="true"
     android:layout_height="match_parent"
     android:padding="8dp">
 
@@ -34,7 +35,7 @@
             android:id="@+id/list_of_city_RV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/item_info_weather_city" />
+            tools:listitem="@layout/item_short_forecast" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

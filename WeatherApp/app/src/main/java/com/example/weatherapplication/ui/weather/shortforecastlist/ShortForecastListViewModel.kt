@@ -8,6 +8,7 @@ import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.repositories.DatabaseForecastRepository
 import com.example.weatherapplication.data.repositories.RemoteForecastRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -40,7 +41,7 @@ class ShortForecastListViewModel : ViewModel() {
     }
 
     fun getForecastList(listCityId: List<City>) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             isLoadingMutableLiveData.postValue(true)
             forecastListMutableLiveData.postValue(
 
@@ -74,11 +75,10 @@ class ShortForecastListViewModel : ViewModel() {
         Log.d("SystemLogging", "request database")
         return listCityId.map {
             try {
-                Log.d("SystemLogging", "$it")
                 databaseRepo.getForecastFromDatabase(it.id)!!
             } catch (t: Throwable) {
                 resetTimeLastRequestForecast()
-                Log.d("SystemLogging", "throwable $t")
+                Log.d("SystemLogging", "throwable db $t")
                 errorMessage("Не данных из интернета и из базы данных, проверьте подключение к интернету")
                 return emptyList()
             }
@@ -96,7 +96,7 @@ class ShortForecastListViewModel : ViewModel() {
     }
 
     private fun clearCurrentForecastList() {
-        forecastListMutableLiveData.value = emptyList()
+        forecastListMutableLiveData.postValue(emptyList())
     }
 
     private fun saveTimeRequestForecast() {

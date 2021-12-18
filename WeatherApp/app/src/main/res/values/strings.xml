@@ -20,5 +20,9 @@
     <string name="DetailsForecastFragment_text_ms">%1$d m/s</string>
     <string name="DetailsForecastFragment_text_name_and_country">%1$s, %2$s</string>
     <string name="DetailsForecastFragment_updateText_text">Обновленно: %1$s</string>
+    
+<!--    Transition name -->
+    <string name="short_forecast_transition_name_item">transition_name_item_position_%1$d</string>
+    <string name="details_forecast_transition_name">details_forecast_transition_name</string>
 
 </resources>

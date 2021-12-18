@@ -9,22 +9,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
-import com.example.weatherapplication.databinding.ItemInfoWeatherCityBinding
-import java.lang.Math.round
+import com.example.weatherapplication.databinding.ItemShortForecastBinding
 import kotlin.math.roundToInt
 
 class ShortForecastListAdapterRV(
-    private val onItemClick: (clickOnPosition: Int) -> Unit
+    private val onItemClick: (clickOnPosition: Int, currentView: View) -> Unit
 ) :
     ListAdapter<Forecast, ShortForecastListAdapterRV.WeatherForecastHolder>(DiffUtilItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherForecastHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.item_info_weather_city, parent, false)
+        val view = inflater.inflate(R.layout.item_short_forecast, parent, false)
         return WeatherForecastHolder(view, onItemClick)
     }
 
     override fun onBindViewHolder(holder: WeatherForecastHolder, position: Int) {
+        holder.itemView.transitionName = holder.itemView.context.resources.getString(
+            R.string.short_forecast_transition_name_item,
+            position
+        )
         val item = getItem(position)
         holder.bind(item)
     }
@@ -44,18 +47,18 @@ class ShortForecastListAdapterRV(
 
     class WeatherForecastHolder(
         view: View,
-        onItemClick: (idCity: Int) -> Unit
+        onItemClick: (idCity: Int, currentView: View) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
         private val mContext = view.context
 
         init {
             view.setOnClickListener {
-                onItemClick(adapterPosition)
+                onItemClick(adapterPosition, view)
             }
         }
 
-        private val viewBind = ItemInfoWeatherCityBinding.bind(view)
+        private val viewBind = ItemShortForecastBinding.bind(view)
 
         fun bind(item: Forecast) {
             with(viewBind) {

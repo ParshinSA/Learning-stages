@@ -2,25 +2,27 @@ package com.example.weatherapplication.ui.weather.shortforecastlist
 
 import android.content.Context
 import android.net.ConnectivityManager
-import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapplication.DefaultListCity
 import com.example.weatherapplication.R
-import com.example.weatherapplication.data.models.forecast.Forecast
-import com.example.weatherapplication.databinding.FragmentListOfCityBinding
+import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
 import com.example.weatherapplication.utils.logD
+import com.google.android.material.transition.MaterialElevationScale
 
-class ShortForecastListFragment : Fragment(R.layout.fragment_list_of_city) {
+class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
-    private var _bind: FragmentListOfCityBinding? = null
-    private val bind: FragmentListOfCityBinding
+    private var _bind: FragmentShortForecastListBinding? = null
+    private val bind: FragmentShortForecastListBinding
         get() = _bind!!
 
     private lateinit var adapterRVShortForecast: ShortForecastListAdapterRV
@@ -33,22 +35,38 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_list_of_city) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _bind = FragmentListOfCityBinding.inflate(inflater, container, false)
+        _bind = FragmentShortForecastListBinding.inflate(inflater, container, false)
         return bind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         this.logD("onViewCreated")
+        thisTransition(view)
         actionInFragment()
         super.onViewCreated(view, savedInstanceState)
     }
 
+    private fun thisTransition(view: View) {
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+    }
+
     private fun actionInFragment() {
         initRV()
+        checkInternet()
         observeData()
         swipeUpdateForecastList()
-        checkInternet()
         getForecastList()
+        exitEnterTransition()
+    }
+
+    private fun exitEnterTransition() {
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = 200.toLong()
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 200.toLong()
+        }
     }
 
     private fun swipeUpdateForecastList() {
@@ -100,11 +118,11 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_list_of_city) {
     }
 
     private fun initRV() {
-        adapterRVShortForecast = ShortForecastListAdapterRV {
-            initCityInfoFragment(
-                shortForecastListViewModel.forecastListLiveData.value!![it]
-            )
-        }
+        adapterRVShortForecast =
+            ShortForecastListAdapterRV { position: Int, currentViewInRV: View ->
+                transitionInDetailsForecastFragment(position, currentViewInRV)
+            }
+
         with(bind.listOfCityRV) {
             adapter = adapterRVShortForecast
             layoutManager = LinearLayoutManager(requireContext())
@@ -112,10 +130,17 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_list_of_city) {
         }
     }
 
-    private fun initCityInfoFragment(forecast: Forecast) {
+    private fun transitionInDetailsForecastFragment(position: Int, currentView: View) {
+        val forecast = shortForecastListViewModel.forecastListLiveData.value!![position]
         val bundle = Bundle()
         bundle.putParcelable(KEY, forecast)
-        findNavController().navigate(R.id.action_listOfCityFragment_to_cityInfoFragment, bundle)
+
+        val transitionName = this.resources.getString(R.string.details_forecast_transition_name)
+        val extras = FragmentNavigatorExtras(currentView to transitionName)
+
+        findNavController().navigate(
+            R.id.action_shortForecastListFragment_to_detailsForecastFragment, bundle, null, extras
+        )
     }
 
     override fun onDestroy() {
