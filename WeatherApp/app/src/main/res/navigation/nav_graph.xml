@@ -8,20 +8,29 @@
     <fragment
         android:id="@+id/shortForecastListFragment"
         android:name="com.example.weatherapplication.ui.weather.shortforecastlist.ShortForecastListFragment"
-        tools:layout="@layout/fragment_short_forecast_list"
-        android:label="ShortForecastListFragment" >
+        android:label="ShortForecastListFragment"
+        tools:layout="@layout/fragment_short_forecast_list">
         <action
             android:id="@+id/action_shortForecastListFragment_to_detailsForecastFragment"
             app:destination="@id/detailsForecastFragment" />
+        <action
+            android:id="@+id/action_shortForecastListFragment_to_weatherReportFragment"
+            app:destination="@id/weatherReportFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/detailsForecastFragment"
         android:name="com.example.weatherapplication.ui.weather.detailsforecast.DetailsForecastFragment"
-        tools:layout="@layout/fragment_details_forecast"
-        android:label="DetailsForecastFragment" >
+        android:label="DetailsForecastFragment"
+        tools:layout="@layout/fragment_details_forecast">
         <action
-            android:id="@+id/action_detailsForecastFragment_to_shortForecastListFragment"
-            app:destination="@id/shortForecastListFragment" />
+            android:id="@+id/action_detailsForecastFragment_to_weatherReportFragment"
+            app:destination="@id/weatherReportFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/weatherReportFragment"
+        android:name="com.example.weatherapplication.ui.weather.weatherreport.WeatherReportFragment"
+        android:label="WeatherReportFragment"
+        tools:layout="@layout/fragment_weather_report" />
 </navigation>

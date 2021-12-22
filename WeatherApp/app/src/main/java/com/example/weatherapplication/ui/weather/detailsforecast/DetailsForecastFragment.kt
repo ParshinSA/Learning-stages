@@ -38,7 +38,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
         return bind.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         thisTransition(view)
         action()
@@ -59,7 +59,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     private fun exitTransform() {
         sharedElementEnterTransition = MaterialContainerTransform().apply {
             drawingViewId = R.id.my_nav_host_fragment
-            duration = 200.toLong()
+            duration = 300
             scrimColor = Color.TRANSPARENT
         }
     }
@@ -73,7 +73,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
 
     private fun bindViewItems(forecast: Forecast) {
         setTime(forecast)
-        setNameAndCountryCity(forecast)
+        setNameCity(forecast)
+        setCountryCity(forecast)
         setTemp(forecast)
         setIcon(forecast)
         setDescription(forecast)
@@ -155,10 +156,16 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
         bind.tempTV.text = round(forecast.main.temp).toInt().toString()
     }
 
-    private fun setNameAndCountryCity(forecast: Forecast) {
+    private fun setNameCity(forecast: Forecast) {
         bind.cityNameTV.text = this.getString(
-            R.string.DetailsForecastFragment_text_name_and_country,
-            forecast.cityName,
+            R.string.DetailsForecastFragment_text_name_city,
+            forecast.cityName
+        )
+    }
+
+    private fun setCountryCity(forecast: Forecast) {
+        bind.countryTV.text = this.getString(
+            R.string.DetailsForecastFragment_text_country_city,
             forecast.sys.country
         )
     }

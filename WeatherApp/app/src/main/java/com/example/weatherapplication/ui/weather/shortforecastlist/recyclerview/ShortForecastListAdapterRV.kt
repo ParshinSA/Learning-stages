@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.shortforecastlist
+package com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview
 
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +25,7 @@ class ShortForecastListAdapterRV(
 
     override fun onBindViewHolder(holder: WeatherForecastHolder, position: Int) {
         holder.itemView.transitionName = holder.itemView.context.resources.getString(
-            R.string.short_forecast_transition_name_item,
+            R.string.ShortForecastListFragment_transition_name_item,
             position
         )
         val item = getItem(position)

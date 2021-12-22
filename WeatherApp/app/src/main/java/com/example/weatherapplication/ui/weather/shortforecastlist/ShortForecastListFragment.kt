@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapplication.DefaultListCity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
+import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.CharacterItemDecoration
+import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.ShortForecastListAdapterRV
 import com.example.weatherapplication.utils.logD
 import com.google.android.material.transition.MaterialElevationScale
 
@@ -126,6 +128,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         with(bind.listOfCityRV) {
             adapter = adapterRVShortForecast
             layoutManager = LinearLayoutManager(requireContext())
+            addItemDecoration(CharacterItemDecoration(requireContext(), 10))
             setHasFixedSize(true)
         }
     }
@@ -135,7 +138,8 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         val bundle = Bundle()
         bundle.putParcelable(KEY, forecast)
 
-        val transitionName = this.resources.getString(R.string.details_forecast_transition_name)
+        val transitionName =
+            this.resources.getString(R.string.DetailsForecastFragment_transition_name)
         val extras = FragmentNavigatorExtras(currentView to transitionName)
 
         findNavController().navigate(

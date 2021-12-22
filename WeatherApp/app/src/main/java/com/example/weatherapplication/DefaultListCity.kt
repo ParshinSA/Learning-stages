@@ -5,15 +5,15 @@ import com.example.weatherapplication.data.models.city.City
 object DefaultListCity {
     val listCity = listOf(
         City(
-            name = "Voronezh",
+            name = "Воронеж",
             id = 472045
         ),
         City(
-            name = "Moscow",
+            name = "Москва",
             id = 524894
         ),
         City(
-            name = "Kursk",
+            name = "Курск",
             id = 538560
         ),
         City(
@@ -21,7 +21,7 @@ object DefaultListCity {
             id = 730852
         ),
         City(
-            name = "Saint Petersburg",
+            name = "Санкт-Петербург",
             id = 498817
         )
     )

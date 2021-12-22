@@ -8,14 +8,11 @@ class RemoteForecastRepository {
 
     suspend fun requestForecast(cityId: Int): Forecast {
         return try {
-
             Networking.forecastApi.requestWeatherForecastByCityId(cityId = cityId).also {
                 databaseForecastRepository.saveForecastInDatabase(it)
             }
-
         } catch (t: Throwable) {
-            error("MY THROWABLE $t")
+            error("error requestForecast $t")
         }
     }
-
 }

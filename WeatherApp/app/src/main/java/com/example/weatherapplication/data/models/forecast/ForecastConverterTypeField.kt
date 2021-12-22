@@ -1,7 +1,6 @@
 package com.example.weatherapplication.data.models.forecast
 
 import androidx.room.TypeConverter
-import com.example.weatherapplication.data.models.forecast.clouds.Clouds
 import com.example.weatherapplication.data.models.forecast.main.Main
 import com.example.weatherapplication.data.models.forecast.sys.Sys
 import com.example.weatherapplication.data.models.forecast.weather.Weather
@@ -9,16 +8,6 @@ import com.example.weatherapplication.data.models.forecast.wind.Wind
 import com.example.weatherapplication.utils.Converter
 
 object ForecastConverterTypeField {
-
-    @TypeConverter
-    fun cloudsToString(mObject: Clouds): String {
-        return Converter.objectToString(mObject)
-    }
-
-    @TypeConverter
-    fun stringToClouds(string: String): Clouds {
-        return Converter.stringToObject(string)
-    }
 
     @TypeConverter
     fun mainToString(mObject: Main): String {

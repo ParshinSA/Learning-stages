@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.example.weatherapplication.data.models.forecast.clouds.Clouds
 import com.example.weatherapplication.data.models.forecast.main.Main
 import com.example.weatherapplication.data.models.forecast.sys.Sys
 import com.example.weatherapplication.data.models.forecast.weather.Weather
@@ -40,10 +39,6 @@ data class Forecast(
     @ColumnInfo(name = Columns.WIND)
     @SerializedName(GsonName.WIND)
     val wind: Wind,
-
-    @ColumnInfo(name = Columns.CLOUDS)
-    @SerializedName(GsonName.CLOUDS)
-    val clouds: Clouds,
 
     @ColumnInfo(name = Columns.CITY_NAME)
     @SerializedName(GsonName.CITY_NAME)

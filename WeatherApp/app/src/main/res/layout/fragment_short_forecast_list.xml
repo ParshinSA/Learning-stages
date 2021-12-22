@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:transitionGroup="true"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:transitionGroup="true">
 
     <TextView
         android:id="@+id/text_header_list_of_city1"
@@ -28,6 +28,7 @@
         android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_header_list_of_city2">
 
@@ -35,6 +36,8 @@
             android:id="@+id/list_of_city_RV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="45dp"
             tools:listitem="@layout/item_short_forecast" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
