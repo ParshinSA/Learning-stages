@@ -20,6 +20,7 @@ import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.
 import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.ShortForecastListAdapterRV
 import com.example.weatherapplication.utils.logD
 import com.google.android.material.transition.MaterialElevationScale
+import timber.log.Timber
 
 class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
@@ -37,18 +38,22 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.d("onCreateView")
+
         _bind = FragmentShortForecastListBinding.inflate(inflater, container, false)
         return bind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        this.logD("onViewCreated")
+        Timber.d("onViewCreated")
         thisTransition(view)
         actionInFragment()
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun thisTransition(view: View) {
+        Timber.d("thisTransition")
+
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
     }
@@ -63,6 +68,8 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun exitEnterTransition() {
+        Timber.d("exitEnterTransition")
+
         exitTransition = MaterialElevationScale(false).apply {
             duration = 200.toLong()
         }
@@ -72,25 +79,27 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun swipeUpdateForecastList() {
+        Timber.d("swipeUpdateForecastList")
+
         bind.swipeLayout.setOnRefreshListener {
             updateForecastList()
         }
     }
 
     private fun getForecastList() {
-        this.logD("getForecastList")
+        Timber.d("getForecastList")
         shortForecastListViewModel.getForecastList(defaultListCity)
     }
 
     private fun updateForecastList() {
-        this.logD("updateForecastList")
+        Timber.d("updateForecastList")
         shortForecastListViewModel.updateForecastList(defaultListCity)
     }
 
     private fun observeData() {
         shortForecastListViewModel.forecastListLiveData.observe(viewLifecycleOwner) {
             adapterRVShortForecast.submitList(it)
-            this.logD("submitList $it")
+            Timber.d("updateForecastList $it")
         }
 
         shortForecastListViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { message ->
@@ -103,6 +112,8 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun showDialogError(message: String) {
+        Timber.d("showDialogError")
+
         myDialog = AlertDialog.Builder(requireContext())
             .setTitle(this.getString(R.string.ShortForecastListFragment_attention))
             .setMessage(message)
@@ -112,6 +123,8 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun checkInternet() {
+        Timber.d("checkInternet")
+
         val connectivityManager =
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val isConnect =
@@ -120,6 +133,8 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun initRV() {
+        Timber.d("initRV")
+
         adapterRVShortForecast =
             ShortForecastListAdapterRV { position: Int, currentViewInRV: View ->
                 transitionInDetailsForecastFragment(position, currentViewInRV)
@@ -134,6 +149,8 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun transitionInDetailsForecastFragment(position: Int, currentView: View) {
+        Timber.d("transitionInDetailsForecastFragment")
+
         val forecast = shortForecastListViewModel.forecastListLiveData.value!![position]
         val bundle = Bundle()
         bundle.putParcelable(KEY, forecast)
@@ -148,6 +165,8 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     override fun onDestroy() {
+        Timber.d("onDestroy")
+
         myDialog?.dismiss()
         super.onDestroy()
     }

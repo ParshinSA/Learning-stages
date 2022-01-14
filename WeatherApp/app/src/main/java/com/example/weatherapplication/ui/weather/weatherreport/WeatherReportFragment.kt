@@ -24,6 +24,7 @@ import com.example.weatherapplication.ui.AppActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialContainerTransform
+import timber.log.Timber
 
 class WeatherReportFragment : Fragment() {
 
@@ -40,6 +41,7 @@ class WeatherReportFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.d("onCreateView")
         _bind = FragmentWeatherReportBinding.inflate(inflater, container, false)
         fabInActivity = requireActivity().findViewById(R.id.open_report_fab)
         return bind.root
@@ -47,6 +49,7 @@ class WeatherReportFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("onViewCreated")
         enterReturnAnimation()
         actionInFragment()
     }
@@ -60,6 +63,8 @@ class WeatherReportFragment : Fragment() {
     }
 
     private fun observe() {
+        Timber.d("observe")
+
         reportViewModel.isLoadingLiveData.observe(viewLifecycleOwner) { isLoading ->
             changeStateComponentView(isLoading)
         }
@@ -74,7 +79,9 @@ class WeatherReportFragment : Fragment() {
     }
 
     private fun openFile(it: String) {
-       AlertDialog.Builder(requireContext())
+        Timber.d("openFile")
+
+        AlertDialog.Builder(requireContext())
            .setTitle("Отчет")
            .setMessage(it)
            .create()
@@ -82,6 +89,8 @@ class WeatherReportFragment : Fragment() {
     }
 
     private fun showSnackbar() {
+        Timber.d("showSnackbar")
+
         Snackbar.make(requireView(), "Отчет сформирован", Snackbar.LENGTH_INDEFINITE)
             .setAction("Открыть") {
                 openReport()
@@ -90,11 +99,15 @@ class WeatherReportFragment : Fragment() {
     }
 
     private fun openReport() {
+        Timber.d("openReport")
+
         reportViewModel.openReport()
         Toast.makeText(requireContext(), "Файл открыт", Toast.LENGTH_SHORT).show()
     }
 
     private fun changeStateComponentView(isLoading: Boolean) {
+        Timber.d("changeStateComponentView")
+
         bind.cityList.isEnabled = !isLoading
         bind.periodList.isEnabled = !isLoading
         bind.reportOkBtn.isEnabled = !isLoading
@@ -102,6 +115,8 @@ class WeatherReportFragment : Fragment() {
     }
 
     private fun checkingNameCityAndPeriod(): Boolean {
+        Timber.d("checkingNameCityAndPeriod")
+
         val nameCity = bind.cityList.editText?.text.toString()
         val period = bind.periodList.editText?.text.toString()
 
@@ -116,6 +131,7 @@ class WeatherReportFragment : Fragment() {
 
     private fun generateReport() {
         bind.reportOkBtn.setOnClickListener {
+        Timber.d("generateReport")
             val nameCity = bind.cityList.editText?.text.toString()
             val period = bind.periodList.editText?.text.toString()
             if (checkingNameCityAndPeriod()) {
@@ -127,11 +143,14 @@ class WeatherReportFragment : Fragment() {
 
     private fun cancelReport() {
         bind.reportCancelBtn.setOnClickListener {
+            Timber.d("cancelReport")
             navigateUp(findNavController(), null)
         }
     }
 
     private fun setCityList() {
+        Timber.d("setCityList")
+
         val autoCompleteCityList = bind.cityList.editText as? AutoCompleteTextView
             ?: error("Incorrect autoCompCityList")
 
@@ -152,6 +171,8 @@ class WeatherReportFragment : Fragment() {
     }
 
     private fun setPeriodList() {
+        Timber.d("setPeriodList")
+
         val autoCompPeriodList = bind.periodList.editText as? AutoCompleteTextView
             ?: error("Incorrect autoCompPeriodList")
 
@@ -192,6 +213,7 @@ class WeatherReportFragment : Fragment() {
 
     override fun onDestroy() {
         fabInActivity.visibility = View.VISIBLE
+        Timber.d("onDestroy")
         super.onDestroy()
     }
 }

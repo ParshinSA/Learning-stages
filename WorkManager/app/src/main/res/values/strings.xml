@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WorkManager</string>
+    <string name="text_enter_url">Введите URL</string>
+    <string name="text_download">Загрузить</string>
+    <string name="text_cancel">Отмена</string>
+    <string name="text_retry">Повторить</string>
+</resources>

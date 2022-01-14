@@ -16,6 +16,7 @@ import com.example.weatherapplication.ui.weather.shortforecastlist.ShortForecast
 import com.example.weatherapplication.utils.convertToDate
 import com.example.weatherapplication.utils.logD
 import com.google.android.material.transition.MaterialContainerTransform
+import timber.log.Timber
 import kotlin.math.round
 import kotlin.math.roundToInt
 
@@ -33,18 +34,22 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        this.logD("onCreateView")
+        Timber.d("onCreateView")
+
         _bind = FragmentDetailsForecastBinding.inflate(inflater, container, false)
         return bind.root
     }
 
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("onViewCreated")
         thisTransition(view)
         action()
     }
 
     private fun thisTransition(view: View) {
+        Timber.d("thisTransition")
+
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
     }
@@ -57,6 +62,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun exitTransform() {
+        Timber.d("exitTransform")
+
         sharedElementEnterTransition = MaterialContainerTransform().apply {
             drawingViewId = R.id.my_nav_host_fragment
             duration = 300
@@ -65,6 +72,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun observeData() {
+        Timber.d("observeData")
+
         detailsForecastViewModel.detailsForecastLiveData.observe(viewLifecycleOwner) { forecast ->
             this.logD("observeData forecast = $forecast")
             bindViewItems(forecast)
@@ -86,6 +95,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setTimeSunriseAndSunset(forecast: Forecast) {
+        Timber.d("setTimeSunriseAndSunset")
+
         bind.infoTextSunriseTV.text = this.getString(
             R.string.DetailsForecastFragment_date_text,
             forecast.sys.sunrise.convertToDate("HH:mm")
@@ -97,6 +108,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setVisibility(forecast: Forecast) {
+        Timber.d("setVisibility")
+
         bind.infoTextVisibilityTV.text = this.getString(
             R.string.DetailsForecastFragment_text_km,
             forecast.visibility / 1000L
@@ -104,6 +117,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setHumidity(forecast: Forecast) {
+        Timber.d("setHumidity")
+
         bind.infoTextHumidityTV.text =
             this.getString(
                 R.string.DetailsForecastFragment_text_percent,
@@ -112,6 +127,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setPressure(forecast: Forecast) {
+        Timber.d("setPressure")
+
         bind.infoTextPressureTV.text = this.getString(
             R.string.DetailsForecastFragment_text_pressure,
             forecast.main.pressure
@@ -119,11 +136,15 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setWind(forecast: Forecast) {
+        Timber.d("setWind")
+
         rotationIconWind(forecast)
         setInfoTextWind(forecast)
     }
 
     private fun setInfoTextWind(forecast: Forecast) {
+        Timber.d("setInfoTextWind")
+
         bind.infoTextWindTV.text =
             this.getString(
                 R.string.DetailsForecastFragment_text_ms,
@@ -132,14 +153,20 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun rotationIconWind(forecast: Forecast) {
+        Timber.d("rotationIconWind")
+
         bind.iconWindRouteIV.animate().rotation(forecast.wind.routeDegrees.toFloat())
     }
 
     private fun setDescription(forecast: Forecast) {
+        Timber.d("setDescription")
+
         bind.descriptionTV.text = forecast.weather[0].description
     }
 
     private fun setIcon(forecast: Forecast) {
+        Timber.d("setIcon")
+
         Glide.with(requireContext())
             .load(
                 this.getString(
@@ -153,10 +180,14 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setTemp(forecast: Forecast) {
+        Timber.d("setTemp")
+
         bind.tempTV.text = round(forecast.main.temp).toInt().toString()
     }
 
     private fun setNameCity(forecast: Forecast) {
+        Timber.d("setNameCity")
+
         bind.cityNameTV.text = this.getString(
             R.string.DetailsForecastFragment_text_name_city,
             forecast.cityName
@@ -164,6 +195,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setCountryCity(forecast: Forecast) {
+        Timber.d("setCountryCity")
+
         bind.countryTV.text = this.getString(
             R.string.DetailsForecastFragment_text_country_city,
             forecast.sys.country
@@ -171,6 +204,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setTime(forecast: Forecast) {
+        Timber.d("setTime")
+
         bind.dateTimeTV.text = this.getString(
             R.string.DetailsForecastFragment_updateText_text,
             forecast.timeForecast.convertToDate("dd MMM yyyy HH:mm")
@@ -178,14 +213,24 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun getArgument(): Forecast? {
+        Timber.d("getArgument")
+
         return requireArguments().getParcelable(ShortForecastListFragment.KEY)
     }
 
     private fun sendForecastInViewModel() {
+        Timber.d("sendForecastInViewModel")
+
         detailsForecastViewModel.setDataDetailsForecastInView(
             getArgument()
                 ?: error("CityInfoFragment / incorrect data in bundle")
         )
+    }
+
+    override fun onDestroy() {
+        Timber.d("onDestroy")
+
+        super.onDestroy()
     }
 }
 

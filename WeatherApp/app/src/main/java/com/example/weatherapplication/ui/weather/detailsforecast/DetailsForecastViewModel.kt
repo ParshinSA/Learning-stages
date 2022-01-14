@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.data.models.forecast.Forecast
+import timber.log.Timber
 
 class DetailsForecastViewModel : ViewModel() {
 
@@ -13,5 +14,10 @@ class DetailsForecastViewModel : ViewModel() {
 
     fun setDataDetailsForecastInView(forecast: Forecast) {
         detailsForecastMutableLiveData.postValue(forecast)
+    }
+
+    override fun onCleared() {
+        Timber.d("onCleared")
+        super.onCleared()
     }
 }

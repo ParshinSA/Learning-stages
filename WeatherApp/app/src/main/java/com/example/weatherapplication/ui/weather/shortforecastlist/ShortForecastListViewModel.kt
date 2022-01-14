@@ -10,6 +10,7 @@ import com.example.weatherapplication.data.repositories.DatabaseForecastReposito
 import com.example.weatherapplication.data.repositories.RemoteForecastRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.IOException
 
 class ShortForecastListViewModel : ViewModel() {
@@ -19,6 +20,8 @@ class ShortForecastListViewModel : ViewModel() {
     private val databaseRepo = DatabaseForecastRepository()
 
     init {
+        Timber.d("init")
+
         timeLastRequest =
             forecastPrefs.getLong(AppSharedPreferencesContract.TIME_LAST_REQUEST_KEY, 0L)
     }
@@ -36,26 +39,31 @@ class ShortForecastListViewModel : ViewModel() {
         get() = isLoadingMutableLiveData
 
     fun updateForecastList(listCityId: List<City>) {
+        Timber.d("updateForecastList")
+
         resetTimeLastRequestForecast()
         getForecastList(listCityId)
     }
 
     fun getForecastList(listCityId: List<City>) {
+        Timber.d("getForecastList")
+
         viewModelScope.launch(Dispatchers.IO) {
             isLoadingMutableLiveData.postValue(true)
             forecastListMutableLiveData.postValue(
 
                 if (isInternetRequest()) {
-                    Log.d("SystemLogging", "request internet")
+                    Timber.d("request internet")
+
                     clearCurrentForecastList()
                     saveTimeRequestForecast()
                     try {
                         getForecastListInInternet(listCityId).also {
-                            Log.d("SystemLogging", "listForecastInternet $it")
+                            Timber.d("response list forecast from internet $it")
                         }
                     } catch (e: IOException) {
                         getForecastListInDatabase(listCityId).also {
-                            Log.d("SystemLogging", "listForecastDatabase $it")
+                            Timber.d("response list forecast from database $it, error ${e.message}")
                         }
                     } finally {
                         isLoadingMutableLiveData.postValue(false)
@@ -63,7 +71,7 @@ class ShortForecastListViewModel : ViewModel() {
                 } else {
                     clearCurrentForecastList()
                     getForecastListInDatabase(listCityId).also {
-                        Log.d("SystemLogging", "listForecastDatabase $it")
+                        Timber.d(" list forecast from database $it")
                         isLoadingMutableLiveData.postValue(false)
                     }
                 }
@@ -72,13 +80,16 @@ class ShortForecastListViewModel : ViewModel() {
     }
 
     private suspend fun getForecastListInDatabase(listCityId: List<City>): List<Forecast> {
-        Log.d("SystemLogging", "request database")
+        Timber.d(" request database")
+
         return listCityId.map {
             try {
-                databaseRepo.getForecastFromDatabase(it.id)!!
+                databaseRepo.getForecastFromDatabase(it.id)!!.also { forecast ->
+                    Timber.d(" list forecast from database $forecast")
+                }
             } catch (t: Throwable) {
                 resetTimeLastRequestForecast()
-                Log.d("SystemLogging", "throwable db $t")
+                Timber.d(" throwable request database $t")
                 errorMessage("Не данных из интернета и из базы данных, проверьте подключение к интернету")
                 return emptyList()
             }
@@ -86,20 +97,28 @@ class ShortForecastListViewModel : ViewModel() {
     }
 
     private suspend fun getForecastListInInternet(listCity: List<City>): List<Forecast> {
+        Timber.d("getForecastListInInternet")
+
         return listCity.map {
             remoteRepo.requestForecast(it.id)
         }
     }
 
     private fun resetTimeLastRequestForecast() {
+        Timber.d("resetTimeLastRequestForecast")
+
         timeLastRequest = 0L
     }
 
     private fun clearCurrentForecastList() {
+        Timber.d("clearCurrentForecastList")
+
         forecastListMutableLiveData.postValue(emptyList())
     }
 
     private fun saveTimeRequestForecast() {
+        Timber.d("saveTimeRequestForecast")
+
         timeLastRequest = System.currentTimeMillis()
         forecastPrefs.edit()
             .putLong(AppSharedPreferencesContract.TIME_LAST_REQUEST_KEY, timeLastRequest)
@@ -108,10 +127,19 @@ class ShortForecastListViewModel : ViewModel() {
 
     // Интернет-запрос не чаще одного раза в десять минут
     private fun isInternetRequest(): Boolean {
+        Timber.d("isInternetRequest")
+
         return System.currentTimeMillis() - timeLastRequest >= 600000
     }
 
     fun errorMessage(message: String) {
+        Timber.d("isInternetRequest $message")
+
         errorMessageMutableLiveData.postValue(message)
+    }
+
+    override fun onCleared() {
+        Timber.d("onCleared")
+        super.onCleared()
     }
 }

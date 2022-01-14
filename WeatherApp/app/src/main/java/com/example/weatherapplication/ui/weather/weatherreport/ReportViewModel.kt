@@ -6,13 +6,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapplication.data.models.report.HistoryData
 import com.example.weatherapplication.data.models.report.Field
+import com.example.weatherapplication.data.models.report.HistoryData
 import com.example.weatherapplication.data.repositories.MemoryRepository
 import com.example.weatherapplication.data.repositories.RemoteWeatherHistoryRepository
 import com.example.weatherapplication.utils.SingleLiveEvent
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.IOException
 import java.text.SimpleDateFormat
 
@@ -36,7 +37,9 @@ class ReportViewModel(
         get() = reportFileMutableLiveData
 
     fun generateReport(nameCity: String, idCity: Int, period: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        Timber.d("generateReport")
+
+        viewModelScope.launch() {
             isLoadingMutableLiveData.postValue(true)
             val historyList =
                 try {
@@ -45,7 +48,6 @@ class ReportViewModel(
                         "Один месяц" -> requestHistoryMonth(idCity, 1)
                         "Три месяца" -> requestHistoryMonth(idCity, 3)
                         else -> error("Incorrect period $period")
-
                     }
                 } catch (e: IOException) {
                     error("error history list ${e.message}")
@@ -61,6 +63,8 @@ class ReportViewModel(
     }
 
     private suspend fun requestHistoryDay(idCity: Int, numberDays: Int): List<HistoryData> {
+        Timber.d("requestHistoryDay")
+
         val currentTimeStamp = System.currentTimeMillis()
         var currentDay = SimpleDateFormat("dd").format(currentTimeStamp).toInt()
         val currentMonth = SimpleDateFormat("MM").format(currentTimeStamp).toInt()
@@ -81,6 +85,8 @@ class ReportViewModel(
     }
 
     private suspend fun requestHistoryMonth(idCity: Int, numberMonth: Int): List<HistoryData> {
+        Timber.d("requestHistoryMonth")
+
         val currentTimeStamp = System.currentTimeMillis()
         var currentMonth = SimpleDateFormat("MM").format(currentTimeStamp).toInt()
         val historyList = mutableListOf<HistoryData>()
@@ -88,18 +94,24 @@ class ReportViewModel(
         for (i in 1..numberMonth) {
             historyList.add(remoteHistoryRepository.requestHistoryMonth(idCity, currentMonth))
             currentMonth--
+            if (currentMonth == 0) currentMonth = 12
+            Timber.d("i:$i, his: $historyList")
         }
 
         return historyList.toList()
     }
 
     fun openReport() {
+        Timber.d("openReport")
+
         reportFileMutableLiveData.postValue(
             memoryRepository.openReportFromCacheDir()
         )
     }
 
     private fun calculateMedian(historyList: List<HistoryData>): HistoryData {
+        Timber.d("calculateMedian")
+
         var tempMedian = 0f
         var humidityMedian = 0f
         var precipitationMedian = 0f
@@ -122,5 +134,10 @@ class ReportViewModel(
             wind = Field(windMedian / delimiter),
             precipitation = Field(precipitationMedian / delimiter),
         )
+    }
+
+    override fun onCleared() {
+        Timber.d("onCleared")
+        super.onCleared()
     }
 }
