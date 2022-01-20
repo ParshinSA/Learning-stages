@@ -9,11 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.weatherapplication.data.models.report.Field
 import com.example.weatherapplication.data.models.report.HistoryData
 import com.example.weatherapplication.data.repositories.MemoryRepository
-import com.example.weatherapplication.data.repositories.RemoteWeatherHistoryRepository
+import com.example.weatherapplication.data.repositories.RemoteRepository
 import com.example.weatherapplication.utils.SingleLiveEvent
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.IOException
 import java.text.SimpleDateFormat
 
@@ -21,7 +19,7 @@ class ReportViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    private val remoteHistoryRepository = RemoteWeatherHistoryRepository()
+    private val remoteRepo = RemoteRepository(application)
     private val memoryRepository = MemoryRepository(application)
 
     private val isLoadingMutableLiveData = MutableLiveData(false)
@@ -36,35 +34,51 @@ class ReportViewModel(
     val reportFileLiveData: LiveData<String>
         get() = reportFileMutableLiveData
 
-    fun generateReport(nameCity: String, idCity: Int, period: String) {
-        Timber.d("generateReport")
+    private val errorMessageMutableLiveData = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = errorMessageMutableLiveData
 
+    fun generateReport(nameCity: String, idCity: Int, period: String) {
+        Log.d(TAG, "generateReport: start")
         viewModelScope.launch() {
             isLoadingMutableLiveData.postValue(true)
-            val historyList =
-                try {
-                    when (period) {
-                        "Десять дней" -> requestHistoryDay(idCity, 10)
-                        "Один месяц" -> requestHistoryMonth(idCity, 1)
-                        "Три месяца" -> requestHistoryMonth(idCity, 3)
-                        else -> error("Incorrect period $period")
-                    }
-                } catch (e: IOException) {
-                    error("error history list ${e.message}")
-                }
+            val historyList = requestHistory(idCity, period)
 
-            val calculateMedian = calculateMedian(historyList)
-            Log.d("SystemLogging", "$calculateMedian")
+            if (historyList.isNotEmpty()) {
+                val calculateMedian = calculateMedian(historyList)
+                Log.d(TAG, "generateReport: $calculateMedian")
+                memoryRepository.saveReportInCacheDirection(nameCity, period, calculateMedian)
+                loadingCompleteSingleLiveEvent.postValue(true)
+            } else {
+                errorMessageMutableLiveData.postValue("Что-то пошло не так...")
+                loadingCompleteSingleLiveEvent.postValue(false)
+            }
 
-            memoryRepository.saveReportInCacheDirection(nameCity, period, calculateMedian)
             isLoadingMutableLiveData.postValue(false)
-            loadingCompleteSingleLiveEvent.postValue(true)
+        }
+    }
+
+    private suspend fun requestHistory(idCity: Int, period: String): List<HistoryData> {
+        return try {
+            when (period) {
+                "Десять дней" -> requestHistoryDay(idCity, 10)
+                "Один месяц" -> requestHistoryMonth(idCity, 1)
+                "Три месяца" -> requestHistoryMonth(idCity, 3)
+                else -> {
+                    Log.d(TAG, "generateReport: Incorrect period $period")
+                    errorMessageMutableLiveData.postValue("Что-то пошло не так...")
+                    emptyList()
+                }
+            }
+        } catch (e: IOException) {
+            Log.d(TAG, "generateReport: error history list ${e.message}")
+            errorMessageMutableLiveData.postValue("Что-то пошло не так...")
+            emptyList()
         }
     }
 
     private suspend fun requestHistoryDay(idCity: Int, numberDays: Int): List<HistoryData> {
-        Timber.d("requestHistoryDay")
-
+        Log.d(TAG, "requestHistoryDay: ")
         val currentTimeStamp = System.currentTimeMillis()
         var currentDay = SimpleDateFormat("dd").format(currentTimeStamp).toInt()
         val currentMonth = SimpleDateFormat("MM").format(currentTimeStamp).toInt()
@@ -72,7 +86,7 @@ class ReportViewModel(
 
         for (i in 1..numberDays) {
             historyList.add(
-                remoteHistoryRepository.requestHistoryDay(
+                remoteRepo.requestHistoryDay(
                     idCity,
                     currentMonth,
                     currentDay
@@ -85,32 +99,28 @@ class ReportViewModel(
     }
 
     private suspend fun requestHistoryMonth(idCity: Int, numberMonth: Int): List<HistoryData> {
-        Timber.d("requestHistoryMonth")
-
+        Log.d(TAG, "requestHistoryMonth: ")
         val currentTimeStamp = System.currentTimeMillis()
         var currentMonth = SimpleDateFormat("MM").format(currentTimeStamp).toInt()
         val historyList = mutableListOf<HistoryData>()
 
         for (i in 1..numberMonth) {
-            historyList.add(remoteHistoryRepository.requestHistoryMonth(idCity, currentMonth))
+            historyList.add(remoteRepo.requestHistoryMonth(idCity, currentMonth))
             currentMonth--
             if (currentMonth == 0) currentMonth = 12
-            Timber.d("i:$i, his: $historyList")
+            Log.d(TAG, "requestHistoryMonth: i:$i, his: $historyList")
         }
 
         return historyList.toList()
     }
 
     fun openReport() {
-        Timber.d("openReport")
-
         reportFileMutableLiveData.postValue(
             memoryRepository.openReportFromCacheDir()
         )
     }
 
     private fun calculateMedian(historyList: List<HistoryData>): HistoryData {
-        Timber.d("calculateMedian")
 
         var tempMedian = 0f
         var humidityMedian = 0f
@@ -137,7 +147,11 @@ class ReportViewModel(
     }
 
     override fun onCleared() {
-        Timber.d("onCleared")
+        Log.d(TAG, "onCleared: ")
         super.onCleared()
+    }
+
+    companion object {
+        const val TAG = "ReportVM_SystemLogging"
     }
 }

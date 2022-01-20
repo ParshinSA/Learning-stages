@@ -1,10 +1,10 @@
 package com.example.weatherapplication.ui.weather.detailsforecast
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.data.models.forecast.Forecast
-import timber.log.Timber
 
 class DetailsForecastViewModel : ViewModel() {
 
@@ -17,7 +17,12 @@ class DetailsForecastViewModel : ViewModel() {
     }
 
     override fun onCleared() {
-        Timber.d("onCleared")
+        Log.d(TAG, "onCleared: ")
         super.onCleared()
     }
+
+    companion object {
+        const val TAG = "DetailVM_Logging"
+    }
+
 }

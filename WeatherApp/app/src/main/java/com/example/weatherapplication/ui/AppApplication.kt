@@ -1,32 +1,38 @@
 package com.example.weatherapplication.ui
 
 import android.app.Application
-import com.example.weatherapplication.BuildConfig
+import android.util.Log
 import com.example.weatherapplication.data.db.appdb.AppDatabaseInit
-import com.example.weatherapplication.data.db.appsp.AppSharedPreferences
-import timber.log.Timber
+import com.example.weatherapplication.data.db.appsp.SharedPrefs
+import com.example.weatherapplication.services.NotificationChannels
 
 class AppApplication : Application() {
+
     override fun onCreate() {
         super.onCreate()
+        Log.d(TAG, "onCreate: ")
         init()
     }
 
     private fun init() {
         initDatabase()
         initSharedPrefs()
-        initTimber()
+        initNotificationChannel()
     }
 
-    private fun initTimber() {
-        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+    private fun initNotificationChannel() {
+        NotificationChannels.create(this)
     }
 
     private fun initSharedPrefs() {
-        AppSharedPreferences.initSharedPref(this)
+        SharedPrefs.initSharedPref(this)
     }
 
     private fun initDatabase() {
         AppDatabaseInit.initDatabase(this)
+    }
+
+    companion object {
+        const val TAG = "Application_Logging"
     }
 }

@@ -13,7 +13,7 @@ interface ForecastDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertListForecast(forecasts: Forecast)
 
-    @Query("SELECT * FROM ${ForecastContract.DatabaseTable.TABLE_NAME} WHERE ${ForecastContract.DatabaseTable.Columns.PK_CITY_ID} = :cityId OR null")
-    suspend fun getWeatherForecast(cityId: Int): Forecast?
+    @Query("SELECT * FROM ${ForecastContract.DatabaseTable.TABLE_NAME}")
+    suspend fun getWeatherForecast(): List<Forecast>
 
 }

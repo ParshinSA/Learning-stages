@@ -1,6 +1,7 @@
 package com.example.weatherapplication.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,11 +10,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.example.weatherapplication.R
+import com.example.weatherapplication.data.db.appsp.SharedPrefs
+import com.example.weatherapplication.data.repositories.RemoteRepository
 import com.example.weatherapplication.databinding.ActivityAppBinding
+import com.example.weatherapplication.ui.weather.AppState
 import com.example.weatherapplication.ui.weather.detailsforecast.DetailsForecastFragment
 import com.example.weatherapplication.ui.weather.shortforecastlist.ShortForecastListFragment
 import com.google.android.material.transition.MaterialElevationScale
-import timber.log.Timber
 
 class AppActivity : AppCompatActivity() {
     private var _bind: ActivityAppBinding? = null
@@ -26,9 +29,13 @@ class AppActivity : AppCompatActivity() {
             ?.fragments
             ?.first()
 
+    override fun onStart() {
+        AppState.changeStateCollapsedApp(false)
+        super.onStart()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("onCreate")
         _bind = ActivityAppBinding.inflate(layoutInflater)
         setContentView(bind.root)
 
@@ -38,7 +45,6 @@ class AppActivity : AppCompatActivity() {
 
     private fun generateReportWeatherInCity() {
         bind.openReportFab.setOnClickListener {
-        Timber.d("generateReportWeatherInCity")
             bind.openReportFab.visibility = View.INVISIBLE
 
             val extras = getMyExtras()
@@ -59,14 +65,12 @@ class AppActivity : AppCompatActivity() {
     }
 
     private fun getCityName(idDirection: Int): String {
-        Timber.d("getCityName")
         return if (idDirection == R.id.action_detailsForecastFragment_to_weatherReportFragment)
             findViewById<TextView>(R.id.city_name_TV).text.toString()
         else ""
     }
 
     private fun getMyDirection(): Int {
-        Timber.d("getMyDirection")
         return when (currentNavigationFragment) {
             is ShortForecastListFragment -> {
                 R.id.action_shortForecastListFragment_to_weatherReportFragment
@@ -95,13 +99,21 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStop() {
+        Log.d(TAG, "onStop: ")
+        AppState.changeStateCollapsedApp(true)
+        RemoteRepository(this).periodUpdateForecastAllCityList()
+        super.onStop()
+    }
+
     override fun onDestroy() {
-        Timber.d("onDestroy")
+        Log.d(TAG, "onDestroy: ")
         super.onDestroy()
     }
 
     companion object {
         const val KEY_ID_DIRECTION = "key ID direction"
         const val KEY_CITY_NAME = "key city name"
+        const val TAG = "AppActivity_Logging"
     }
 }

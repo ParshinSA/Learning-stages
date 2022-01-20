@@ -12,6 +12,8 @@
     <string name="ShortForecastListFragment_check_internet">"Проверьте подключение к интернету"</string>
     <string name="ShortForecastListFragment_attention">Внимание!</string>
     <string name="ShortForecastListFragment_transition_name_item">ShortForecastListFragment_transition_name_item_(position)_%1$d</string>
+    <string name="ShortForecastListFragment_updateText_text">Данные обновленны: %1$s</string>
+
 
     <!--    DetailsForecastFragment-->
     <string name="DetailsForecastFragment_date_text">%1$s</string>
@@ -21,7 +23,7 @@
     <string name="DetailsForecastFragment_text_ms">%1$d m/s</string>
     <string name="DetailsForecastFragment_text_name_city">%1$s</string>
     <string name="DetailsForecastFragment_text_country_city">%1$s</string>
-    <string name="DetailsForecastFragment_updateText_text">Обновленно: %1$s</string>
+    <string name="DetailsForecastFragment_updateText_text">Обновленно на сервере: %1$s</string>
     <string name="DetailsForecastFragment_transition_name">DetailsForecastFragment_transition_name</string>
 
     <!--    WeatherReportFragment -->

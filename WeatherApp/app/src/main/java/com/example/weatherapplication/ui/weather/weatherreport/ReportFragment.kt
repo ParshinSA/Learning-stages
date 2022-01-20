@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,16 +25,15 @@ import com.example.weatherapplication.ui.AppActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialContainerTransform
-import timber.log.Timber
 
-class WeatherReportFragment : Fragment() {
+class ReportFragment : Fragment() {
 
     private var _bind: FragmentWeatherReportBinding? = null
     private val bind: FragmentWeatherReportBinding
         get() = _bind!!
 
     private lateinit var fabInActivity: FloatingActionButton
-
+    private var dialog: AlertDialog? = null
     private val reportViewModel: ReportViewModel by viewModels()
 
     override fun onCreateView(
@@ -41,7 +41,6 @@ class WeatherReportFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Timber.d("onCreateView")
         _bind = FragmentWeatherReportBinding.inflate(inflater, container, false)
         fabInActivity = requireActivity().findViewById(R.id.open_report_fab)
         return bind.root
@@ -49,7 +48,7 @@ class WeatherReportFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated")
+        Log.d(TAG, "onViewCreated: ")
         enterReturnAnimation()
         actionInFragment()
     }
@@ -59,12 +58,10 @@ class WeatherReportFragment : Fragment() {
         setPeriodList()
         cancelReport()
         generateReport()
-        observe()
+        observeData()
     }
 
-    private fun observe() {
-        Timber.d("observe")
-
+    private fun observeData() {
         reportViewModel.isLoadingLiveData.observe(viewLifecycleOwner) { isLoading ->
             changeStateComponentView(isLoading)
         }
@@ -76,21 +73,25 @@ class WeatherReportFragment : Fragment() {
         reportViewModel.reportFileLiveData.observe(viewLifecycleOwner) {
             openFile(it)
         }
+
+        reportViewModel.errorMessage.observe(viewLifecycleOwner) {
+            dialog = AlertDialog.Builder(requireContext())
+                .setMessage(it)
+                .create()
+
+            dialog?.show()
+        }
     }
 
     private fun openFile(it: String) {
-        Timber.d("openFile")
-
-        AlertDialog.Builder(requireContext())
-           .setTitle("Отчет")
-           .setMessage(it)
-           .create()
-           .show()
+        dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Отчет")
+            .setMessage(it)
+            .create()
+        dialog?.show()
     }
 
     private fun showSnackbar() {
-        Timber.d("showSnackbar")
-
         Snackbar.make(requireView(), "Отчет сформирован", Snackbar.LENGTH_INDEFINITE)
             .setAction("Открыть") {
                 openReport()
@@ -99,15 +100,11 @@ class WeatherReportFragment : Fragment() {
     }
 
     private fun openReport() {
-        Timber.d("openReport")
-
         reportViewModel.openReport()
         Toast.makeText(requireContext(), "Файл открыт", Toast.LENGTH_SHORT).show()
     }
 
     private fun changeStateComponentView(isLoading: Boolean) {
-        Timber.d("changeStateComponentView")
-
         bind.cityList.isEnabled = !isLoading
         bind.periodList.isEnabled = !isLoading
         bind.reportOkBtn.isEnabled = !isLoading
@@ -115,8 +112,6 @@ class WeatherReportFragment : Fragment() {
     }
 
     private fun checkingNameCityAndPeriod(): Boolean {
-        Timber.d("checkingNameCityAndPeriod")
-
         val nameCity = bind.cityList.editText?.text.toString()
         val period = bind.periodList.editText?.text.toString()
 
@@ -131,9 +126,9 @@ class WeatherReportFragment : Fragment() {
 
     private fun generateReport() {
         bind.reportOkBtn.setOnClickListener {
-        Timber.d("generateReport")
             val nameCity = bind.cityList.editText?.text.toString()
             val period = bind.periodList.editText?.text.toString()
+
             if (checkingNameCityAndPeriod()) {
                 val idCity = DefaultListCity.listCity.filter { it.name == nameCity }[0].id
                 reportViewModel.generateReport(nameCity, idCity, period)
@@ -143,14 +138,11 @@ class WeatherReportFragment : Fragment() {
 
     private fun cancelReport() {
         bind.reportCancelBtn.setOnClickListener {
-            Timber.d("cancelReport")
             navigateUp(findNavController(), null)
         }
     }
 
     private fun setCityList() {
-        Timber.d("setCityList")
-
         val autoCompleteCityList = bind.cityList.editText as? AutoCompleteTextView
             ?: error("Incorrect autoCompCityList")
 
@@ -171,8 +163,6 @@ class WeatherReportFragment : Fragment() {
     }
 
     private fun setPeriodList() {
-        Timber.d("setPeriodList")
-
         val autoCompPeriodList = bind.periodList.editText as? AutoCompleteTextView
             ?: error("Incorrect autoCompPeriodList")
 
@@ -212,8 +202,13 @@ class WeatherReportFragment : Fragment() {
     }
 
     override fun onDestroy() {
+        dialog?.dismiss()
         fabInActivity.visibility = View.VISIBLE
-        Timber.d("onDestroy")
+        Log.d(TAG, "onDestroy: ")
         super.onDestroy()
+    }
+
+    companion object {
+        const val TAG = "ReportFrg_Logging"
     }
 }

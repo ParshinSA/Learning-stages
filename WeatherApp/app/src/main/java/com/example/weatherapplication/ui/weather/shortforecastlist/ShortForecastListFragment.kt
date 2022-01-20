@@ -1,26 +1,35 @@
 package com.example.weatherapplication.ui.weather.shortforecastlist
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weatherapplication.DefaultListCity
 import com.example.weatherapplication.R
+import com.example.weatherapplication.data.db.appsp.SharedPrefs
+import com.example.weatherapplication.data.db.appsp.SharedPrefsContract
+import com.example.weatherapplication.data.db.appsp.SharedPrefsListener
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
+import com.example.weatherapplication.services.StateServiceUpdateForecast
 import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.CharacterItemDecoration
 import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.ShortForecastListAdapterRV
-import com.example.weatherapplication.utils.logD
 import com.google.android.material.transition.MaterialElevationScale
-import timber.log.Timber
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
@@ -28,9 +37,12 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     private val bind: FragmentShortForecastListBinding
         get() = _bind!!
 
+    private val sharedPrefs: SharedPreferences by lazy {
+        SharedPrefs.instancePrefs
+    }
+
     private lateinit var adapterRVShortForecast: ShortForecastListAdapterRV
     private val shortForecastListViewModel: ShortForecastListViewModel by viewModels()
-    private val defaultListCity = DefaultListCity.listCity
     private var myDialog: AlertDialog? = null
 
     override fun onCreateView(
@@ -38,38 +50,73 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Timber.d("onCreateView")
-
+        Log.d(TAG, "onCreateView: ")
         _bind = FragmentShortForecastListBinding.inflate(inflater, container, false)
         return bind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.d("onViewCreated")
+        Log.d(TAG, "onViewCreated: ")
         thisTransition(view)
         actionInFragment()
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun thisTransition(view: View) {
-        Timber.d("thisTransition")
+    private fun actionInFragment() {
+        initComponents()
+        observeData()
+        swipeUpdateForecastList()
+        exitEnterTransition()
+        checkInternet()
+    }
 
+    private fun initComponents() {
+        initRV()
+    }
+
+    private fun setLastTimeUpdateForecast() {
+        val lastTimeUpdate = sharedPrefs.getLong(SharedPrefsContract.TIME_LAST_REQUEST_KEY, 0L)
+        Log.d(TAG, "setLastTimeUpdateForecast: lastTime:$lastTimeUpdate")
+        val dateFormat = Date(lastTimeUpdate)
+        val sdf = SimpleDateFormat("dd MMMM  HH:mm:ss")
+
+        bind.updateTime.text = this.getString(
+            R.string.ShortForecastListFragment_updateText_text,
+            sdf.format(dateFormat)
+        )
+    }
+
+    private fun checkInternet() {
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val isConnect =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) != null
+
+        if (isConnect) {
+            getForecastList()
+            setLastTimeUpdateForecast()
+            changeStateUpdateTime(true)
+        } else {
+            shortForecastListViewModel.errorMessage(this.getString(R.string.ShortForecastListFragment_check_internet))
+            changeStateUpdateTime(false)
+        }
+    }
+
+    private fun changeStateUpdateTime(state: Boolean) {
+        bind.updateTime.isVisible = state
+
+    }
+
+    private fun getForecastList() {
+        shortForecastListViewModel.getForecastList()
+    }
+
+    private fun thisTransition(view: View) {
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
     }
 
-    private fun actionInFragment() {
-        initRV()
-        checkInternet()
-        observeData()
-        swipeUpdateForecastList()
-        getForecastList()
-        exitEnterTransition()
-    }
-
     private fun exitEnterTransition() {
-        Timber.d("exitEnterTransition")
-
         exitTransition = MaterialElevationScale(false).apply {
             duration = 200.toLong()
         }
@@ -79,27 +126,14 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun swipeUpdateForecastList() {
-        Timber.d("swipeUpdateForecastList")
-
         bind.swipeLayout.setOnRefreshListener {
-            updateForecastList()
+            shortForecastListViewModel.getForecastList(true)
         }
-    }
-
-    private fun getForecastList() {
-        Timber.d("getForecastList")
-        shortForecastListViewModel.getForecastList(defaultListCity)
-    }
-
-    private fun updateForecastList() {
-        Timber.d("updateForecastList")
-        shortForecastListViewModel.updateForecastList(defaultListCity)
     }
 
     private fun observeData() {
         shortForecastListViewModel.forecastListLiveData.observe(viewLifecycleOwner) {
             adapterRVShortForecast.submitList(it)
-            Timber.d("updateForecastList $it")
         }
 
         shortForecastListViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { message ->
@@ -109,11 +143,30 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         shortForecastListViewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
             bind.swipeLayout.isRefreshing = it
         }
+
+        observeUpdateService()
+        observeSharedPrefs()
+    }
+
+    private fun observeSharedPrefs() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            Log.d(TAG, "observeSharedPrefs: ")
+            SharedPrefs.addChangeListener()
+        }
+
+        SharedPrefsListener.listenerSharedPrefs.observe(viewLifecycleOwner) {
+            setLastTimeUpdateForecast()
+        }
+    }
+
+    private fun observeUpdateService() {
+        StateServiceUpdateForecast.stateUpdate.observe(viewLifecycleOwner) { isLoadingService ->
+            if (!isLoadingService) checkInternet()
+            bind.swipeLayout.isRefreshing = isLoadingService
+        }
     }
 
     private fun showDialogError(message: String) {
-        Timber.d("showDialogError")
-
         myDialog = AlertDialog.Builder(requireContext())
             .setTitle(this.getString(R.string.ShortForecastListFragment_attention))
             .setMessage(message)
@@ -122,19 +175,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         myDialog!!.show()
     }
 
-    private fun checkInternet() {
-        Timber.d("checkInternet")
-
-        val connectivityManager =
-            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val isConnect =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) == null
-        if (isConnect) shortForecastListViewModel.errorMessage(this.getString(R.string.ShortForecastListFragment_check_internet))
-    }
-
     private fun initRV() {
-        Timber.d("initRV")
-
         adapterRVShortForecast =
             ShortForecastListAdapterRV { position: Int, currentViewInRV: View ->
                 transitionInDetailsForecastFragment(position, currentViewInRV)
@@ -149,11 +190,9 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun transitionInDetailsForecastFragment(position: Int, currentView: View) {
-        Timber.d("transitionInDetailsForecastFragment")
-
         val forecast = shortForecastListViewModel.forecastListLiveData.value!![position]
         val bundle = Bundle()
-        bundle.putParcelable(KEY, forecast)
+        bundle.putParcelable(KEY_FORECAST, forecast)
 
         val transitionName =
             this.resources.getString(R.string.DetailsForecastFragment_transition_name)
@@ -165,13 +204,14 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     override fun onDestroy() {
-        Timber.d("onDestroy")
-
+        SharedPrefs.removeListener()
         myDialog?.dismiss()
+        Log.d(TAG, "onDestroy:")
         super.onDestroy()
     }
 
     companion object {
-        const val KEY = "key"
+        const val KEY_FORECAST = "key forecast"
+        const val TAG = "ShortFrg_Logging"
     }
 }

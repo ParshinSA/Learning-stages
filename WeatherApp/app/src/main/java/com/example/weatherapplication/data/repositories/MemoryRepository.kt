@@ -26,14 +26,13 @@ class MemoryRepository(
         } catch (t: Throwable) {
             error("error saveReportInCacheDirection: $t")
         }
-
     }
 
     fun openReportFromCacheDir(): String {
         val folder = context.cacheDir
         val file = File(folder, "report.txt")
         file.inputStream().bufferedReader().use {
-           return it.readText()
+            return it.readText()
         }
     }
 }
