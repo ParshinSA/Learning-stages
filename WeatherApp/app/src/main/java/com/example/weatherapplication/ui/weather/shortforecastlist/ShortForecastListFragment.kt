@@ -21,6 +21,7 @@ import com.example.weatherapplication.R
 import com.example.weatherapplication.data.db.appsp.SharedPrefs
 import com.example.weatherapplication.data.db.appsp.SharedPrefsContract
 import com.example.weatherapplication.data.db.appsp.SharedPrefsListener
+import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
 import com.example.weatherapplication.services.StateServiceUpdateForecast
 import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.CharacterItemDecoration
@@ -67,7 +68,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         observeData()
         swipeUpdateForecastList()
         exitEnterTransition()
-        checkInternet()
+        getForecastList(false)
     }
 
     private fun initComponents() {
@@ -78,7 +79,8 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         val lastTimeUpdate = sharedPrefs.getLong(SharedPrefsContract.TIME_LAST_REQUEST_KEY, 0L)
         Log.d(TAG, "setLastTimeUpdateForecast: lastTime:$lastTimeUpdate")
         val dateFormat = Date(lastTimeUpdate)
-        val sdf = SimpleDateFormat("dd MMMM  HH:mm:ss")
+        val sdf =
+            SimpleDateFormat(this.getString(R.string.ShortForecastListFragment_time_format_ddMMMMHHmmss))
 
         bind.updateTime.text = this.getString(
             R.string.ShortForecastListFragment_updateText_text,
@@ -86,29 +88,33 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         )
     }
 
-    private fun checkInternet() {
+    private fun isConnect(): Boolean {
         val connectivityManager =
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val isConnect =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) != null
-
-        if (isConnect) {
-            getForecastList()
-            setLastTimeUpdateForecast()
-            changeStateUpdateTime(true)
-        } else {
-            shortForecastListViewModel.errorMessage(this.getString(R.string.ShortForecastListFragment_check_internet))
-            changeStateUpdateTime(false)
-        }
+        return connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) != null
     }
 
-    private fun changeStateUpdateTime(state: Boolean) {
+    private fun changeStateViewUpdateTime(state: Boolean) {
         bind.updateTime.isVisible = state
-
     }
 
-    private fun getForecastList() {
-        shortForecastListViewModel.getForecastList()
+    private fun getForecastList(isForcedUpdate: Boolean) {
+
+        if (isForcedUpdate) {
+            if (isConnect()) {
+                shortForecastListViewModel.getForecastList(isForcedUpdate)
+                changeStateViewUpdateTime(true)
+            } else {
+                shortForecastListViewModel.errorMessage(this.getString(R.string.ShortForecastListFragment_check_internet))
+                changeStateViewUpdateTime(false)
+                changeStateProgressView(false)
+            }
+
+        } else shortForecastListViewModel.getForecastList(isForcedUpdate)
+    }
+
+    private fun changeStateProgressView(isLoading: Boolean) {
+        bind.swipeLayout.isRefreshing = isLoading
     }
 
     private fun thisTransition(view: View) {
@@ -127,25 +133,31 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
 
     private fun swipeUpdateForecastList() {
         bind.swipeLayout.setOnRefreshListener {
-            shortForecastListViewModel.getForecastList(true)
+            getForecastList(true)
         }
     }
 
     private fun observeData() {
-        shortForecastListViewModel.forecastListLiveData.observe(viewLifecycleOwner) {
-            adapterRVShortForecast.submitList(it)
+        shortForecastListViewModel.forecastListLiveData.observe(viewLifecycleOwner) { listForecast ->
+            updateForecastListInRV(listForecast)
         }
 
         shortForecastListViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { message ->
             showDialogError(message)
         }
 
-        shortForecastListViewModel.isLoadingLiveData.observe(viewLifecycleOwner) {
-            bind.swipeLayout.isRefreshing = it
+        shortForecastListViewModel.isLoadingLiveData.observe(viewLifecycleOwner) { isUpdate ->
+            changeStateProgressView(isUpdate)
         }
 
         observeUpdateService()
         observeSharedPrefs()
+    }
+
+    private fun updateForecastListInRV(listForecast: List<Forecast>) {
+        if (listForecast.isEmpty()) {
+            shortForecastListViewModel.errorMessage("Не удалось получить данные")
+        } else adapterRVShortForecast.submitList(listForecast)
     }
 
     private fun observeSharedPrefs() {
@@ -153,16 +165,16 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
             Log.d(TAG, "observeSharedPrefs: ")
             SharedPrefs.addChangeListener()
         }
-
         SharedPrefsListener.listenerSharedPrefs.observe(viewLifecycleOwner) {
+            Log.d(TAG, "observeSharedPrefs: UPDATE TIME")
             setLastTimeUpdateForecast()
         }
     }
 
     private fun observeUpdateService() {
-        StateServiceUpdateForecast.stateUpdate.observe(viewLifecycleOwner) { isLoadingService ->
-            if (!isLoadingService) checkInternet()
-            bind.swipeLayout.isRefreshing = isLoadingService
+        StateServiceUpdateForecast.stateUpdate.observe(viewLifecycleOwner) { isUpdate ->
+            changeStateProgressView(isUpdate)
+            if (!isUpdate) getForecastList(false)
         }
     }
 

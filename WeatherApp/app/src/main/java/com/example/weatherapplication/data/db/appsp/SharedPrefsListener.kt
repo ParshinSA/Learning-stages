@@ -10,6 +10,6 @@ object SharedPrefsListener {
         get() = listenerSharedPrefsMutableLiveData
 
     fun isSharedPrefs(isChanged: Boolean) {
-        listenerSharedPrefsMutableLiveData.postValue(true)
+        listenerSharedPrefsMutableLiveData.postValue(isChanged)
     }
 }

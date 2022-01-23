@@ -9,7 +9,7 @@ object StateServiceUpdateForecast {
     val stateUpdate: LiveData<Boolean>
         get() = mutableStateUpdate
 
-    fun changeStateUpdate(isDownloading: Boolean) {
-        mutableStateUpdate.postValue(isDownloading)
+    fun changeStateUpdate(isUpdate: Boolean) {
+        mutableStateUpdate.postValue(isUpdate)
     }
 }

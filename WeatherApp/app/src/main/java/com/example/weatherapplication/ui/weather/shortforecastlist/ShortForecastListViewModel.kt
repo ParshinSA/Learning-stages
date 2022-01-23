@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.repositories.DatabaseRepository
 import com.example.weatherapplication.data.repositories.RemoteRepository
+import com.example.weatherapplication.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class ShortForecastListViewModel(
@@ -22,7 +23,7 @@ class ShortForecastListViewModel(
     val forecastListLiveData: LiveData<List<Forecast>>
         get() = forecastListMutableLiveData
 
-    private val errorMessageMutableLiveData = MutableLiveData<String>()
+    private val errorMessageMutableLiveData = SingleLiveEvent<String>()
     val errorMessageLiveData: LiveData<String>
         get() = errorMessageMutableLiveData
 
@@ -30,19 +31,17 @@ class ShortForecastListViewModel(
     val isLoadingLiveData: LiveData<Boolean>
         get() = isLoadingMutableLiveData
 
-    fun getForecastList(isForcedUpdate: Boolean = false) {
+    fun getForecastList(isForcedUpdate: Boolean) {
         isLoadingMutableLiveData.postValue(true)
         viewModelScope.launch {
 
-            val listForecast = if (!isForcedUpdate) {
-                databaseRepo.getForecastFromDatabase()
-            } else emptyList()
-
-            if (listForecast.isEmpty()) {
+            if (isForcedUpdate) {
                 remoteRepo.oneTimeUpdateForecastAllCity()
+            } else {
+                forecastListMutableLiveData.postValue(
+                    databaseRepo.getForecastFromDatabase()
+                )
             }
-
-            forecastListMutableLiveData.postValue(listForecast)
             isLoadingMutableLiveData.postValue(false)
         }
     }
