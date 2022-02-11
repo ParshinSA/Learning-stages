@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.objects.AppDisposable
+import com.example.weatherapplication.data.objects.AppState
 import com.example.weatherapplication.data.repositories.RemoteRepository
 import com.example.weatherapplication.databinding.ActivityAppBinding
-import com.example.weatherapplication.data.objects.AppState
 import com.google.android.material.transition.MaterialElevationScale
 
 class AppActivity : AppCompatActivity() {
@@ -54,6 +54,7 @@ class AppActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        AppDisposable.unSubscribeAll()
         Log.d(TAG, "onDestroy: ")
         super.onDestroy()
     }
