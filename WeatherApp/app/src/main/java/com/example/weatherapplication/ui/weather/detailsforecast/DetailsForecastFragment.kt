@@ -9,9 +9,15 @@ import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
+import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.models.forecast.Forecast
+import com.example.weatherapplication.data.objects.CustomCities
 import com.example.weatherapplication.databinding.FragmentDetailsForecastBinding
 import com.example.weatherapplication.ui.weather.shortforecastlist.ShortForecastListFragment
 import com.example.weatherapplication.utils.convertToDate
@@ -28,6 +34,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
 
     private val detailsForecastViewModel: DetailsForecastViewModel by viewModels()
 
+    private lateinit var currentForecast: Forecast
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,7 +49,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ")
         thisTransition(view)
-        action()
+        actionInFragment()
     }
 
     private fun thisTransition(view: View) {
@@ -49,11 +57,12 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
         view.doOnPreDraw { startPostponedEnterTransition() }
     }
 
-    private fun action() {
+    private fun actionInFragment() {
         exitTransform()
         sendForecastInViewModel()
-        getArgument()
+        generateReportWeatherInCity()
         observeData()
+        backButtonClickListener()
     }
 
     private fun exitTransform() {
@@ -67,84 +76,90 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     private fun observeData() {
         detailsForecastViewModel.detailsForecastLiveData.observe(viewLifecycleOwner) { forecast ->
             Log.d(TAG, "observeData: ")
-            bindViewItems(forecast)
+            currentForecast = forecast
+            bindViewItems()
         }
     }
 
-    private fun bindViewItems(forecast: Forecast) {
-        setTime(forecast)
-        setNameCity(forecast)
-        setCountryCity(forecast)
-        setTemp(forecast)
-        setIcon(forecast)
-        setDescription(forecast)
-        setWind(forecast)
-        setPressure(forecast)
-        setHumidity(forecast)
-        setVisibility(forecast)
-        setTimeSunriseAndSunset(forecast)
+    private fun bindViewItems() {
+        setTime()
+        setNameCity()
+        setTemp()
+        setIcon()
+        setDescription()
+        setWind()
+        setPressure()
+        setHumidity()
+        setVisibility()
+        setTimeSunriseAndSunset()
     }
 
-    private fun setTimeSunriseAndSunset(forecast: Forecast) {
+    private fun backButtonClickListener() {
+        bind.toolbarDetailFrg.setNavigationOnClickListener {
+            NavigationUI.navigateUp(findNavController(), null)
+        }
+    }
+
+    private fun setTimeSunriseAndSunset() {
         bind.infoTextSunriseTV.text = this.getString(
             R.string.DetailsForecastFragment_date_text,
-            forecast.sys.sunrise.convertToDate("HH:mm")
+            currentForecast.sys.sunrise.convertToDate("HH:mm")
         )
         bind.infoTextSunsetTV.text = this.getString(
             R.string.DetailsForecastFragment_date_text,
-            forecast.sys.sunset.convertToDate("HH:mm")
+            currentForecast.sys.sunset.convertToDate("HH:mm")
         )
     }
 
-    private fun setVisibility(forecast: Forecast) {
+    private fun setVisibility() {
         bind.infoTextVisibilityTV.text = this.getString(
             R.string.DetailsForecastFragment_text_km,
-            forecast.visibility / 1000L
+            currentForecast.visibility / 1000L
         )
     }
 
-    private fun setHumidity(forecast: Forecast) {
+    private fun setHumidity() {
         bind.infoTextHumidityTV.text =
             this.getString(
                 R.string.DetailsForecastFragment_text_percent,
-                forecast.main.humidity
+                currentForecast.main.humidity
             )
     }
 
-    private fun setPressure(forecast: Forecast) {
+    private fun setPressure() {
         bind.infoTextPressureTV.text = this.getString(
             R.string.DetailsForecastFragment_text_pressure,
-            forecast.main.pressure
+            currentForecast.main.pressure
         )
     }
 
-    private fun setWind(forecast: Forecast) {
-        rotationIconWind(forecast)
-        setInfoTextWind(forecast)
+    private fun setWind() {
+        rotationIconWind()
+        setInfoTextWind()
     }
 
-    private fun setInfoTextWind(forecast: Forecast) {
+    private fun setInfoTextWind() {
         bind.infoTextWindTV.text =
             this.getString(
                 R.string.DetailsForecastFragment_text_ms,
-                forecast.wind.speed.roundToInt()
+                currentForecast.wind.speed.roundToInt()
             )
     }
 
-    private fun rotationIconWind(forecast: Forecast) {
-        bind.iconWindRouteIV.animate().rotation(forecast.wind.routeDegrees.toFloat())
+    private fun rotationIconWind() {
+        bind.iconWindRouteIV.animate().rotation(currentForecast.wind.routeDegrees.toFloat())
     }
 
-    private fun setDescription(forecast: Forecast) {
-        bind.descriptionTV.text = forecast.weather[0].description
+    private fun setDescription() {
+        bind.descriptionTV.text = currentForecast.weather[0].description
     }
 
-    private fun setIcon(forecast: Forecast) {
+    private fun setIcon() {
         Glide.with(requireContext())
             .load(
                 this.getString(
                     R.string.URL_loading_image_weather,
-                    forecast.weather[0].sectionURL
+                    currentForecast.weather[0].sectionURL
                 )
             )
             .placeholder(R.drawable.ic_cloud)
@@ -152,40 +167,60 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
             .into(bind.iconWeatherIV)
     }
 
-    private fun setTemp(forecast: Forecast) {
-        bind.tempTV.text = round(forecast.main.temp).toInt().toString()
+    private fun setTemp() {
+        bind.tempTV.text = round(currentForecast.main.temp).toInt().toString()
     }
 
-    private fun setNameCity(forecast: Forecast) {
+    private fun setNameCity() {
         bind.cityNameTV.text = this.getString(
             R.string.DetailsForecastFragment_text_name_city,
-            forecast.cityName
+            currentForecast.cityName,
+            currentForecast.sys.country
         )
     }
 
-    private fun setCountryCity(forecast: Forecast) {
-        bind.countryTV.text = this.getString(
-            R.string.DetailsForecastFragment_text_country_city,
-            forecast.sys.country
-        )
-    }
-
-    private fun setTime(forecast: Forecast) {
+    private fun setTime() {
         bind.dateTimeTV.text = this.getString(
             R.string.DetailsForecastFragment_updateText_text,
-            forecast.timeForecast.convertToDate("dd MMM yyyy HH:mm")
+            currentForecast.timeForecast.convertToDate("dd MMM yyyy HH:mm")
         )
     }
 
-    private fun getArgument(): Forecast? {
-        return requireArguments().getParcelable(ShortForecastListFragment.KEY_FORECAST)
+    private fun getArgument() {
+        currentForecast = requireArguments().getParcelable(ShortForecastListFragment.KEY_FORECAST)
+            ?: error("$TAG No forecast")
     }
 
     private fun sendForecastInViewModel() {
-        detailsForecastViewModel.setDataDetailsForecastInView(
-            getArgument()
-                ?: error("CityInfoFragment / incorrect data in bundle")
-        )
+        getArgument()
+        detailsForecastViewModel.setDataDetailsForecastInView(currentForecast)
+    }
+
+    private fun generateReportWeatherInCity() {
+        bind.openReportFab.visibility = View.VISIBLE
+
+        bind.openReportFab.setOnClickListener {
+            bind.openReportFab.visibility = View.INVISIBLE
+
+            val extras = getMyExtras()
+
+            val bundle = Bundle()
+
+            bundle.putParcelable(KEY_FORECAST, currentForecast)
+
+            findNavController().navigate(
+                R.id.action_detailsForecastFragment_to_weatherReportFragment,
+                bundle,
+                null,
+                extras
+            )
+        }
+    }
+
+    private fun getMyExtras(): FragmentNavigator.Extras {
+        val transitionName =
+            resources.getString(R.string.WeatherReportFragment_transition_name)
+        return FragmentNavigatorExtras(bind.openReportFab to transitionName)
     }
 
     override fun onDestroy() {
@@ -194,6 +229,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     companion object {
+        const val KEY_FORECAST = "key city name"
         const val TAG = "DetailFrg_Logging"
     }
 }

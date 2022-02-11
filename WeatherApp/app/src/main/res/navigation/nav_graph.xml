@@ -14,8 +14,8 @@
             android:id="@+id/action_shortForecastListFragment_to_detailsForecastFragment"
             app:destination="@id/detailsForecastFragment" />
         <action
-            android:id="@+id/action_shortForecastListFragment_to_weatherReportFragment"
-            app:destination="@id/weatherReportFragment" />
+            android:id="@+id/action_shortForecastListFragment_to_addCityFragment"
+            app:destination="@id/addCityFragment" />
     </fragment>
 
     <fragment
@@ -33,4 +33,9 @@
         android:name="com.example.weatherapplication.ui.weather.weatherreport.ReportFragment"
         android:label="WeatherReportFragment"
         tools:layout="@layout/fragment_weather_report" />
+    <fragment
+        android:id="@+id/addCityFragment"
+        tools:layout="@layout/fragment_search_city"
+        android:name="com.example.weatherapplication.ui.weather.searchcity.SearchCityFragment"
+        android:label="AddCityFragment" />
 </navigation>

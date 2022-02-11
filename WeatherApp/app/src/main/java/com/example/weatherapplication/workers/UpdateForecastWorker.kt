@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.weatherapplication.services.UpdateForecastService
-import com.example.weatherapplication.ui.weather.AppState
+import com.example.weatherapplication.data.objects.AppState
 
 class UpdateForecastWorker(
     private val context: Context,

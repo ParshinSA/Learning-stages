@@ -2,8 +2,10 @@ package com.example.weatherapplication.ui
 
 import android.app.Application
 import android.util.Log
-import com.example.weatherapplication.data.db.appdb.AppDatabaseInit
+import com.example.weatherapplication.data.db.forecastdb.ForecastDbInit
 import com.example.weatherapplication.data.db.appsp.SharedPrefs
+import com.example.weatherapplication.data.db.customcitiesdb.CustomCitiesDbInit
+import com.example.weatherapplication.data.objects.CustomCities
 import com.example.weatherapplication.services.NotificationChannels
 
 class AppApplication : Application() {
@@ -18,6 +20,7 @@ class AppApplication : Application() {
         initDatabase()
         initSharedPrefs()
         initNotificationChannel()
+        observeDatabase()
     }
 
     private fun initNotificationChannel() {
@@ -29,7 +32,12 @@ class AppApplication : Application() {
     }
 
     private fun initDatabase() {
-        AppDatabaseInit.initDatabase(this)
+        ForecastDbInit.initDatabase(this)
+        CustomCitiesDbInit.initDatabase(this)
+    }
+
+    private fun observeDatabase(){
+        CustomCities.observeCustomCitiesDb()
     }
 
     companion object {

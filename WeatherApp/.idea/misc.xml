@@ -3,7 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/fragment_weather_report.xml" value="0.14322916666666666" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/drawable/bg_city_info.xml" value="0.159375" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/drawable/bg_item_info_weather_city.xml" value="0.159375" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/activity_app.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/fragment_add_city.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/fragment_details_forecast.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/fragment_search_city.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/fragment_short_forecast_list.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/fragment_weather_report.xml" value="0.25" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/item_city_list.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/item_city_list_in_reports.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/item_period_list.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/item_result_search.xml" value="0.22" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/item_search_city.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/layout/item_short_forecast.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/WeatherApp/app/src/main/res/menu/search_menu_toolbar.xml" value="0.26871794871794874" />
       </map>
     </option>
   </component>

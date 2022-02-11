@@ -6,5 +6,5 @@ import com.example.weatherapplication.data.models.report.HistoryWeatherContract.
 
 data class Field(
     @SerializedName(GsonName.MEDIAN)
-    val median: Float
+    val median: Double
 )

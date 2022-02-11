@@ -1,11 +1,11 @@
 package com.example.weatherapplication.data.models.forecast
 
 object ForecastContract {
-    object DatabaseTable {
+    object TableDatabase {
         const val TABLE_NAME = "forecast_table"
 
         object Columns {
-            const val PK_CITY_ID = "pk_city_id"
+            const val PK_COORDINATION_CITY = "pk_coordination_city"
             const val WEATHER = "weather"
             const val MAIN = "main"
             const val VISIBILITY = "visibility"
@@ -24,7 +24,7 @@ object ForecastContract {
         const val WIND = "wind"
         const val TIME_FORECAST = "dt"
         const val CITY_NAME = "name"
-        const val CITY_ID = "id"
+        const val COORDINATION_CITY = "coord"
         const val SYS = "sys"
     }
 }

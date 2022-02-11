@@ -5,19 +5,18 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.weatherapplication.data.models.forecast.Forecast
-import com.example.weatherapplication.data.repositories.DatabaseRepository
+import com.example.weatherapplication.data.objects.AppDisposable
+import com.example.weatherapplication.data.repositories.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.RemoteRepository
 import com.example.weatherapplication.utils.SingleLiveEvent
-import kotlinx.coroutines.launch
 
 class ShortForecastListViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
     private val remoteRepo = RemoteRepository(application)
-    private val databaseRepo = DatabaseRepository()
+    private val databaseRepo = ForecastDbRepository()
 
     private val forecastListMutableLiveData = MutableLiveData<List<Forecast>>()
     val forecastListLiveData: LiveData<List<Forecast>>
@@ -31,19 +30,20 @@ class ShortForecastListViewModel(
     val isLoadingLiveData: LiveData<Boolean>
         get() = isLoadingMutableLiveData
 
-    fun getForecastList(isForcedUpdate: Boolean) {
-        isLoadingMutableLiveData.postValue(true)
-        viewModelScope.launch {
+    init {
+        AppDisposable.disposableList.add(
+            databaseRepo.observeForecastDatabase().subscribe {
+                isLoadingMutableLiveData.postValue(true)
+                forecastListMutableLiveData.postValue(it)
+                isLoadingMutableLiveData.postValue(false)
+                Log.d(TAG, "DatabaseListener: $it")
+            })
+    }
 
-            if (isForcedUpdate) {
-                remoteRepo.oneTimeUpdateForecastAllCity()
-            } else {
-                forecastListMutableLiveData.postValue(
-                    databaseRepo.getForecastFromDatabase()
-                )
-            }
-            isLoadingMutableLiveData.postValue(false)
-        }
+    fun getForecastList() {
+        isLoadingMutableLiveData.postValue(true)
+        remoteRepo.oneTimeUpdateForecastAllCity()
+        isLoadingMutableLiveData.postValue(false)
     }
 
     fun errorMessage(message: String) {
@@ -51,7 +51,7 @@ class ShortForecastListViewModel(
     }
 
     override fun onCleared() {
-        Log.d(TAG, "onCleared")
+        Log.d(TAG, "onCleared: VM cleared")
         super.onCleared()
     }
 

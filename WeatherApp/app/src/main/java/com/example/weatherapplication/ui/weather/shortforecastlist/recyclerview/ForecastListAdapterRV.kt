@@ -12,10 +12,10 @@ import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.ItemShortForecastBinding
 import kotlin.math.roundToInt
 
-class ShortForecastListAdapterRV(
+class ForecastListAdapterRV(
     private val onItemClick: (clickOnPosition: Int, currentView: View) -> Unit
 ) :
-    ListAdapter<Forecast, ShortForecastListAdapterRV.WeatherForecastHolder>(DiffUtilItemCallback()) {
+    ListAdapter<Forecast, ForecastListAdapterRV.WeatherForecastHolder>(DiffUtilItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherForecastHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -34,7 +34,7 @@ class ShortForecastListAdapterRV(
 
     class DiffUtilItemCallback : DiffUtil.ItemCallback<Forecast>() {
         override fun areItemsTheSame(oldItem: Forecast, newItem: Forecast): Boolean {
-            return oldItem.cityId == newItem.cityId
+            return oldItem.coordination.lat == newItem.coordination.lat
         }
 
         override fun areContentsTheSame(

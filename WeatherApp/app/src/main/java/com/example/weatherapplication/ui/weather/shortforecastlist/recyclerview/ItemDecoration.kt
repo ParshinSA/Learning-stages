@@ -6,7 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.utils.fromDpToPixels
 
-class CharacterItemDecoration(
+class ItemDecoration(
     private val context: Context,
     private val offsetDp: Int
 ) : RecyclerView.ItemDecoration() {

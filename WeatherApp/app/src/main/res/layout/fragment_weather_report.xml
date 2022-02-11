@@ -1,79 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/report"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:transitionName="@string/WeatherReportFragment_transition_name">
+    android:orientation="vertical">
 
-    <TextView
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/WeatherReportFragment_report_text"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+        android:background="@color/myPrimary"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/WeatherReportFragment_report_text"
+        app:titleTextColor="@color/darkColorText" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/city_list"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_margin="8dp"
+        android:background="@drawable/bg_item"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:transitionName="@string/WeatherReportFragment_transition_name">
 
-        <AutoCompleteTextView
+        <TextView
+            android:id="@+id/city_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/city_text"
-            android:inputType="none" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/darkColorText"
+            tools:text="London" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/period_list"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
-
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/period_list"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="match_parent"
+            app:boxBackgroundColor="@color/white"
             android:layout_height="wrap_content"
-            android:hint="@string/period_text"
-            android:inputType="none" />
+            android:layout_margin="8dp">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/WeatherReportFragment_period_text"
+                android:inputType="none" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/report_cancel_btn"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/cancel_text"
-            android:textColor="@color/darkColor" />
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/report_ok_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:text="@string/ok_text"
-            android:textColor="@color/darkColor" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/report_cancel_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/WeatherReportFragment_text_cancel"
+                android:textColor="@color/darkColorText" />
 
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/report_ok_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="@string/WeatherReportFragment_text_ok"
+                android:textColor="@color/darkColorText" />
+
+        </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <ProgressBar
         android:id="@+id/progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="visible" />
+        android:visibility="invisible" />
+
 </LinearLayout>

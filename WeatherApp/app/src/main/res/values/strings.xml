@@ -1,19 +1,16 @@
 <resources>
     <string name="app_name">Как там погода?</string>
-    <string name="text_header_list_of_city1">Список городов</string>
-    <string name="text_header_list_of_city2">Нажмите для подробного прогноза</string>
-    <string name="text_celsius">°C</string>
-    <string name="text_humidity">Влажность:</string>
-    <string name="text_visibility">Видимость:</string>
 
+    <!--    Collective-->
     <string name="URL_loading_image_weather">https://openweathermap.org/img/wn/%1$s@2x.png</string>
 
     <!--    ShortForecastListFragment-->
-    <string name="ShortForecastListFragment_check_internet">"Проверьте подключение к интернету"</string>
+    <string name="ShortForecastListFragment_check_internet">"Нет подключение к интернету"</string>
     <string name="ShortForecastListFragment_attention">Внимание!</string>
     <string name="ShortForecastListFragment_transition_name_item">ShortForecastListFragment_transition_name_item_(position)_%1$d</string>
     <string name="ShortForecastListFragment_updateText_text">Данные обновленны: %1$s</string>
     <string name="ShortForecastListFragment_time_format_ddMMMMHHmmss">dd MMMM  HH:mm:ss</string>
+    <string name="ShortForecastListFragment_text_title_toolbar">Список городов.</string>
 
     <!--    DetailsForecastFragment-->
     <string name="DetailsForecastFragment_date_text">%1$s</string>
@@ -21,25 +18,33 @@
     <string name="DetailsForecastFragment_text_percent">%1$d %%</string>
     <string name="DetailsForecastFragment_text_pressure">%1$d hPa</string>
     <string name="DetailsForecastFragment_text_ms">%1$d m/s</string>
-    <string name="DetailsForecastFragment_text_name_city">%1$s</string>
-    <string name="DetailsForecastFragment_text_country_city">%1$s</string>
+    <string name="DetailsForecastFragment_text_name_city">%1$s, %2$s</string>
     <string name="DetailsForecastFragment_updateText_text">Обновленно на сервере: %1$s</string>
     <string name="DetailsForecastFragment_transition_name">DetailsForecastFragment_transition_name</string>
+    <string name="DetailsForecastFragment_text_title_toolbar">Детальный прогноз</string>
+    <string name="DetailsForecastFragment_text_humidity">Влажность:</string>
+    <string name="DetailsForecastFragment_text_celsius">°C</string>
+    <string name="DetailsForecastFragment_text_visibility">Видимость:</string>
+    <string name="DetailsForecastFragment_fab_transition_name">AppActivity_FAB_transition_name</string>
 
-    <!--    WeatherReportFragment -->
-    <string name="WeatherReportFragment_transition_name">WeatherReportFragment_transition_name</string>
+    <!--    WeatherReportFragment-->
     <string name="WeatherReportFragment_report_text">Сформировать отчет</string>
+    <string name="WeatherReportFragment_transition_name">WeatherReportFragment_transition_name</string>
+    <string name="WeatherReportFragment_city_text">Город</string>
+    <string name="WeatherReportFragment_period_text">Период</string>
+    <string name="WeatherReportFragment_text_ok">Ок</string>
+    <string name="WeatherReportFragment_text_cancel">Cancel</string>
+    <string name="WeatherReportFragment_city_name_and_country">%1$s, %2$s</string>
+    <string name="WeatherReportFragment_default_period">Десять дней</string>
     <string-array name="WeatherReportFragment_period_list">
         <item>Десять дней</item>
         <item>Один месяц</item>
         <item>Три месяца</item>
     </string-array>
 
-    <!--    ActivityApp-->
-    <string name="AppActivity_FAB_transition_name">AppActivity_FAB_transition_name</string>
-    <string name="city_text">Город</string>
-    <string name="period_text">Период</string>
-    <string name="cancel_text">Cancel</string>
-    <string name="ok_text">Ок</string>
+<!--    AddCityFragment-->
+    <string name="AddCityFragment_text_title_toolbar">Поиск города</string>
+    <string name="SearchCityFragment_search_in_toolbar">Search_city</string>
+
 
 </resources>

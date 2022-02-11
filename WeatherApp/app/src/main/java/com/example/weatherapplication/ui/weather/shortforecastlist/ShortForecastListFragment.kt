@@ -13,22 +13,17 @@ import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.db.appsp.SharedPrefs
 import com.example.weatherapplication.data.db.appsp.SharedPrefsContract
-import com.example.weatherapplication.data.db.appsp.SharedPrefsListener
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
-import com.example.weatherapplication.services.StateServiceUpdateForecast
-import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.CharacterItemDecoration
-import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.ShortForecastListAdapterRV
+import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.ForecastListAdapterRV
+import com.example.weatherapplication.ui.weather.shortforecastlist.recyclerview.ItemDecoration
 import com.google.android.material.transition.MaterialElevationScale
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,7 +37,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         SharedPrefs.instancePrefs
     }
 
-    private lateinit var adapterRVShortForecast: ShortForecastListAdapterRV
+    private lateinit var adapterRVForecast: ForecastListAdapterRV
     private val shortForecastListViewModel: ShortForecastListViewModel by viewModels()
     private var myDialog: AlertDialog? = null
 
@@ -60,15 +55,23 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         Log.d(TAG, "onViewCreated: ")
         thisTransition(view)
         actionInFragment()
+
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun actionInFragment() {
+        getForecastList()
         initComponents()
-        observeData()
-        swipeUpdateForecastList()
+        addNewCity()
+        refreshForecastListSwipe()
         exitEnterTransition()
-        getForecastList(false)
+        observeData()
+    }
+
+    private fun addNewCity() {
+        bind.addCityFab.setOnClickListener {
+            findNavController().navigate(R.id.action_shortForecastListFragment_to_addCityFragment)
+        }
     }
 
     private fun initComponents() {
@@ -77,14 +80,15 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
 
     private fun setLastTimeUpdateForecast() {
         val lastTimeUpdate = sharedPrefs.getLong(SharedPrefsContract.TIME_LAST_REQUEST_KEY, 0L)
-        Log.d(TAG, "setLastTimeUpdateForecast: lastTime:$lastTimeUpdate")
         val dateFormat = Date(lastTimeUpdate)
         val sdf =
-            SimpleDateFormat(this.getString(R.string.ShortForecastListFragment_time_format_ddMMMMHHmmss))
-
+            SimpleDateFormat(
+                this.getString(R.string.ShortForecastListFragment_time_format_ddMMMMHHmmss),
+                Locale("ru")
+            ).format(dateFormat)
         bind.updateTime.text = this.getString(
             R.string.ShortForecastListFragment_updateText_text,
-            sdf.format(dateFormat)
+            sdf
         )
     }
 
@@ -94,23 +98,19 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         return connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) != null
     }
 
-    private fun changeStateViewUpdateTime(state: Boolean) {
+    private fun changeStateViewUpdate(state: Boolean) {
+        bind.textHeader.text =
+            if (!state) "Вы ещё не добавили ни одного города." else "Нажмите для подробного прогноза."
         bind.updateTime.isVisible = state
     }
 
-    private fun getForecastList(isForcedUpdate: Boolean) {
-
-        if (isForcedUpdate) {
-            if (isConnect()) {
-                shortForecastListViewModel.getForecastList(isForcedUpdate)
-                changeStateViewUpdateTime(true)
-            } else {
-                shortForecastListViewModel.errorMessage(this.getString(R.string.ShortForecastListFragment_check_internet))
-                changeStateViewUpdateTime(false)
-                changeStateProgressView(false)
-            }
-
-        } else shortForecastListViewModel.getForecastList(isForcedUpdate)
+    private fun getForecastList() {
+        if (isConnect()) {
+            shortForecastListViewModel.getForecastList()
+        } else {
+            shortForecastListViewModel.errorMessage(this.getString(R.string.ShortForecastListFragment_check_internet))
+            changeStateProgressView(false)
+        }
     }
 
     private fun changeStateProgressView(isLoading: Boolean) {
@@ -131,17 +131,14 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         }
     }
 
-    private fun swipeUpdateForecastList() {
+    private fun refreshForecastListSwipe() {
         bind.swipeLayout.setOnRefreshListener {
-            getForecastList(true)
+            Log.d(TAG, "refreshForecastListSwipe: start")
+            getForecastList()
         }
     }
 
     private fun observeData() {
-        shortForecastListViewModel.forecastListLiveData.observe(viewLifecycleOwner) { listForecast ->
-            updateForecastListInRV(listForecast)
-        }
-
         shortForecastListViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { message ->
             showDialogError(message)
         }
@@ -150,31 +147,18 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
             changeStateProgressView(isUpdate)
         }
 
-        observeUpdateService()
-        observeSharedPrefs()
+        shortForecastListViewModel.forecastListLiveData.observe(viewLifecycleOwner) { listForecast ->
+            updateForecastListInRV(listForecast)
+        }
     }
 
     private fun updateForecastListInRV(listForecast: List<Forecast>) {
-        if (listForecast.isEmpty()) {
-            shortForecastListViewModel.errorMessage("Не удалось получить данные")
-        } else adapterRVShortForecast.submitList(listForecast)
-    }
-
-    private fun observeSharedPrefs() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            Log.d(TAG, "observeSharedPrefs: ")
-            SharedPrefs.addChangeListener()
-        }
-        SharedPrefsListener.listenerSharedPrefs.observe(viewLifecycleOwner) {
-            Log.d(TAG, "observeSharedPrefs: UPDATE TIME")
+        if (listForecast.isEmpty())
+            changeStateViewUpdate(false)
+        else {
+            adapterRVForecast.submitList(listForecast.sortedBy { Forecast::cityName.toString() })
+            changeStateViewUpdate(true)
             setLastTimeUpdateForecast()
-        }
-    }
-
-    private fun observeUpdateService() {
-        StateServiceUpdateForecast.stateUpdate.observe(viewLifecycleOwner) { isUpdate ->
-            changeStateProgressView(isUpdate)
-            if (!isUpdate) getForecastList(false)
         }
     }
 
@@ -188,15 +172,15 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun initRV() {
-        adapterRVShortForecast =
-            ShortForecastListAdapterRV { position: Int, currentViewInRV: View ->
+        adapterRVForecast =
+            ForecastListAdapterRV { position: Int, currentViewInRV: View ->
                 transitionInDetailsForecastFragment(position, currentViewInRV)
             }
 
         with(bind.listOfCityRV) {
-            adapter = adapterRVShortForecast
+            adapter = adapterRVForecast
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(CharacterItemDecoration(requireContext(), 10))
+            addItemDecoration(ItemDecoration(requireContext(), 10))
             setHasFixedSize(true)
         }
     }
@@ -216,7 +200,6 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     override fun onDestroy() {
-        SharedPrefs.removeListener()
         myDialog?.dismiss()
         Log.d(TAG, "onDestroy:")
         super.onDestroy()

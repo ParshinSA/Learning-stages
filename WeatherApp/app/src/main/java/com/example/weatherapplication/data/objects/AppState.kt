@@ -1,5 +1,6 @@
-package com.example.weatherapplication.ui.weather
+package com.example.weatherapplication.data.objects
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
@@ -10,6 +11,9 @@ object AppState {
         get() = isCollapsedAppMutableLiveData
 
     fun changeStateCollapsedApp(isCollapsed: Boolean) {
+        Log.d(TAG, "changeStateCollapsedApp: $isCollapsed")
         isCollapsedAppMutableLiveData.value = isCollapsed
     }
+
+    const val TAG = "AppState_Logging"
 }

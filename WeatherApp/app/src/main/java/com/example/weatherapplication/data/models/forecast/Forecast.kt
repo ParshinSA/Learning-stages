@@ -10,19 +10,21 @@ import com.example.weatherapplication.data.models.forecast.sys.Sys
 import com.example.weatherapplication.data.models.forecast.weather.Weather
 import com.example.weatherapplication.data.models.forecast.wind.Wind
 import com.example.weatherapplication.data.models.forecast.ForecastContract.GsonName
-import com.example.weatherapplication.data.models.forecast.ForecastContract.DatabaseTable.Columns
-import com.example.weatherapplication.data.models.forecast.ForecastContract.DatabaseTable.TABLE_NAME
+import com.example.weatherapplication.data.models.forecast.ForecastContract.TableDatabase.Columns
+import com.example.weatherapplication.data.models.forecast.ForecastContract.TableDatabase.TABLE_NAME
+import com.example.weatherapplication.data.models.forecast.coord.Coordination
+import com.example.weatherapplication.data.objects.AppTypeConverter
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@TypeConverters(ForecastConverterTypeField::class)
+@TypeConverters(AppTypeConverter::class)
 @Entity(tableName = TABLE_NAME)
 data class Forecast(
     @PrimaryKey
-    @ColumnInfo(name = Columns.PK_CITY_ID)
-    @SerializedName(GsonName.CITY_ID)
-    val cityId: Int,
+    @ColumnInfo(name = Columns.PK_COORDINATION_CITY)
+    @SerializedName(GsonName.COORDINATION_CITY)
+    val coordination: Coordination,
 
     @ColumnInfo(name = Columns.MAIN)
     @SerializedName(GsonName.MAIN)

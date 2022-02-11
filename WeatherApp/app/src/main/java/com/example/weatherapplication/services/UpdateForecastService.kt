@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 import com.example.weatherapplication.data.db.appsp.SharedPrefs
 import com.example.weatherapplication.data.db.appsp.SharedPrefsContract
 import com.example.weatherapplication.data.repositories.RemoteRepository
-import com.example.weatherapplication.ui.weather.AppState
+import com.example.weatherapplication.data.objects.AppState
 import kotlinx.coroutines.*
 
 class UpdateForecastService : Service() {
@@ -31,19 +31,14 @@ class UpdateForecastService : Service() {
     }
 
     private fun updateForecast() {
-        coroutineScope.launch {
 
             if (checkSDK() && AppState.isCollapsedAppLiveData.value == true) {
                 Log.d(TAG, "updateForecast: startForeground")
                 startForeground(FOREGROUND_ID, createNotification())
             } else Log.d(TAG, "updateForecast: startService")
 
-            StateServiceUpdateForecast.changeStateUpdate(true)
-
             remoteRepo.requestForecastAllCity()
             saveTimeUpdateForecast()
-
-            StateServiceUpdateForecast.changeStateUpdate(false)
 
             if (checkSDK() && AppState.isCollapsedAppLiveData.value == true) {
                 stopForeground(true)
@@ -52,16 +47,13 @@ class UpdateForecastService : Service() {
 
             stopSelf()
             Log.d(TAG, "updateForecast: stopSelf")
-        }
     }
 
     private fun saveTimeUpdateForecast() {
 
-        val sharedPrefs = SharedPrefs.instancePrefs
-
         val currentTime = System.currentTimeMillis()
 
-        sharedPrefs.edit()
+        SharedPrefs.instancePrefs.edit()
             .putLong(SharedPrefsContract.TIME_LAST_REQUEST_KEY, currentTime)
             .apply()
 
