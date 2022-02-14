@@ -7,6 +7,6 @@ object AppDisposable {
     val disposableList = CompositeDisposable()
 
     fun unSubscribeAll(){
-        disposableList.dispose()
+        disposableList.clear()
     }
 }
