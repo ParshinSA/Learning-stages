@@ -7,15 +7,15 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.example.weatherapplication.data.db.appsp.SharedPrefs
-import com.example.weatherapplication.data.db.appsp.SharedPrefsContract
-import com.example.weatherapplication.data.repositories.RemoteRepository
+import com.example.weatherapplication.data.db.app_sp.SharedPrefs
+import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
+import com.example.weatherapplication.data.objects.AppDisposable
 import com.example.weatherapplication.data.objects.AppState
-import kotlinx.coroutines.*
+import com.example.weatherapplication.data.repositories.RemoteRepository
+import io.reactivex.disposables.CompositeDisposable
 
 class UpdateForecastService : Service() {
     private val remoteRepo = RemoteRepository(this)
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -32,21 +32,28 @@ class UpdateForecastService : Service() {
 
     private fun updateForecast() {
 
-            if (checkSDK() && AppState.isCollapsedAppLiveData.value == true) {
-                Log.d(TAG, "updateForecast: startForeground")
-                startForeground(FOREGROUND_ID, createNotification())
-            } else Log.d(TAG, "updateForecast: startService")
+        if (checkSDK() && AppState.isCollapsedAppLiveData.value == true) {
+            Log.d(TAG, "updateForecast: startForeground")
+            startForeground(FOREGROUND_ID, createNotification())
+        } else Log.d(TAG, "updateForecast: startService")
 
-            remoteRepo.requestForecastAllCity()
-            saveTimeUpdateForecast()
+        AppDisposable.disposableList.add(
+            remoteRepo.requestForecastAllCity().subscribe({ forecast ->
+                remoteRepo.saveForecastInDatabase(forecast)
+            }, {
+                Log.d(TAG, "updateForecast: ERROR $it")
+            },{
+                saveTimeUpdateForecast()
+            })
+        )
 
-            if (checkSDK() && AppState.isCollapsedAppLiveData.value == true) {
-                stopForeground(true)
-                Log.d(TAG, "updateForecast: stopForeground")
-            }
+        if (checkSDK() && AppState.isCollapsedAppLiveData.value == true) {
+            stopForeground(true)
+            Log.d(TAG, "updateForecast: stopForeground")
+        }
 
-            stopSelf()
-            Log.d(TAG, "updateForecast: stopSelf")
+        stopSelf()
+        Log.d(TAG, "updateForecast: stopSelf")
     }
 
     private fun saveTimeUpdateForecast() {
@@ -70,7 +77,6 @@ class UpdateForecastService : Service() {
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy: ")
-        coroutineScope.cancel()
         super.onDestroy()
     }
 

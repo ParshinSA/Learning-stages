@@ -2,6 +2,9 @@ package com.example.weatherapplication.utils
 
 import android.content.Context
 import android.util.DisplayMetrics
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,17 +21,12 @@ fun Int.fromDpToPixels(context: Context): Int {
     return this * pixelsInDp
 }
 
-fun calculateDayStepDay(step: Int): Int {
-    return SimpleDateFormat("dd")
-        .format(System.currentTimeMillis() - 86400000 * step).toInt()
+fun Retrofit.Builder.addAdapterAndConverterFactory(): Retrofit.Builder {
+    return this.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
 }
 
-fun calculateMonthStepDay(step: Int): Int {
-    return SimpleDateFormat("MM")
-        .format(System.currentTimeMillis() - 86400000 * step).toInt()
-}
-
-fun calculateMonthStepMonth(step: Int): Int {
-    return SimpleDateFormat("MM")
-        .format(System.currentTimeMillis() - 2592000000 * step).toInt()
+fun Number.toStringDoubleFormat(): String {
+    this.toDouble()
+    return String.format("%,.2f", this)
 }

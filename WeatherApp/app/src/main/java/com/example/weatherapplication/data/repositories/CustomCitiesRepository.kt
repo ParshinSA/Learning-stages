@@ -1,13 +1,10 @@
 package com.example.weatherapplication.data.repositories
 
-import com.example.weatherapplication.data.db.customcitiesdb.CustomCitiesDbInit
+import com.example.weatherapplication.data.db.custom_cities_db.CustomCitiesDbInit
 import com.example.weatherapplication.data.models.city.City
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 class CustomCitiesRepository {
 

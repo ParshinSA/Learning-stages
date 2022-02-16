@@ -16,10 +16,10 @@ object CustomCities {
         get() = listCitiesMutableLiveData
 
     fun observeCustomCitiesDb() {
-        Log.d(TAG, "observeCustomCitiesDb: start")
+        Log.d(TAG, "subscribeCustomCitiesDb: start")
         AppDisposable.disposableList.add(
             customCitiesRepository.observeCustomCitiesDb().subscribe { cityList ->
-                Log.d(TAG, "subscribe bd city: $cityList ")
+                Log.d(TAG, "add livedata from bd: $cityList ")
                 listCitiesMutableLiveData.postValue(cityList)
             }
         )

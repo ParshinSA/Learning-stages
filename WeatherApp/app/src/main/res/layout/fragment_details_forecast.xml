@@ -6,7 +6,7 @@
     android:layout_height="match_parent"    >
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_detail_frg"
+        android:id="@+id/tb_Detail_frg"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
         android:background="@color/myPrimary"
@@ -22,10 +22,10 @@
         android:padding="4dp"
         android:transitionName="@string/DetailsForecastFragment_transition_name"
         android:background="@drawable/bg_item"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_detail_frg">
+        app:layout_constraintTop_toBottomOf="@+id/tb_Detail_frg">
 
         <TextView
-            android:id="@+id/date_time_TV"
+            android:id="@+id/tv_Date_time_last_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -33,193 +33,184 @@
             tools:text="Nov 9, 15:56am" />
 
         <TextView
-            android:id="@+id/city_name_TV"
+            android:id="@+id/tv_City_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/date_time_TV"
-            app:layout_constraintTop_toBottomOf="@+id/date_time_TV"
+            app:layout_constraintStart_toStartOf="@id/tv_Date_time_last_update"
+            app:layout_constraintTop_toBottomOf="@+id/tv_Date_time_last_update"
             tools:text="London" />
 
         <ImageView
-            android:id="@+id/icon_weather_IV"
+            android:id="@+id/imv_Ic_weather"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:src="@drawable/icon_weather"
-            app:layout_constraintStart_toStartOf="@id/date_time_TV"
-            app:layout_constraintTop_toBottomOf="@+id/city_name_TV"
+            app:layout_constraintStart_toStartOf="@id/tv_Date_time_last_update"
+            app:layout_constraintTop_toBottomOf="@+id/tv_City_name"
             app:layout_constraintWidth_percent="0.15" />
 
         <TextView
-            android:id="@+id/temp_TV"
+            android:id="@+id/tv_Value_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="22sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/icon_weather_IV"
-            app:layout_constraintStart_toEndOf="@+id/icon_weather_IV"
-            app:layout_constraintTop_toTopOf="@id/icon_weather_IV"
+            app:layout_constraintBottom_toBottomOf="@+id/imv_Ic_weather"
+            app:layout_constraintStart_toEndOf="@+id/imv_Ic_weather"
+            app:layout_constraintTop_toTopOf="@id/imv_Ic_weather"
             tools:text="-15" />
 
         <TextView
-            android:id="@+id/text_celsius_TV"
+            android:id="@+id/tv_Text_celsius"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="@string/DetailsForecastFragment_text_celsius"
             android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="@id/temp_TV"
-            app:layout_constraintStart_toEndOf="@id/temp_TV"
-            app:layout_constraintTop_toTopOf="@id/temp_TV" />
+            app:layout_constraintBottom_toBottomOf="@id/tv_Value_temp"
+            app:layout_constraintStart_toEndOf="@id/tv_Value_temp"
+            app:layout_constraintTop_toTopOf="@id/tv_Value_temp" />
 
         <TextView
-            android:id="@+id/description_TV"
+            android:id="@+id/tv_Description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences"
-            app:layout_constraintStart_toStartOf="@id/date_time_TV"
-            app:layout_constraintTop_toBottomOf="@id/icon_weather_IV"
+            app:layout_constraintStart_toStartOf="@id/tv_Date_time_last_update"
+            app:layout_constraintTop_toBottomOf="@id/imv_Ic_weather"
             tools:text="небольшая облачность" />
 
         <ImageView
-            android:id="@+id/line_IV"
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:background="#C14242"
-            app:layout_constraintStart_toStartOf="@id/description_TV"
-            app:layout_constraintTop_toBottomOf="@id/description_TV" />
-
-        <ImageView
-            android:id="@+id/icon_wind_route_IV"
+            android:id="@+id/imv_Ic_wind_route"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:adjustViewBounds="true"
             android:src="@drawable/navigation"
-            app:layout_constraintStart_toStartOf="@id/date_time_TV"
-            app:layout_constraintTop_toBottomOf="@id/description_TV"
+            app:layout_constraintStart_toStartOf="@id/tv_Date_time_last_update"
+            app:layout_constraintTop_toBottomOf="@id/tv_Description"
             app:layout_constraintWidth_percent="0.05"
             app:tint="@color/darkColorText" />
 
         <TextView
-            android:id="@+id/info_text_wind_TV"
+            android:id="@+id/tv_Value_wind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="@id/icon_wind_route_IV"
-            app:layout_constraintStart_toEndOf="@id/icon_wind_route_IV"
-            app:layout_constraintTop_toTopOf="@id/icon_wind_route_IV"
+            app:layout_constraintBottom_toBottomOf="@id/imv_Ic_wind_route"
+            app:layout_constraintStart_toEndOf="@id/imv_Ic_wind_route"
+            app:layout_constraintTop_toTopOf="@id/imv_Ic_wind_route"
             tools:text="1.3m/s" />
 
         <ImageView
-            android:id="@+id/icon_pressure_IV"
+            android:id="@+id/imv_Ic_pressure"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:adjustViewBounds="true"
             android:src="@drawable/barometer"
-            app:layout_constraintStart_toEndOf="@id/info_text_wind_TV"
-            app:layout_constraintTop_toBottomOf="@id/description_TV"
+            app:layout_constraintStart_toEndOf="@id/tv_Value_wind"
+            app:layout_constraintTop_toBottomOf="@id/tv_Description"
             app:layout_constraintWidth_percent="0.05"
             app:tint="@color/darkColorText" />
 
         <TextView
-            android:id="@+id/info_text_pressure_TV"
+            android:id="@+id/tv_Value_pressure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="@id/icon_pressure_IV"
-            app:layout_constraintStart_toEndOf="@id/icon_pressure_IV"
-            app:layout_constraintTop_toTopOf="@id/icon_pressure_IV"
+            app:layout_constraintBottom_toBottomOf="@id/imv_Ic_pressure"
+            app:layout_constraintStart_toEndOf="@id/imv_Ic_pressure"
+            app:layout_constraintTop_toTopOf="@id/imv_Ic_pressure"
             tools:text="5.6hPa" />
 
         <ImageView
-            android:id="@+id/icon_sunrise_IV"
+            android:id="@+id/imv_Ic_sunrise"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_sunrise"
-            app:layout_constraintStart_toStartOf="@id/date_time_TV"
-            app:layout_constraintTop_toBottomOf="@id/icon_wind_route_IV"
+            app:layout_constraintStart_toStartOf="@id/tv_Date_time_last_update"
+            app:layout_constraintTop_toBottomOf="@id/imv_Ic_wind_route"
             app:layout_constraintWidth_percent="0.05"
             app:tint="@color/darkColorText" />
 
         <TextView
-            android:id="@+id/info_text_sunrise_TV"
+            android:id="@+id/tv_Value_sunrise"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="@id/icon_sunrise_IV"
-            app:layout_constraintStart_toEndOf="@id/icon_sunrise_IV"
-            app:layout_constraintTop_toTopOf="@id/icon_sunrise_IV"
+            app:layout_constraintBottom_toBottomOf="@id/imv_Ic_sunrise"
+            app:layout_constraintStart_toEndOf="@id/imv_Ic_sunrise"
+            app:layout_constraintTop_toTopOf="@id/imv_Ic_sunrise"
             tools:text="06:56" />
 
         <ImageView
-            android:id="@+id/icon_sunset_IV"
+            android:id="@+id/imv_Ic_sunset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_sunset"
-            app:layout_constraintStart_toStartOf="@id/icon_pressure_IV"
-            app:layout_constraintTop_toBottomOf="@id/icon_pressure_IV"
+            app:layout_constraintStart_toStartOf="@id/imv_Ic_pressure"
+            app:layout_constraintTop_toBottomOf="@id/imv_Ic_pressure"
             app:layout_constraintWidth_percent="0.05"
             app:tint="@color/darkColorText" />
 
         <TextView
-            android:id="@+id/info_text_sunset_TV"
+            android:id="@+id/tv_Value_sunset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="@id/icon_sunset_IV"
-            app:layout_constraintStart_toEndOf="@id/icon_sunset_IV"
-            app:layout_constraintTop_toTopOf="@id/icon_sunset_IV"
+            app:layout_constraintBottom_toBottomOf="@id/imv_Ic_sunset"
+            app:layout_constraintStart_toEndOf="@id/imv_Ic_sunset"
+            app:layout_constraintTop_toTopOf="@id/imv_Ic_sunset"
             tools:text="19:32" />
 
 
         <TextView
-            android:id="@+id/text_humidity_TV"
+            android:id="@+id/tv_Text_humidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/DetailsForecastFragment_text_humidity"
-            app:layout_constraintStart_toStartOf="@id/date_time_TV"
-            app:layout_constraintTop_toBottomOf="@id/icon_sunrise_IV" />
+            app:layout_constraintStart_toStartOf="@id/tv_Date_time_last_update"
+            app:layout_constraintTop_toBottomOf="@id/imv_Ic_sunrise" />
 
         <TextView
-            android:id="@+id/info_text_humidity_TV"
+            android:id="@+id/tv_Value_humidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintStart_toEndOf="@id/text_humidity_TV"
-            app:layout_constraintTop_toTopOf="@id/text_humidity_TV"
+            app:layout_constraintStart_toEndOf="@id/tv_Text_humidity"
+            app:layout_constraintTop_toTopOf="@id/tv_Text_humidity"
             tools:text="76%" />
 
         <TextView
-            android:id="@+id/text_visibility_TV"
+            android:id="@+id/tv_Text_visibility"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/DetailsForecastFragment_text_visibility"
-            app:layout_constraintStart_toStartOf="@id/date_time_TV"
-            app:layout_constraintTop_toBottomOf="@id/text_humidity_TV" />
+            app:layout_constraintStart_toStartOf="@id/tv_Date_time_last_update"
+            app:layout_constraintTop_toBottomOf="@id/tv_Text_humidity" />
 
         <TextView
-            android:id="@+id/info_text_visibility_TV"
+            android:id="@+id/tv_Value_visibility"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintStart_toEndOf="@id/text_visibility_TV"
-            app:layout_constraintTop_toTopOf="@id/text_visibility_TV"
+            app:layout_constraintStart_toEndOf="@id/tv_Text_visibility"
+            app:layout_constraintTop_toTopOf="@id/tv_Text_visibility"
             tools:text="10.0km" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/open_report_fab"
+        android:id="@+id/fab_Open_report"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

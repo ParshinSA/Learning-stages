@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_Report_frg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/myPrimary"
@@ -25,7 +26,7 @@
         android:transitionName="@string/WeatherReportFragment_transition_name">
 
         <TextView
-            android:id="@+id/city_name"
+            android:id="@+id/tv_City_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -33,7 +34,7 @@
             tools:text="London" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/period_list"
+            android:id="@+id/til_Container_period"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="match_parent"
             app:boxBackgroundColor="@color/white"
@@ -56,7 +57,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/report_cancel_btn"
+                android:id="@+id/btn_Cancel"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -65,7 +66,7 @@
                 android:textColor="@color/darkColorText" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/report_ok_btn"
+                android:id="@+id/btn_Ok"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -77,7 +78,7 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <ProgressBar
-        android:id="@+id/progressbar"
+        android:id="@+id/pb_loader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

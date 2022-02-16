@@ -7,7 +7,7 @@
     android:transitionGroup="true">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_short_frg"
+        android:id="@+id/tb_Short_frg"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
         android:background="@color/myPrimary"
@@ -16,31 +16,31 @@
         app:title="@string/ShortForecastListFragment_text_title_toolbar"/>
 
     <TextView
-        android:id="@+id/text_header"
+        android:id="@+id/tv_Text_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_short_frg"
+        app:layout_constraintTop_toBottomOf="@+id/tb_Short_frg"
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/updateTime"
+        android:id="@+id/tv_Last_update_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/text_header"
-        app:layout_constraintTop_toBottomOf="@+id/text_header" />
+        app:layout_constraintStart_toStartOf="@+id/tv_Text_header"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Text_header" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_layout"
+        android:id="@+id/swl_Swipe_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updateTime">
+        app:layout_constraintTop_toBottomOf="@+id/tv_Last_update_time">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_of_city_RV"
+            android:id="@+id/rv_List_city"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -50,7 +50,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addCity_fab"
+        android:id="@+id/fab_Add_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

@@ -17,13 +17,13 @@ class AppActivity : AppCompatActivity() {
         get() = _bind!!
 
     private val currentNavigationFragment: Fragment?
-        get() = supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment)
+        get() = supportFragmentManager.findFragmentById(R.id.frg_nav_host)
             ?.childFragmentManager
             ?.fragments
             ?.first()
 
     override fun onStart() {
-        AppState.changeStateCollapsedApp(false)
+        AppState.appIsCollapsed(false)
         super.onStart()
     }
 
@@ -48,7 +48,7 @@ class AppActivity : AppCompatActivity() {
 
     override fun onStop() {
         Log.d(TAG, "onStop: ")
-        AppState.changeStateCollapsedApp(true)
+        AppState.appIsCollapsed(true)
         RemoteRepository(this).periodUpdateForecastAllCityList()
         super.onStop()
     }

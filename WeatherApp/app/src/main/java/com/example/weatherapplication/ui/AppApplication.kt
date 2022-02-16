@@ -2,9 +2,9 @@ package com.example.weatherapplication.ui
 
 import android.app.Application
 import android.util.Log
-import com.example.weatherapplication.data.db.forecastdb.ForecastDbInit
-import com.example.weatherapplication.data.db.appsp.SharedPrefs
-import com.example.weatherapplication.data.db.customcitiesdb.CustomCitiesDbInit
+import com.example.weatherapplication.data.db.forecast_db.ForecastDbInit
+import com.example.weatherapplication.data.db.app_sp.SharedPrefs
+import com.example.weatherapplication.data.db.custom_cities_db.CustomCitiesDbInit
 import com.example.weatherapplication.data.objects.CustomCities
 import com.example.weatherapplication.services.NotificationChannels
 

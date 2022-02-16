@@ -10,8 +10,8 @@ object AppState {
     val isCollapsedAppLiveData: LiveData<Boolean>
         get() = isCollapsedAppMutableLiveData
 
-    fun changeStateCollapsedApp(isCollapsed: Boolean) {
-        Log.d(TAG, "changeStateCollapsedApp: $isCollapsed")
+    fun appIsCollapsed(isCollapsed: Boolean) {
+        Log.d(TAG, "appIsCollapsed: $isCollapsed")
         isCollapsedAppMutableLiveData.value = isCollapsed
     }
 
