@@ -2,6 +2,7 @@ package com.example.weatherapplication.utils
 
 import android.content.Context
 import android.util.DisplayMetrics
+import com.example.weatherapplication.ui.AppApplication
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory

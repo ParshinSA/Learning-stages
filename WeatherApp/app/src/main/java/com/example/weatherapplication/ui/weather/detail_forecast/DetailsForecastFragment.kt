@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -29,13 +29,8 @@ import kotlin.math.roundToInt
 class DetailsForecastFragment : Fragment() {
 
     @Inject
-    lateinit var detailsForecastViewModelFactory: DetailsForecastViewModelFactory
-    private val detailsForecastViewModel: DetailsForecastViewModel by lazy {
-        ViewModelProvider(
-            this,
-            detailsForecastViewModelFactory
-        )[DetailsForecastViewModel::class.java]
-    }
+    lateinit var detailsViewModelFactory: DetailsForecastViewModelFactory
+    private val detailsViewModel: DetailsForecastViewModel by viewModels { detailsViewModelFactory }
 
     private var _bind: FragmentDetailsForecastBinding? = null
     private val bind: FragmentDetailsForecastBinding
@@ -90,7 +85,7 @@ class DetailsForecastFragment : Fragment() {
     }
 
     private fun observeData() {
-        detailsForecastViewModel.detailsForecastLiveData.observe(viewLifecycleOwner) { forecast ->
+        detailsViewModel.detailsForecastLiveData.observe(viewLifecycleOwner) { forecast ->
             Log.d(TAG, "observeData: ")
             currentForecast = forecast
             bindViewItems()
@@ -209,7 +204,7 @@ class DetailsForecastFragment : Fragment() {
 
     private fun sendForecastInViewModel() {
         getArgument()
-        detailsForecastViewModel.setDataDetailsForecastInView(currentForecast)
+        detailsViewModel.setDataDetailsForecastInView(currentForecast)
     }
 
     private fun generateReportWeatherInCity() {

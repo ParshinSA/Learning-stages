@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.navigateUp
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +17,6 @@ import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.objects.CustomCities
 import com.example.weatherapplication.databinding.FragmentSearchCityBinding
 import com.example.weatherapplication.ui.AppApplication
-import com.example.weatherapplication.ui.weather.search_city.recyclerview.ResultSearchAdapter
 import com.example.weatherapplication.utils.ItemDecoration
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -29,11 +28,8 @@ class SearchCityFragment : Fragment() {
     lateinit var customCities: CustomCities
 
     @Inject
-    lateinit var searchCityViewModelFactory: SearchCityViewModelFactory
-
-    private val viewModel: SearchCityViewModel by lazy {
-        ViewModelProvider(this, searchCityViewModelFactory)[SearchCityViewModel::class.java]
-    }
+    lateinit var searchViewModelFactory: SearchCityViewModelFactory
+    private val searchViewModel: SearchCityViewModel by viewModels { searchViewModelFactory }
 
     private var _bind: FragmentSearchCityBinding? = null
     private val bind: FragmentSearchCityBinding
@@ -79,7 +75,7 @@ class SearchCityFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.resultCityLiveData.observe(viewLifecycleOwner) {
+        searchViewModel.resultCityLiveData.observe(viewLifecycleOwner) {
             bind.tvTextNoResult.isVisible = it.isEmpty()
             showResultSearchCity(it)
         }
@@ -99,7 +95,7 @@ class SearchCityFragment : Fragment() {
     }
 
     private fun addTextChangeListener(searchView: SearchView) {
-        viewModel.textInputProcessing(
+        searchViewModel.textInputProcessing(
             Observable.create { subscriber ->
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(userInput: String?): Boolean {

@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.short_forecast.recyclerview
+package com.example.weatherapplication.ui.weather.short_forecast
 
 import android.view.LayoutInflater
 import android.view.View

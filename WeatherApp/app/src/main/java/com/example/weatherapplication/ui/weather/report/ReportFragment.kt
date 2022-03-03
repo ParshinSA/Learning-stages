@@ -19,21 +19,26 @@ import androidx.transition.Slide
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentWeatherReportBinding
+import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.ui.weather.detail_forecast.DetailsForecastFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialContainerTransform
+import javax.inject.Inject
 
 class ReportFragment : Fragment(R.layout.fragment_weather_report) {
+
+    @Inject
+    lateinit var reportViewModelFactory: ReportViewModelFactory
+    private val reportViewModel: ReportViewModel by viewModels { reportViewModelFactory }
 
     private var _bind: FragmentWeatherReportBinding? = null
     private val bind: FragmentWeatherReportBinding
         get() = _bind!!
 
     private lateinit var fabInDetailFrg: FloatingActionButton
-    private var dialog: AlertDialog? = null
-    private val reportViewModel: ReportViewModel by viewModels()
     private var snackbar: Snackbar? = null
+    private var dialog: AlertDialog? = null
 
     private val userChoice: String
         get() = bind.tilContainerPeriod.editText?.text.toString()
@@ -41,6 +46,15 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     private val currentForecast: Forecast
         get() = requireArguments().getParcelable(DetailsForecastFragment.KEY_FORECAST)
             ?: error("$TAG No default forecast")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        inject()
+        super.onCreate(savedInstanceState)
+    }
+
+    private fun inject() {
+        (requireContext().applicationContext as AppApplication).appComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -23,12 +23,6 @@ class AppActivity : AppCompatActivity() {
     private val bind: ActivityAppBinding
         get() = _bind!!
 
-    private val currentNavigationFragment: Fragment?
-        get() = supportFragmentManager.findFragmentById(R.id.frg_nav_host)
-            ?.childFragmentManager
-            ?.fragments
-            ?.first()
-
     override fun onStart() {
         inject()
         AppState.appIsCollapsed(false)
@@ -39,23 +33,10 @@ class AppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _bind = ActivityAppBinding.inflate(layoutInflater)
         setContentView(bind.root)
-
-        exitEnterTransition()
     }
 
     private fun inject() {
         (applicationContext as AppApplication).appComponent.inject(this)
-    }
-
-    private fun exitEnterTransition() {
-        currentNavigationFragment?.apply {
-            exitTransition = MaterialElevationScale(false).apply {
-                duration = 300
-            }
-            reenterTransition = MaterialElevationScale(true).apply {
-                duration = 300
-            }
-        }
     }
 
     override fun onStop() {

@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +22,6 @@ import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
 import com.example.weatherapplication.ui.AppApplication
-import com.example.weatherapplication.ui.weather.short_forecast.recyclerview.ForecastListAdapterRV
 import com.example.weatherapplication.utils.ItemDecoration
 import com.google.android.material.transition.MaterialElevationScale
 import java.text.SimpleDateFormat
@@ -32,15 +31,12 @@ import javax.inject.Inject
 class ShortForecastListFragment : Fragment() {
 
     @Inject
-    lateinit var shortForecastViewModelFactory: ShortForecastViewModelFactory
+    lateinit var shortViewModelFactory: ShortForecastViewModelFactory
+    private val shortViewModel: ShortForecastViewModel by viewModels { shortViewModelFactory }
 
     private var _bind: FragmentShortForecastListBinding? = null
     private val bind: FragmentShortForecastListBinding
         get() = _bind!!
-
-    private val shortViewModel: ShortForecastViewModel by lazy {
-        ViewModelProvider(this, shortForecastViewModelFactory)[ShortForecastViewModel::class.java]
-    }
 
     private val sharedPrefs: SharedPreferences by lazy {
         SharedPrefs.instancePrefs
@@ -49,13 +45,20 @@ class ShortForecastListFragment : Fragment() {
     private lateinit var adapterRVForecast: ForecastListAdapterRV
     private var myDialog: AlertDialog? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        injectValue()
+        super.onCreate(savedInstanceState)
+    }
+
+    private fun injectValue() {
+        (requireContext().applicationContext as AppApplication).appComponent.inject(this)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        (requireContext().applicationContext as AppApplication).appComponent.inject(this)
 
         Log.d(TAG, "onCreateView: ")
         _bind = FragmentShortForecastListBinding.inflate(inflater, container, false)
