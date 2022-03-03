@@ -1,5 +1,6 @@
 package com.example.weatherapplication.ui.weather.search_city
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.navigateUp
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.objects.CustomCities
@@ -22,7 +24,7 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 
-class SearchCityFragment : Fragment() {
+class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
 
     @Inject
     lateinit var customCities: CustomCities
@@ -31,25 +33,13 @@ class SearchCityFragment : Fragment() {
     lateinit var searchViewModelFactory: SearchCityViewModelFactory
     private val searchViewModel: SearchCityViewModel by viewModels { searchViewModelFactory }
 
-    private var _bind: FragmentSearchCityBinding? = null
-    private val bind: FragmentSearchCityBinding
-        get() = _bind!!
+    private val bind by viewBinding(FragmentSearchCityBinding::bind)
 
     private lateinit var resultSearchAdapter: ResultSearchAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         inject()
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Log.d(TAG, "onCreateView: ")
-        _bind = FragmentSearchCityBinding.inflate(inflater, container, false)
-        return bind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

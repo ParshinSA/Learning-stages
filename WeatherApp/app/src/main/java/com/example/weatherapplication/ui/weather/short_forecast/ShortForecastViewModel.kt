@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.data.models.forecast.Forecast
-import com.example.weatherapplication.data.objects.AppDisposable
 import com.example.weatherapplication.data.repositories.repo_interface.DatabaseRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.utils.SingleLiveEvent

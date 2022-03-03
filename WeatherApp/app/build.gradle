@@ -102,16 +102,12 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
     implementation "io.reactivex.rxjava2:rxjava:2.2.21"
 
-    // RxBinding
-    def binding_version = "0.4.0"
-    implementation "com.jakewharton.rxbinding:rxbinding:$binding_version"
-    implementation "com.jakewharton.rxbinding:rxbinding-support-v4:$binding_version"
-    implementation "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$binding_version"
-
-
     // Dagger
     def dagger_version = "2.41"
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
+    // ViewBindingPropertyDelegate
+    // To use only without reflection variants of viewBinding
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.5.3'
 }

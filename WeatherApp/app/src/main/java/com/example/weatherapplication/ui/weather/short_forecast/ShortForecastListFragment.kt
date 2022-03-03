@@ -5,9 +5,7 @@ import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
@@ -16,10 +14,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.db.app_sp.SharedPrefs
 import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
 import com.example.weatherapplication.data.models.forecast.Forecast
+import com.example.weatherapplication.data.objects.CustomCities
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
 import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.utils.ItemDecoration
@@ -28,15 +28,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class ShortForecastListFragment : Fragment() {
+class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
     @Inject
     lateinit var shortViewModelFactory: ShortForecastViewModelFactory
+    @Inject
+    lateinit var customCities: CustomCities
+
     private val shortViewModel: ShortForecastViewModel by viewModels { shortViewModelFactory }
 
-    private var _bind: FragmentShortForecastListBinding? = null
-    private val bind: FragmentShortForecastListBinding
-        get() = _bind!!
+    private val bind by viewBinding(FragmentShortForecastListBinding::bind)
 
     private val sharedPrefs: SharedPreferences by lazy {
         SharedPrefs.instancePrefs
@@ -45,24 +46,9 @@ class ShortForecastListFragment : Fragment() {
     private lateinit var adapterRVForecast: ForecastListAdapterRV
     private var myDialog: AlertDialog? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        injectValue()
-        super.onCreate(savedInstanceState)
-    }
-
-    private fun injectValue() {
-        (requireContext().applicationContext as AppApplication).appComponent.inject(this)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        Log.d(TAG, "onCreateView: ")
-        _bind = FragmentShortForecastListBinding.inflate(inflater, container, false)
-        return bind.root
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        inject()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,14 +67,18 @@ class ShortForecastListFragment : Fragment() {
         observeData()
     }
 
-    private fun addNewCity() {
-        bind.fabAddCity.setOnClickListener {
-            findNavController().navigate(R.id.action_shortForecastListFragment_to_addCityFragment)
-        }
+    private fun inject() {
+        (requireContext().applicationContext as AppApplication).appComponent.inject(this)
     }
 
     private fun initComponents() {
         initRV()
+    }
+
+    private fun addNewCity() {
+        bind.fabAddCity.setOnClickListener {
+            findNavController().navigate(R.id.action_shortForecastListFragment_to_addCityFragment)
+        }
     }
 
     private fun setLastTimeUpdateForecast() {
@@ -163,7 +153,12 @@ class ShortForecastListFragment : Fragment() {
         }
 
         shortViewModel.forecastListLiveData.observe(viewLifecycleOwner) { listForecast ->
+            Log.d(TAG, "observeData: $listForecast")
             updateForecastListInRV(listForecast)
+        }
+
+        customCities.listCitiesLiveData.observe(viewLifecycleOwner){
+            getForecastList()
         }
     }
 

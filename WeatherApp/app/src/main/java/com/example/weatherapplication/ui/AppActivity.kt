@@ -1,38 +1,26 @@
 package com.example.weatherapplication.ui
 
-import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.objects.AppDisposable
 import com.example.weatherapplication.data.objects.AppState
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.databinding.ActivityAppBinding
-import com.google.android.material.transition.MaterialElevationScale
 import javax.inject.Inject
 
-class AppActivity : AppCompatActivity() {
+class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
     @Inject
     lateinit var remoteRepository: RemoteRepository
     @Inject
     lateinit var appDisposable: AppDisposable
 
-    private var _bind: ActivityAppBinding? = null
-    private val bind: ActivityAppBinding
-        get() = _bind!!
-
     override fun onStart() {
         inject()
         AppState.appIsCollapsed(false)
         super.onStart()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _bind = ActivityAppBinding.inflate(layoutInflater)
-        setContentView(bind.root)
     }
 
     private fun inject() {

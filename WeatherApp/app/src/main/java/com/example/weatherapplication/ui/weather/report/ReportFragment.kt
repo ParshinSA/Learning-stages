@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.navigateUp
 import androidx.transition.Slide
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentWeatherReportBinding
@@ -32,16 +33,11 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     lateinit var reportViewModelFactory: ReportViewModelFactory
     private val reportViewModel: ReportViewModel by viewModels { reportViewModelFactory }
 
-    private var _bind: FragmentWeatherReportBinding? = null
-    private val bind: FragmentWeatherReportBinding
-        get() = _bind!!
+    private val bind by viewBinding(FragmentWeatherReportBinding::bind)
 
     private lateinit var fabInDetailFrg: FloatingActionButton
     private var snackbar: Snackbar? = null
     private var dialog: AlertDialog? = null
-
-    private val userChoice: String
-        get() = bind.tilContainerPeriod.editText?.text.toString()
 
     private val currentForecast: Forecast
         get() = requireArguments().getParcelable(DetailsForecastFragment.KEY_FORECAST)
@@ -56,18 +52,9 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
         (requireContext().applicationContext as AppApplication).appComponent.inject(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _bind = FragmentWeatherReportBinding.inflate(inflater, container, false)
-        fabInDetailFrg = requireActivity().findViewById(R.id.fab_Open_report)
-        return bind.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fabInDetailFrg = requireActivity().findViewById(R.id.fab_Open_report)
         Log.d(TAG, "onViewCreated: ")
         enterReturnAnimation()
         actionInFragment()
@@ -142,6 +129,8 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
 
     private fun generateReport() {
         bind.btnOk.setOnClickListener {
+            val userChoice = bind.tilContainerPeriod.editText?.text.toString()
+
             reportViewModel.generateReport(
                 currentForecast,
                 Period.values().filter { it.stringQuantity == userChoice }[0]

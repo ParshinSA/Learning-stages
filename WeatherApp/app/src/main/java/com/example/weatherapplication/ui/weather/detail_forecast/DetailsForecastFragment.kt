@@ -13,6 +13,7 @@ import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.navigateUp
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
@@ -26,16 +27,13 @@ import kotlin.math.round
 import kotlin.math.roundToInt
 
 
-class DetailsForecastFragment : Fragment() {
+class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
 
     @Inject
     lateinit var detailsViewModelFactory: DetailsForecastViewModelFactory
     private val detailsViewModel: DetailsForecastViewModel by viewModels { detailsViewModelFactory }
 
-    private var _bind: FragmentDetailsForecastBinding? = null
-    private val bind: FragmentDetailsForecastBinding
-        get() = _bind!!
-
+    private val bind by viewBinding(FragmentDetailsForecastBinding::bind)
     private lateinit var currentForecast: Forecast
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,24 +41,15 @@ class DetailsForecastFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    private fun inject() {
-        (requireContext().applicationContext as AppApplication).appComponent.inject(this)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _bind = FragmentDetailsForecastBinding.inflate(inflater, container, false)
-        return bind.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ")
         thisTransition(view)
         actionInFragment()
+    }
+
+    private fun inject() {
+        (requireContext().applicationContext as AppApplication).appComponent.inject(this)
     }
 
     private fun thisTransition(view: View) {
