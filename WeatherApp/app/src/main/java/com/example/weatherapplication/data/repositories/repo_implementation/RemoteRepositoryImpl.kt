@@ -1,6 +1,5 @@
 package com.example.weatherapplication.data.repositories.repo_implementation
 
-import android.content.Context
 import android.util.Log
 import androidx.work.*
 import com.example.weatherapplication.data.models.city.City
@@ -23,22 +22,20 @@ import java.util.concurrent.TimeUnit
 
 
 class RemoteRepositoryImpl(
-    private val context: Context,
+    private val workManager: WorkManager,
     private val customCities: CustomCities
 ) : RemoteRepository {
 
     override fun oneTimeUpdateForecastAllCity() {
         Log.d(TAG, "oneTimeUpdateForecastAllCity: start")
-        val updateWorker =
+
+        workManager.enqueueUniqueWork(
+            UpdateForecastWorker.UPDATE_FORECAST_WORKER_NAME,
+            ExistingWorkPolicy.REPLACE,
+
             OneTimeWorkRequestBuilder<UpdateForecastWorker>()
                 .build()
-
-        WorkManager.getInstance(context)
-            .enqueueUniqueWork(
-                UpdateForecastWorker.UPDATE_FORECAST_WORKER_NAME,
-                ExistingWorkPolicy.REPLACE,
-                updateWorker
-            )
+        )
     }
 
     override fun requestForecastAllCity(): Observable<Forecast> {
@@ -52,7 +49,10 @@ class RemoteRepositoryImpl(
 
     override fun periodUpdateForecastAllCityList() {
         Log.d(TAG, "periodUpdateForecastAllCityList: start")
-        val updateWorker =
+        workManager.enqueueUniquePeriodicWork(
+            UpdateForecastWorker.UPDATE_FORECAST_WORKER_NAME,
+            ExistingPeriodicWorkPolicy.REPLACE,
+
             PeriodicWorkRequestBuilder<UpdateForecastWorker>(15, TimeUnit.MINUTES)
                 .setConstraints(
                     Constraints.Builder()
@@ -60,14 +60,7 @@ class RemoteRepositoryImpl(
                         .build()
                 )
                 .build()
-
-        WorkManager.getInstance(context)
-            .enqueueUniquePeriodicWork(
-                UpdateForecastWorker.UPDATE_FORECAST_WORKER_NAME,
-                ExistingPeriodicWorkPolicy.REPLACE,
-                updateWorker
-
-            )
+        )
     }
 
     override fun requestHistory(

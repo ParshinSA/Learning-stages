@@ -7,6 +7,7 @@ import com.example.weatherapplication.ui.weather.detail_forecast.DetailsForecast
 import com.example.weatherapplication.ui.weather.report.ReportFragment
 import com.example.weatherapplication.ui.weather.search_city.SearchCityFragment
 import com.example.weatherapplication.ui.weather.short_forecast.ShortForecastListFragment
+import com.example.weatherapplication.workers.UpdateForecastWorker
 import dagger.Component
 import javax.inject.Singleton
 
@@ -17,7 +18,6 @@ import javax.inject.Singleton
         DatabaseModule::class,
         RepositoryModule::class,
         ViewModelModule::class,
-        ServiceModule::class,
         ObjectModule::class
     ]
 )
@@ -31,4 +31,6 @@ interface AppComponent {
     fun inject(fragment: ReportFragment)
 
     fun inject(service: UpdateForecastService)
+
+    fun inject(worker: UpdateForecastWorker)
 }

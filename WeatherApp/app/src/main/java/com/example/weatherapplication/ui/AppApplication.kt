@@ -2,8 +2,6 @@ package com.example.weatherapplication.ui
 
 import android.app.Application
 import android.util.Log
-import com.example.weatherapplication.data.db.app_sp.SharedPrefs
-import com.example.weatherapplication.data.objects.CustomCities
 import com.example.weatherapplication.di.AppComponent
 import com.example.weatherapplication.di.DaggerAppComponent
 import com.example.weatherapplication.di.modules.AppModule
@@ -26,16 +24,11 @@ class AppApplication : Application() {
     }
 
     private fun init() {
-        initSharedPrefs()
         initNotificationChannel()
     }
 
     private fun initNotificationChannel() {
         NotificationChannels.create(this)
-    }
-
-    private fun initSharedPrefs() {
-        SharedPrefs.initSharedPref(this)
     }
 
     companion object {

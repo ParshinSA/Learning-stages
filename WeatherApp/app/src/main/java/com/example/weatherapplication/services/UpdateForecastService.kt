@@ -3,11 +3,11 @@ package com.example.weatherapplication.services
 import android.app.Notification
 import android.app.Service
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.example.weatherapplication.data.db.app_sp.SharedPrefs
 import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
 import com.example.weatherapplication.data.objects.AppDisposable
 import com.example.weatherapplication.data.objects.AppState
@@ -24,6 +24,10 @@ class UpdateForecastService : Service() {
     lateinit var remoteRepo: RemoteRepository
     @Inject
     lateinit var appDisposable: AppDisposable
+    @Inject
+    lateinit var sharedPrefs: SharedPreferences
+    @Inject
+    lateinit var appState: AppState
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -45,7 +49,7 @@ class UpdateForecastService : Service() {
 
     private fun updateForecast() {
 
-        if (checkSDK() && AppState.isCollapsedAppLiveData.value == true) {
+        if (checkSDK() && appState.isCollapsedAppLiveData.value == true) {
             Log.d(TAG, "updateForecast: startForeground")
             startForeground(FOREGROUND_ID, createNotification())
         } else Log.d(TAG, "updateForecast: startService")
@@ -61,7 +65,7 @@ class UpdateForecastService : Service() {
             })
         )
 
-        if (checkSDK() && AppState.isCollapsedAppLiveData.value == true) {
+        if (checkSDK() && appState.isCollapsedAppLiveData.value == true) {
             stopForeground(true)
             Log.d(TAG, "updateForecast: stopForeground")
         }
@@ -74,7 +78,7 @@ class UpdateForecastService : Service() {
 
         val currentTime = System.currentTimeMillis()
 
-        SharedPrefs.instancePrefs.edit()
+        sharedPrefs.edit()
             .putLong(SharedPrefsContract.TIME_LAST_REQUEST_KEY, currentTime)
             .apply()
 

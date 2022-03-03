@@ -12,16 +12,6 @@ import com.example.weatherapplication.utils.Converter
 object AppTypeConverter {
 
     @TypeConverter
-    fun cityToString(city: City): String {
-        return Converter.objectToString(city)
-    }
-
-    @TypeConverter
-    fun stringToCity(string: String): City {
-        return Converter.stringToObject(string)
-    }
-
-    @TypeConverter
     fun coordinationToString(coordination: Coordination): String {
         return Converter.objectToString(coordination)
     }

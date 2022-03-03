@@ -13,7 +13,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@TypeConverters(AppTypeConverter::class)
 @Entity(tableName = TABLE_NAME, primaryKeys = [Columns.LATITUDE, Columns.LONGITUDE])
 data class City(
 

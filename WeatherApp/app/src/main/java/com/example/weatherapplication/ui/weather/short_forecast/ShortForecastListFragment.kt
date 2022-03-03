@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
-import com.example.weatherapplication.data.db.app_sp.SharedPrefs
 import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.objects.CustomCities
@@ -32,17 +31,13 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
 
     @Inject
     lateinit var shortViewModelFactory: ShortForecastViewModelFactory
-
     @Inject
     lateinit var customCities: CustomCities
+    @Inject
+    lateinit var sharedPrefs: SharedPreferences
 
     private val shortViewModel: ShortForecastViewModel by viewModels { shortViewModelFactory }
-
     private val bind by viewBinding(FragmentShortForecastListBinding::bind)
-
-    private val sharedPrefs: SharedPreferences by lazy {
-        SharedPrefs.instancePrefs
-    }
 
     private lateinit var adapterRVForecast: ForecastListAdapterRV
     private var myDialog: AlertDialog? = null

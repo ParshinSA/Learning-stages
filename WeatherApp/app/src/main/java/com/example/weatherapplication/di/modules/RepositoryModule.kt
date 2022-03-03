@@ -1,6 +1,7 @@
 package com.example.weatherapplication.di.modules
 
 import android.content.Context
+import androidx.work.WorkManager
 import com.example.weatherapplication.data.db.custom_cities_db.CustomCitiesDao
 import com.example.weatherapplication.data.db.forecast_db.ForecastDao
 import com.example.weatherapplication.data.objects.CustomCities
@@ -22,11 +23,11 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideRemoteRepositoryImpl(
-        context: Context,
+        workManager: WorkManager,
         customCities: CustomCities
     ): RemoteRepository {
         return RemoteRepositoryImpl(
-            context = context,
+            workManager = workManager,
             customCities = customCities
         )
     }

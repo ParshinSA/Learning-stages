@@ -19,7 +19,7 @@ class DatabaseModule {
     fun provideForecastDbModels(context: Context): ForecastDbModels {
         return Room.databaseBuilder(
             context,
-            ForecastDbModels::class.java, // TODO: 02.03.2022 проброс RoomDatabase?
+            ForecastDbModels::class.java,
             ForecastDbContract.Database.NAME
         )
             .fallbackToDestructiveMigration()
@@ -36,7 +36,7 @@ class DatabaseModule {
     fun provideCustomCitiesDbModels(context: Context): CustomCitiesDbModels{
         return Room.databaseBuilder(
             context,
-            CustomCitiesDbModels::class.java, // TODO: 02.03.2022 проброс RoomDatabase?
+            CustomCitiesDbModels::class.java,
             CustomCitiesContract.Database.NAME
         )
             .fallbackToDestructiveMigration()

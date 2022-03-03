@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-object AppState {
+class AppState {
 
     private val isCollapsedAppMutableLiveData = MutableLiveData(true)
     val isCollapsedAppLiveData: LiveData<Boolean>
@@ -15,5 +15,7 @@ object AppState {
         isCollapsedAppMutableLiveData.value = isCollapsed
     }
 
-    const val TAG = "AppState_Logging"
+    companion object {
+        const val TAG = "AppState_Logging"
+    }
 }
