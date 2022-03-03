@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.navigateUp
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,19 +16,35 @@ import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.objects.CustomCities
 import com.example.weatherapplication.databinding.FragmentSearchCityBinding
+import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.ui.weather.search_city.recyclerview.ResultSearchAdapter
 import com.example.weatherapplication.utils.ItemDecoration
 import io.reactivex.Observable
+import javax.inject.Inject
 
 
 class SearchCityFragment : Fragment() {
+
+    @Inject
+    lateinit var customCities: CustomCities
+
+    @Inject
+    lateinit var searchCityViewModelFactory: SearchCityViewModelFactory
+
+    private val viewModel: SearchCityViewModel by lazy {
+        ViewModelProvider(this, searchCityViewModelFactory)[SearchCityViewModel::class.java]
+    }
 
     private var _bind: FragmentSearchCityBinding? = null
     private val bind: FragmentSearchCityBinding
         get() = _bind!!
 
     private lateinit var resultSearchAdapter: ResultSearchAdapter
-    private val viewModel: SearchCityViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        inject()
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +60,10 @@ class SearchCityFragment : Fragment() {
         Log.d(TAG, "onViewCreated: ")
         actionInFragment()
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun inject() {
+        (requireContext().applicationContext as AppApplication).appComponent.inject(this)
     }
 
     private fun actionInFragment() {
@@ -97,7 +117,7 @@ class SearchCityFragment : Fragment() {
 
     private fun initRv() {
         resultSearchAdapter = ResultSearchAdapter { city: City ->
-            CustomCities.addCity(city)
+            customCities.addCity(city)
         }
 
         with(bind.rvResultSearchCity) {

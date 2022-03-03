@@ -1,24 +1,22 @@
-package com.example.weatherapplication.ui.weather.weather_report
+package com.example.weatherapplication.ui.weather.report
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.data.models.forecast.Forecast
-import com.example.weatherapplication.data.models.report.HistoryData
-import com.example.weatherapplication.data.repositories.MemoryRepository
-import com.example.weatherapplication.data.repositories.RemoteRepository
+import com.example.weatherapplication.data.models.report.DataHistory
+import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
+import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.utils.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class ReportViewModel(
-    application: Application
-) : AndroidViewModel(application) {
-    private val disposeBack = CompositeDisposable()
+    private val disposeBack: CompositeDisposable,
+    private val remoteRepo: RemoteRepository,
+    private val memoryRepository: MemoryRepository
+) : ViewModel() {
 
-    private val remoteRepo = RemoteRepository(application)
-    private val memoryRepository = MemoryRepository(application)
 
     private val isLoadingMutableLiveData = MutableLiveData(false)
     val isLoadingLiveData: LiveData<Boolean>
@@ -56,7 +54,7 @@ class ReportViewModel(
         )
     }
 
-    private fun saveReport(forecast: Forecast, period: Period, medianSata: HistoryData) {
+    private fun saveReport(forecast: Forecast, period: Period, medianSata: DataHistory) {
         disposeBack.add(
             memoryRepository.saveReportInCacheDirection(forecast.cityName, period, medianSata)
                 .subscribe({

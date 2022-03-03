@@ -1,6 +1,6 @@
 package com.example.weatherapplication.data.retrofit.api
 
-import com.example.weatherapplication.data.models.report.HistoryForecast
+import com.example.weatherapplication.data.models.report.ResponseHistoryApi
 import com.example.weatherapplication.data.retrofit.NetworkContract
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -14,7 +14,7 @@ interface HistoryApi {
         @Query("lon") long: Double,
         @Query("month") month: Int,
         @Query("appid") apiKey: String = NetworkContract.API_KEY
-    ): Observable<HistoryForecast>
+    ): Observable<ResponseHistoryApi>
 
     @GET("data/2.5/aggregated/day")
     fun requestHistoryDay(
@@ -23,6 +23,6 @@ interface HistoryApi {
         @Query("day") day: Int,
         @Query("month") month: Int,
         @Query("appid") apiKey: String = NetworkContract.API_KEY
-    ): Observable<HistoryForecast>
+    ): Observable<ResponseHistoryApi>
 
 }

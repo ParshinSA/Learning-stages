@@ -34,7 +34,7 @@ class ForecastListAdapterRV(
 
     class DiffUtilItemCallback : DiffUtil.ItemCallback<Forecast>() {
         override fun areItemsTheSame(oldItem: Forecast, newItem: Forecast): Boolean {
-            return oldItem.coordination.lat == newItem.coordination.lat
+            return oldItem.coordination.latitude == newItem.coordination.latitude
         }
 
         override fun areContentsTheSame(
@@ -62,13 +62,13 @@ class ForecastListAdapterRV(
 
         fun bind(item: Forecast) {
             viewBind.tvCityName.text = item.cityName
-            viewBind.tvTemperature.text = item.main.temp.roundToInt().toString()
+            viewBind.tvTemperature.text = item.main.temperature.roundToInt().toString()
 
                 Glide.with(itemView)
                     .load(
                         mContext.getString(
                             R.string.URL_loading_image_weather,
-                            item.weather[0].sectionURL
+                            item.weather[0].iconId
                         )
                     )
                     .placeholder(R.drawable.ic_cloud)

@@ -28,7 +28,7 @@ class ResultSearchAdapter(
 
     class DiffUtilItemCallback : DiffUtil.ItemCallback<City>() {
         override fun areItemsTheSame(oldItem: City, newItem: City): Boolean {
-            return oldItem.lat == newItem.lat && oldItem.lon == newItem.lon
+            return oldItem.latitude == newItem.latitude && oldItem.longitude == newItem.longitude
         }
 
         override fun areContentsTheSame(oldItem: City, newItem: City): Boolean {

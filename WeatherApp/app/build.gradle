@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -108,5 +108,10 @@ dependencies {
     implementation "com.jakewharton.rxbinding:rxbinding-support-v4:$binding_version"
     implementation "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$binding_version"
 
-}
 
+    // Dagger
+    def dagger_version = "2.41"
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
+}

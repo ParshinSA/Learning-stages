@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -17,22 +17,40 @@ import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentDetailsForecastBinding
+import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.ui.weather.short_forecast.ShortForecastListFragment
 import com.example.weatherapplication.utils.convertToDate
 import com.google.android.material.transition.MaterialContainerTransform
+import javax.inject.Inject
 import kotlin.math.round
 import kotlin.math.roundToInt
 
 
-class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
+class DetailsForecastFragment : Fragment() {
+
+    @Inject
+    lateinit var detailsForecastViewModelFactory: DetailsForecastViewModelFactory
+    private val detailsForecastViewModel: DetailsForecastViewModel by lazy {
+        ViewModelProvider(
+            this,
+            detailsForecastViewModelFactory
+        )[DetailsForecastViewModel::class.java]
+    }
 
     private var _bind: FragmentDetailsForecastBinding? = null
     private val bind: FragmentDetailsForecastBinding
         get() = _bind!!
 
-    private val detailsForecastViewModel: DetailsForecastViewModel by viewModels()
-
     private lateinit var currentForecast: Forecast
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        inject()
+        super.onCreate(savedInstanceState)
+    }
+
+    private fun inject() {
+        (requireContext().applicationContext as AppApplication).appComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -157,7 +175,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
             .load(
                 this.getString(
                     R.string.URL_loading_image_weather,
-                    currentForecast.weather[0].sectionURL
+                    currentForecast.weather[0].iconId
                 )
             )
             .placeholder(R.drawable.ic_cloud)
@@ -166,7 +184,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setTemp() {
-        bind.tvValueTemp.text = round(currentForecast.main.temp).toInt().toString()
+        bind.tvValueTemp.text = round(currentForecast.main.temperature).toInt().toString()
     }
 
     private fun setNameCity() {

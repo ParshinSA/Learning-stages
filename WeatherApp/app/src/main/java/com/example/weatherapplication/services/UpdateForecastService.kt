@@ -11,15 +11,24 @@ import com.example.weatherapplication.data.db.app_sp.SharedPrefs
 import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
 import com.example.weatherapplication.data.objects.AppDisposable
 import com.example.weatherapplication.data.objects.AppState
-import com.example.weatherapplication.data.repositories.RemoteRepository
-import io.reactivex.disposables.CompositeDisposable
+import com.example.weatherapplication.data.repositories.repo_interface.DatabaseRepository
+import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
+import com.example.weatherapplication.ui.AppApplication
+import javax.inject.Inject
 
 class UpdateForecastService : Service() {
-    private val remoteRepo = RemoteRepository(this)
+
+    @Inject
+    lateinit var databaseRepo: DatabaseRepository
+    @Inject
+    lateinit var remoteRepo: RemoteRepository
+    @Inject
+    lateinit var appDisposable: AppDisposable
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
+        inject()
         Log.d(TAG, "onCreate: ")
         super.onCreate()
     }
@@ -30,6 +39,10 @@ class UpdateForecastService : Service() {
         return START_STICKY
     }
 
+    private fun inject() {
+        (this.applicationContext as AppApplication).appComponent.inject(this)
+    }
+
     private fun updateForecast() {
 
         if (checkSDK() && AppState.isCollapsedAppLiveData.value == true) {
@@ -37,12 +50,13 @@ class UpdateForecastService : Service() {
             startForeground(FOREGROUND_ID, createNotification())
         } else Log.d(TAG, "updateForecast: startService")
 
-        AppDisposable.disposableList.add(
+        appDisposable.disposableList.add(
             remoteRepo.requestForecastAllCity().subscribe({ forecast ->
-                remoteRepo.saveForecastInDatabase(forecast)
+                Log.d(TAG, "updateForecast: $forecast")
+                databaseRepo.saveForecastInDatabase(forecast)
             }, {
                 Log.d(TAG, "updateForecast: ERROR $it")
-            },{
+            }, {
                 saveTimeUpdateForecast()
             })
         )

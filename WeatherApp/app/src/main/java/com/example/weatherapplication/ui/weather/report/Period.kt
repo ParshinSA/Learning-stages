@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.weather_report
+package com.example.weatherapplication.ui.weather.report
 
 enum class Period(val stringQuantity: String, val quantity:Int) {
     TEN_DAYS("Десять дней",10),

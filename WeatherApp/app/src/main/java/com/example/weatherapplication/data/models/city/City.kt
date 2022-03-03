@@ -23,11 +23,11 @@ data class City(
 
     @ColumnInfo(name = Columns.LATITUDE)
     @SerializedName(GsonName.LATITUDE)
-    val lat: Double,
+    val latitude: Double,
 
     @ColumnInfo(name = Columns.LONGITUDE)
     @SerializedName(GsonName.LONGITUDE)
-    val lon: Double,
+    val longitude: Double,
 
     @ColumnInfo(name = Columns.COUNTRY)
     @SerializedName(GsonName.COUNTRY)

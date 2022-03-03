@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,24 +21,32 @@ import com.example.weatherapplication.data.db.app_sp.SharedPrefs
 import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
+import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.ui.weather.short_forecast.recyclerview.ForecastListAdapterRV
 import com.example.weatherapplication.utils.ItemDecoration
 import com.google.android.material.transition.MaterialElevationScale
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list) {
+class ShortForecastListFragment : Fragment() {
+
+    @Inject
+    lateinit var shortForecastViewModelFactory: ShortForecastViewModelFactory
 
     private var _bind: FragmentShortForecastListBinding? = null
     private val bind: FragmentShortForecastListBinding
         get() = _bind!!
+
+    private val shortViewModel: ShortForecastViewModel by lazy {
+        ViewModelProvider(this, shortForecastViewModelFactory)[ShortForecastViewModel::class.java]
+    }
 
     private val sharedPrefs: SharedPreferences by lazy {
         SharedPrefs.instancePrefs
     }
 
     private lateinit var adapterRVForecast: ForecastListAdapterRV
-    private val shortViewModel: ShortForecastListViewModel by viewModels()
     private var myDialog: AlertDialog? = null
 
     override fun onCreateView(
@@ -46,6 +54,9 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        (requireContext().applicationContext as AppApplication).appComponent.inject(this)
+
         Log.d(TAG, "onCreateView: ")
         _bind = FragmentShortForecastListBinding.inflate(inflater, container, false)
         return bind.root
@@ -55,7 +66,6 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         Log.d(TAG, "onViewCreated: ")
         thisTransition(view)
         actionInFragment()
-
         super.onViewCreated(view, savedInstanceState)
     }
 

@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.weather_report
+package com.example.weatherapplication.ui.weather.report
 
 import android.app.AlertDialog
 import android.graphics.Color

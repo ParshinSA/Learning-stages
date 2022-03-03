@@ -8,8 +8,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Main(
 
-    @SerializedName(GsonName.TEMP)
-    val temp: Float,
+    @SerializedName(GsonName.TEMPERATURE)
+    val temperature: Double,
 
     @SerializedName(GsonName.PRESSURE)
     val pressure: Int,

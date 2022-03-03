@@ -9,8 +9,8 @@ import kotlinx.parcelize.Parcelize
 data class Coordination(
 
     @SerializedName(GsonName.LATITUDE)
-    val lat: Double,
+    val latitude: Double,
 
     @SerializedName(GsonName.LONGITUDE)
-    val lon: Double
+    val longitude: Double
 ) : Parcelable

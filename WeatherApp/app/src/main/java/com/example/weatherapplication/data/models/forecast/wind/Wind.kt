@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class Wind(
 
     @SerializedName(GsonName.SPEED)
-    val speed: Float,
+    val speed: Double,
 
     @SerializedName(GsonName.ROUTE_DEGREES)
     val routeDegrees: Int

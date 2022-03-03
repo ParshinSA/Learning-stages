@@ -7,11 +7,18 @@ import androidx.fragment.app.Fragment
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.objects.AppDisposable
 import com.example.weatherapplication.data.objects.AppState
-import com.example.weatherapplication.data.repositories.RemoteRepository
+import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.databinding.ActivityAppBinding
 import com.google.android.material.transition.MaterialElevationScale
+import javax.inject.Inject
 
 class AppActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var remoteRepository: RemoteRepository
+    @Inject
+    lateinit var appDisposable: AppDisposable
+
     private var _bind: ActivityAppBinding? = null
     private val bind: ActivityAppBinding
         get() = _bind!!
@@ -23,6 +30,7 @@ class AppActivity : AppCompatActivity() {
             ?.first()
 
     override fun onStart() {
+        inject()
         AppState.appIsCollapsed(false)
         super.onStart()
     }
@@ -33,6 +41,10 @@ class AppActivity : AppCompatActivity() {
         setContentView(bind.root)
 
         exitEnterTransition()
+    }
+
+    private fun inject() {
+        (applicationContext as AppApplication).appComponent.inject(this)
     }
 
     private fun exitEnterTransition() {
@@ -49,12 +61,12 @@ class AppActivity : AppCompatActivity() {
     override fun onStop() {
         Log.d(TAG, "onStop: ")
         AppState.appIsCollapsed(true)
-        RemoteRepository(this).periodUpdateForecastAllCityList()
+        remoteRepository.periodUpdateForecastAllCityList()
         super.onStop()
     }
 
     override fun onDestroy() {
-        AppDisposable.unSubscribeAll()
+        appDisposable.unSubscribeAll()
         Log.d(TAG, "onDestroy: ")
         super.onDestroy()
     }

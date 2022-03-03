@@ -1,22 +1,21 @@
 package com.example.weatherapplication.ui.weather.short_forecast
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.objects.AppDisposable
-import com.example.weatherapplication.data.repositories.ForecastDbRepository
-import com.example.weatherapplication.data.repositories.RemoteRepository
+import com.example.weatherapplication.data.repositories.repo_interface.DatabaseRepository
+import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.utils.SingleLiveEvent
+import io.reactivex.disposables.CompositeDisposable
 
-class ShortForecastListViewModel(
-    application: Application
-) : AndroidViewModel(application) {
-
-    private val remoteRepo = RemoteRepository(application)
-    private val databaseRepo = ForecastDbRepository()
+class ShortForecastViewModel(
+    val remoteRepo: RemoteRepository,
+    val disposable: CompositeDisposable,
+    databaseRepo: DatabaseRepository
+) : ViewModel() {
 
     private val forecastListMutableLiveData = MutableLiveData<List<Forecast>>()
     val forecastListLiveData: LiveData<List<Forecast>>
@@ -28,9 +27,8 @@ class ShortForecastListViewModel(
 
     val isLoadingMutableLiveData = MutableLiveData<Boolean>()
 
-
     init {
-        AppDisposable.disposableList.add(
+        disposable.add(
             databaseRepo.observeForecastDatabase().subscribe {
                 isLoadingMutableLiveData.postValue(true)
                 forecastListMutableLiveData.postValue(it)
@@ -51,6 +49,7 @@ class ShortForecastListViewModel(
 
     override fun onCleared() {
         Log.d(TAG, "onCleared: VM cleared")
+        disposable.clear()
         super.onCleared()
     }
 

@@ -3,10 +3,10 @@ package com.example.weatherapplication.data.objects
 import io.reactivex.disposables.CompositeDisposable
 
 
-object AppDisposable {
+class AppDisposable {
     val disposableList = CompositeDisposable()
 
-    fun unSubscribeAll(){
+    fun unSubscribeAll() {
         disposableList.clear()
     }
 }

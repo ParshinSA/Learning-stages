@@ -1,23 +1,20 @@
 package com.example.weatherapplication.ui.weather.search_city
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.data.models.city.City
-import com.example.weatherapplication.data.objects.AppDisposable
-import com.example.weatherapplication.data.repositories.RemoteRepository
+import com.example.weatherapplication.data.repositories.repo_implementation.RemoteRepositoryImpl
+import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 
 class SearchCityViewModel(
-    application: Application
-) : AndroidViewModel(application) {
-
-    private val remoteRepository = RemoteRepository(application)
-    private val disposeBack = CompositeDisposable()
+    private val remoteRepository: RemoteRepository,
+    private val disposeBack: CompositeDisposable
+) : ViewModel() {
 
     private val resultSearchListMutableLiveData = MutableLiveData<List<City>>(emptyList())
     val resultCityLiveData: LiveData<List<City>>
@@ -38,7 +35,7 @@ class SearchCityViewModel(
     private fun searchCity(userInput: String) {
         disposeBack.add(
             remoteRepository.searchCity(userInput)
-                .subscribe({ listCity->
+                .subscribe({ listCity ->
                     Log.d(TAG, "searchCity: RESULT $listCity")
                     resultSearchListMutableLiveData.postValue(listCity)
                 }, {
