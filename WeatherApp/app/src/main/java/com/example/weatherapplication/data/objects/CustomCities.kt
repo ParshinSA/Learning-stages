@@ -12,7 +12,7 @@ class CustomCities(
     private val appDisposable: AppDisposable
 ) {
 
-    private val listCitiesMutableLiveData = MutableLiveData<List<City>>(emptyList())
+    private val listCitiesMutableLiveData = MutableLiveData<List<City>>()
     val listCitiesLiveData: LiveData<List<City>>
         get() = listCitiesMutableLiveData
 

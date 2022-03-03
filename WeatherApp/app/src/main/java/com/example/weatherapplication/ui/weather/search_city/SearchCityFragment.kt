@@ -103,6 +103,7 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
 
     private fun initRv() {
         resultSearchAdapter = ResultSearchAdapter { city: City ->
+            Log.d(TAG, "customCities: ${customCities.hashCode()}")
             customCities.addCity(city)
         }
 

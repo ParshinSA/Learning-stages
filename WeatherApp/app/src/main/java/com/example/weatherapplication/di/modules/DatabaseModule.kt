@@ -10,6 +10,7 @@ import com.example.weatherapplication.data.db.forecast_db.ForecastDbContract
 import com.example.weatherapplication.data.db.forecast_db.ForecastDbModels
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 class DatabaseModule {
@@ -26,6 +27,7 @@ class DatabaseModule {
     }
 
     @Provides
+    @Singleton
     fun provideForecastDao(forecastDbModels: ForecastDbModels): ForecastDao {
         return forecastDbModels.getForecastDao()
     }

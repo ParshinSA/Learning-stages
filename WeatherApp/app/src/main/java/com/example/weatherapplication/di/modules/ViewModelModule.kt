@@ -1,5 +1,6 @@
 package com.example.weatherapplication.di.modules
 
+import com.example.weatherapplication.data.objects.AppDisposable
 import com.example.weatherapplication.data.repositories.repo_interface.DatabaseRepository
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
@@ -17,12 +18,12 @@ class ViewModelModule {
     @Provides
     fun provideShortForecastViewModelFactory(
         remoteRepo: RemoteRepository,
-        disposable: CompositeDisposable,
+        appDisposable: AppDisposable,
         databaseRepo: DatabaseRepository
     ): ShortForecastViewModelFactory {
         return ShortForecastViewModelFactory(
             remoteRepo = remoteRepo,
-            disposable = disposable,
+            appDisposable = appDisposable,
             databaseRepo = databaseRepo
         )
     }

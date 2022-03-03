@@ -32,6 +32,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
 
     @Inject
     lateinit var shortViewModelFactory: ShortForecastViewModelFactory
+
     @Inject
     lateinit var customCities: CustomCities
 
@@ -59,7 +60,6 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun actionInFragment() {
-        getForecastList()
         initComponents()
         addNewCity()
         refreshForecastListSwipe()
@@ -153,12 +153,13 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         }
 
         shortViewModel.forecastListLiveData.observe(viewLifecycleOwner) { listForecast ->
-            Log.d(TAG, "observeData: $listForecast")
+            Log.d(TAG, "observeData: forecastListLiveData $listForecast")
             updateForecastListInRV(listForecast)
         }
 
-        customCities.listCitiesLiveData.observe(viewLifecycleOwner){
-            getForecastList()
+        customCities.listCitiesLiveData.observe(viewLifecycleOwner) { listCustomCities ->
+            Log.d(TAG, "observeData: listCitiesLiveData $listCustomCities")
+            if (listCustomCities.isNotEmpty()) getForecastList()
         }
     }
 
@@ -166,7 +167,9 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         if (listForecast.isEmpty())
             changeStateViewUpdate(false)
         else {
-            adapterRVForecast.submitList(listForecast.sortedBy { it.cityName })
+            adapterRVForecast.submitList(listForecast.sortedBy {
+                it.cityName
+            })
             changeStateViewUpdate(true)
             setLastTimeUpdateForecast()
         }
@@ -207,6 +210,16 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         findNavController().navigate(
             R.id.action_shortForecastListFragment_to_detailsForecastFragment, bundle, null, extras
         )
+    }
+
+    override fun onPause() {
+        Log.d(TAG, "onPause: ")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        Log.d(TAG, "onStop: ")
+        super.onStop()
     }
 
     override fun onDestroy() {

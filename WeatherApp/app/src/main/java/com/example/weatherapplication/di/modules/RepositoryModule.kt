@@ -14,11 +14,13 @@ import com.example.weatherapplication.data.repositories.repo_interface.MemoryRep
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 class RepositoryModule {
 
     @Provides
+    @Singleton
     fun provideRemoteRepositoryImpl(
         context: Context,
         customCities: CustomCities
