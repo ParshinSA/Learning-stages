@@ -12,16 +12,14 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
     @Inject
     lateinit var remoteRepository: RemoteRepository
-
     @Inject
     lateinit var appDisposable: AppDisposable
-
     @Inject
     lateinit var appState: AppState
 
     override fun onStart() {
         inject()
-        appState.appIsCollapsed(false)
+        changeStateCollapsedApp(false)
         super.onStart()
     }
 
@@ -29,15 +27,27 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         (applicationContext as AppApplication).appComponent.inject(this)
     }
 
+    private fun changeStateCollapsedApp(isCollapsed: Boolean) {
+        appState.appIsCollapsed(isCollapsed)
+    }
+
+    private fun startBackgroundUpdateForecast(){
+        remoteRepository.periodUpdateForecastAllCityList()
+    }
+
+    private fun unsubscribeAll(){
+        appDisposable.unsubscribeAll()
+    }
+
     override fun onStop() {
         Log.d(TAG, "onStop: ")
-        appState.appIsCollapsed(true)
-        remoteRepository.periodUpdateForecastAllCityList()
+        changeStateCollapsedApp(true)
         super.onStop()
     }
 
     override fun onDestroy() {
-        appDisposable.unSubscribeAll()
+        unsubscribeAll()
+        startBackgroundUpdateForecast()
         Log.d(TAG, "onDestroy: ")
         super.onDestroy()
     }

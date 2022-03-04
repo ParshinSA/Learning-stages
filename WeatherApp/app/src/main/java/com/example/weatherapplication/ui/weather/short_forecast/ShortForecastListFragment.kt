@@ -39,7 +39,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     private val shortViewModel: ShortForecastViewModel by viewModels { shortViewModelFactory }
     private val bind by viewBinding(FragmentShortForecastListBinding::bind)
 
-    private lateinit var adapterRVForecast: ForecastListAdapterRV
+    private lateinit var adapterRV: ForecastListAdapterRV
     private var myDialog: AlertDialog? = null
 
     override fun onAttach(context: Context) {
@@ -57,7 +57,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     private fun actionInFragment() {
         initComponents()
         addNewCity()
-        refreshForecastListSwipe()
+        updateForecastsSwipe()
         exitEnterTransition()
         observeData()
     }
@@ -96,7 +96,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         return connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) != null
     }
 
-    private fun changeStateViewUpdate(state: Boolean) {
+    private fun changeStateInfoView(state: Boolean) {
         bind.tvTextHeader.text =
             if (!state)
                 this.getString(R.string.ShortForecastListFragment_text_No_city_in_list)
@@ -131,7 +131,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         }
     }
 
-    private fun refreshForecastListSwipe() {
+    private fun updateForecastsSwipe() {
         bind.swlSwipeContainer.setOnRefreshListener {
             Log.d(TAG, "refreshForecastListSwipe: start")
             getForecastList()
@@ -160,12 +160,12 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
 
     private fun updateForecastListInRV(listForecast: List<Forecast>) {
         if (listForecast.isEmpty())
-            changeStateViewUpdate(false)
+            changeStateInfoView(false)
         else {
-            adapterRVForecast.submitList(listForecast.sortedBy {
+            adapterRV.submitList(listForecast.sortedBy {
                 it.cityName
             })
-            changeStateViewUpdate(true)
+            changeStateInfoView(true)
             setLastTimeUpdateForecast()
         }
     }
@@ -180,13 +180,13 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun initRV() {
-        adapterRVForecast =
+        adapterRV =
             ForecastListAdapterRV { position: Int, currentViewInRV: View ->
                 transitionInDetailsForecastFragment(position, currentViewInRV)
             }
 
         with(bind.rvListCity) {
-            adapter = adapterRVForecast
+            adapter = adapterRV
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(ItemDecoration(requireContext(), 10))
             setHasFixedSize(true)

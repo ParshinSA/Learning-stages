@@ -6,7 +6,7 @@ import io.reactivex.disposables.CompositeDisposable
 class AppDisposable {
     val disposableList = CompositeDisposable()
 
-    fun unSubscribeAll() {
+    fun unsubscribeAll() {
         disposableList.clear()
     }
 }

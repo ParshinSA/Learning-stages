@@ -17,9 +17,4 @@ interface CustomCitiesDao {
 
     @Query("SELECT * FROM ${TableDatabase.TABLE_NAME}")
     fun getCityList(): Observable<List<City>>
-
-    @Query("DELETE FROM ${TableDatabase.TABLE_NAME} WHERE ${Columns.LATITUDE} == (:lat) AND ${Columns.LONGITUDE} == (:lon)")
-    fun deleteCity(lat: Double, lon: Double)
-
-
 }

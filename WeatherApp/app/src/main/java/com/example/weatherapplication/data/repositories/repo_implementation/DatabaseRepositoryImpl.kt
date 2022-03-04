@@ -12,11 +12,11 @@ class DatabaseRepositoryImpl(
 ) : DatabaseRepository {
 
     override fun saveForecastInDatabase(forecast: Forecast) {
-        forecastDao.insertListForecast(forecast)
+        forecastDao.insertForecast(forecast)
     }
 
     override fun observeForecastDatabase(): Flowable<List<Forecast>> {
-        return forecastDao.getWeatherForecast()
+        return forecastDao.getListForecast()
             .observeOn(Schedulers.io())
             .debounce(500, TimeUnit.MILLISECONDS)
     }

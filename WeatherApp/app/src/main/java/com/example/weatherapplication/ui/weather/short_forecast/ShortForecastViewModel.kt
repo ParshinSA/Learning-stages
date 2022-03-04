@@ -12,9 +12,9 @@ import com.example.weatherapplication.utils.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 
 class ShortForecastViewModel(
-    val remoteRepo: RemoteRepository,
-    val appDisposable: AppDisposable,
-    val databaseRepo: DatabaseRepository
+    private val remoteRepo: RemoteRepository,
+    private val appDisposable: AppDisposable,
+    private val databaseRepo: DatabaseRepository
 ) : ViewModel() {
     var disposables: Disposable? = null
 
@@ -29,16 +29,17 @@ class ShortForecastViewModel(
     val isLoadingMutableLiveData = MutableLiveData<Boolean>()
 
     init {
-        disposables = databaseRepo.observeForecastDatabase().subscribe {
-            isLoadingMutableLiveData.postValue(true)
-            forecastListMutableLiveData.postValue(it)
-            isLoadingMutableLiveData.postValue(false)
-            Log.d(TAG, "DatabaseListener: $it")
-        }
+        appDisposable.disposableList.add(
+            databaseRepo.observeForecastDatabase().subscribe { forecastList ->
+                isLoadingMutableLiveData.postValue(true)
+                forecastListMutableLiveData.postValue(forecastList)
+                isLoadingMutableLiveData.postValue(false)
+                Log.d(TAG, "DatabaseListener: $forecastList")
+            })
     }
 
     fun getForecastList() {
-        Log.d(TAG, "getForecastList: ${disposables?.isDisposed}")
+        Log.d(TAG, "getForecastList: ")
         isLoadingMutableLiveData.postValue(true)
         remoteRepo.oneTimeUpdateForecastAllCity()
         isLoadingMutableLiveData.postValue(false)

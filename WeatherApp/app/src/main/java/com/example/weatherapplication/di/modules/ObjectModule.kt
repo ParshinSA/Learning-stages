@@ -35,6 +35,7 @@ class ObjectModule {
     }
 
     @Provides
+    @Singleton
     fun provideCompositeDisposable(): CompositeDisposable {
         return CompositeDisposable()
     }

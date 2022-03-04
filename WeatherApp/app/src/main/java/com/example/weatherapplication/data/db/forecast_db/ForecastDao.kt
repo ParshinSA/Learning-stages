@@ -12,9 +12,9 @@ import io.reactivex.Flowable
 interface ForecastDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertListForecast(forecasts: Forecast)
+    fun insertForecast(forecasts: Forecast)
 
     @Query("SELECT * FROM ${TableDatabase.TABLE_NAME}")
-    fun getWeatherForecast(): Flowable<List<Forecast>>
+    fun getListForecast(): Flowable<List<Forecast>>
 
 }
