@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tb_Search_city"
+        android:id="@+id/tbSearchCity"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
         android:background="@color/myPrimary"
@@ -17,19 +17,19 @@
         app:titleTextColor="@color/darkColorText" />
 
     <TextView
-        android:id="@+id/tv_Text_no_result"
-        app:layout_constraintTop_toBottomOf="@id/tb_Search_city"
+        android:id="@+id/tvTextNoResult"
+        app:layout_constraintTop_toBottomOf="@id/tbSearchCity"
         android:layout_width="match_parent"
         android:text="@string/SearchCityFragment_Text_no_result"
         android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_Result_search_city"
+        android:id="@+id/rvResultSearchCity"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_Search_city"
+        app:layout_constraintTop_toBottomOf="@+id/tbSearchCity"
         tools:listitem="@layout/item_result_search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

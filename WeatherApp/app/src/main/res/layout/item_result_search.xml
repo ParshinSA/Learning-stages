@@ -8,7 +8,7 @@
     android:padding="4dp">
 
     <Button
-        android:id="@+id/btn_Item_result"
+        android:id="@+id/btnItemResult"
         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,12 +23,12 @@
         tools:text="London" />
 
     <TextView
-        android:id="@+id/tv_State_city"
+        android:id="@+id/tvStateCity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_Item_result"
+        app:layout_constraintBottom_toBottomOf="@+id/btnItemResult"
         tools:text="test" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
