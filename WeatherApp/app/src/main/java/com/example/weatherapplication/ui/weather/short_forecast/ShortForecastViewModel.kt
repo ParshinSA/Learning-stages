@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.objects.AppDisposable
-import com.example.weatherapplication.data.repositories.repo_interface.DatabaseRepository
+import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.utils.SingleLiveEvent
 import io.reactivex.disposables.Disposable
@@ -14,7 +14,7 @@ import io.reactivex.disposables.Disposable
 class ShortForecastViewModel(
     private val remoteRepo: RemoteRepository,
     private val appDisposable: AppDisposable,
-    private val databaseRepo: DatabaseRepository
+    private val forecastDbRepo: ForecastDbRepository
 ) : ViewModel() {
     var disposables: Disposable? = null
 
@@ -30,7 +30,7 @@ class ShortForecastViewModel(
 
     init {
         appDisposable.disposableList.add(
-            databaseRepo.observeForecastDatabase().subscribe { forecastList ->
+            forecastDbRepo.observeForecastDatabase().subscribe { forecastList ->
                 isLoadingMutableLiveData.postValue(true)
                 forecastListMutableLiveData.postValue(forecastList)
                 isLoadingMutableLiveData.postValue(false)

@@ -6,8 +6,8 @@ import android.os.Build
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.example.weatherapplication.services.UpdateForecastService
 import com.example.weatherapplication.data.objects.AppState
+import com.example.weatherapplication.services.UpdateForecastService
 import com.example.weatherapplication.ui.AppApplication
 import javax.inject.Inject
 
@@ -38,7 +38,12 @@ class UpdateForecastWorker(
         try {
             val intentUpdateService = Intent(context, UpdateForecastService::class.java)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && appState.isCollapsedAppLiveData.value == true) {
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                context.startService(intentUpdateService)
+                return
+            }
+
+            if (appState.isCollapsed) {
                 Log.d(TAG, "startUpdateService: startForegroundService")
                 context.startForegroundService(intentUpdateService)
             } else {

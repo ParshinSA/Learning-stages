@@ -16,6 +16,7 @@ import javax.inject.Singleton
 class DatabaseModule {
 
     @Provides
+    @Singleton
     fun provideForecastDbModels(context: Context): ForecastDbModels {
         return Room.databaseBuilder(
             context,
@@ -33,7 +34,8 @@ class DatabaseModule {
     }
 
     @Provides
-    fun provideCustomCitiesDbModels(context: Context): CustomCitiesDbModels{
+    @Singleton
+    fun provideCustomCitiesDbModels(context: Context): CustomCitiesDbModels {
         return Room.databaseBuilder(
             context,
             CustomCitiesDbModels::class.java,
@@ -44,7 +46,8 @@ class DatabaseModule {
     }
 
     @Provides
-    fun provideCustomCitiesDao(customCitiesDbModels: CustomCitiesDbModels): CustomCitiesDao{
+    @Singleton
+    fun provideCustomCitiesDao(customCitiesDbModels: CustomCitiesDbModels): CustomCitiesDao {
         return customCitiesDbModels.getCustomCitiesDao()
     }
 

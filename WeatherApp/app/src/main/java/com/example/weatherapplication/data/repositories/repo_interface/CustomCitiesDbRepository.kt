@@ -4,7 +4,7 @@ import com.example.weatherapplication.data.models.city.City
 import io.reactivex.Completable
 import io.reactivex.Observable
 
-interface CustomCitiesRepository {
+interface CustomCitiesDbRepository {
     fun observeCustomCitiesDb(): Observable<List<City>>
     fun addCity(city: City): Completable
 }

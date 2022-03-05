@@ -7,12 +7,12 @@ import io.reactivex.disposables.CompositeDisposable
 
 class SearchCityViewModelFactory(
     private val remoteRepository: RemoteRepository,
-    private val disposeBack: CompositeDisposable
+    private val compositeDisposable: CompositeDisposable
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return SearchCityViewModel(
             remoteRepository = remoteRepository,
-            disposeBack = disposeBack
+            disposeBack = compositeDisposable
         ) as T
     }
 }

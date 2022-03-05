@@ -2,14 +2,14 @@ package com.example.weatherapplication.data.repositories.repo_implementation
 
 import com.example.weatherapplication.data.db.forecast_db.ForecastDao
 import com.example.weatherapplication.data.models.forecast.Forecast
-import com.example.weatherapplication.data.repositories.repo_interface.DatabaseRepository
+import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class DatabaseRepositoryImpl(
+class ForecastDbRepositoryImpl(
     private val forecastDao: ForecastDao
-) : DatabaseRepository {
+) : ForecastDbRepository {
 
     override fun saveForecastInDatabase(forecast: Forecast) {
         forecastDao.insertForecast(forecast)

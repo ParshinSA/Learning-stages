@@ -5,23 +5,21 @@ import androidx.work.WorkManager
 import com.example.weatherapplication.data.db.custom_cities_db.CustomCitiesDao
 import com.example.weatherapplication.data.db.forecast_db.ForecastDao
 import com.example.weatherapplication.data.objects.CustomCities
-import com.example.weatherapplication.data.repositories.repo_implementation.CustomCitiesRepositoryImpl
-import com.example.weatherapplication.data.repositories.repo_implementation.DatabaseRepositoryImpl
+import com.example.weatherapplication.data.repositories.repo_implementation.CustomCitiesDbRepositoryImpl
+import com.example.weatherapplication.data.repositories.repo_implementation.ForecastDbRepositoryImpl
 import com.example.weatherapplication.data.repositories.repo_implementation.MemoryRepositoryImpl
 import com.example.weatherapplication.data.repositories.repo_implementation.RemoteRepositoryImpl
-import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesRepository
-import com.example.weatherapplication.data.repositories.repo_interface.DatabaseRepository
+import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
+import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 class RepositoryModule {
 
     @Provides
-    @Singleton
     fun provideRemoteRepositoryImpl(
         workManager: WorkManager,
         customCities: CustomCities
@@ -33,13 +31,13 @@ class RepositoryModule {
     }
 
     @Provides
-    fun provideForecastDbRepositoryImpl(forecastDao: ForecastDao): DatabaseRepository {
-        return DatabaseRepositoryImpl(forecastDao)
+    fun provideForecastDbRepositoryImpl(forecastDao: ForecastDao): ForecastDbRepository {
+        return ForecastDbRepositoryImpl(forecastDao)
     }
 
     @Provides
-    fun provideCustomCitiesRepositoryImpl(customCitiesDao: CustomCitiesDao): CustomCitiesRepository {
-        return CustomCitiesRepositoryImpl(customCitiesDao)
+    fun provideCustomCitiesDbRepositoryImpl(customCitiesDao: CustomCitiesDao): CustomCitiesDbRepository {
+        return CustomCitiesDbRepositoryImpl(customCitiesDao)
     }
 
     @Provides

@@ -7,13 +7,13 @@ import com.example.weatherapplication.data.repositories.repo_interface.RemoteRep
 import io.reactivex.disposables.CompositeDisposable
 
 class ReportViewModelFactory(
-    private val disposeBack: CompositeDisposable,
+    private val compositeDisposable: CompositeDisposable,
     private val remoteRepo: RemoteRepository,
     private val memoryRepository: MemoryRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return ReportViewModel(
-            disposeBack = disposeBack,
+            disposeBack = compositeDisposable,
             remoteRepo = remoteRepo,
             memoryRepository = memoryRepository
         ) as T

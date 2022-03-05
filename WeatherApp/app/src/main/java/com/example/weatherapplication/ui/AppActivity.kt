@@ -28,7 +28,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     }
 
     private fun changeStateCollapsedApp(isCollapsed: Boolean) {
-        appState.appIsCollapsed(isCollapsed)
+        appState.changeStateApp(isCollapsed)
     }
 
     private fun startBackgroundUpdateForecast(){
@@ -36,7 +36,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     }
 
     private fun unsubscribeAll(){
-        appDisposable.unsubscribeAll()
+        appDisposable.disposableList.clear()
     }
 
     override fun onStop() {

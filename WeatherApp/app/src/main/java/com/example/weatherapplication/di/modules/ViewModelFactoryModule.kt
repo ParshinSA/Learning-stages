@@ -1,7 +1,7 @@
 package com.example.weatherapplication.di.modules
 
 import com.example.weatherapplication.data.objects.AppDisposable
-import com.example.weatherapplication.data.repositories.repo_interface.DatabaseRepository
+import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.ui.weather.detail_forecast.DetailsForecastViewModelFactory
@@ -13,29 +13,29 @@ import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
 
 @Module
-class ViewModelModule {
+class ViewModelFactoryModule {
 
     @Provides
     fun provideShortForecastViewModelFactory(
         remoteRepo: RemoteRepository,
         appDisposable: AppDisposable,
-        databaseRepo: DatabaseRepository
+        forecastDbRepo: ForecastDbRepository
     ): ShortForecastViewModelFactory {
         return ShortForecastViewModelFactory(
             remoteRepo = remoteRepo,
             appDisposable = appDisposable,
-            databaseRepo = databaseRepo
+            forecastDbRepo = forecastDbRepo
         )
     }
 
     @Provides
     fun provideReportViewModelFactory(
-        disposeBack: CompositeDisposable,
+        compositeDisposable: CompositeDisposable,
         remoteRepo: RemoteRepository,
         memoryRepository: MemoryRepository
     ): ReportViewModelFactory {
         return ReportViewModelFactory(
-            disposeBack = disposeBack,
+            compositeDisposable = compositeDisposable,
             remoteRepo = remoteRepo,
             memoryRepository = memoryRepository
         )
@@ -44,11 +44,11 @@ class ViewModelModule {
     @Provides
     fun providerSearchCityViewModelFactory(
         remoteRepository: RemoteRepository,
-        disposeBack: CompositeDisposable
+        compositeDisposable: CompositeDisposable
     ): SearchCityViewModelFactory {
         return SearchCityViewModelFactory(
             remoteRepository = remoteRepository,
-            disposeBack = disposeBack
+            compositeDisposable = compositeDisposable
         )
     }
 

@@ -7,7 +7,7 @@ import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
 import com.example.weatherapplication.data.objects.AppDisposable
 import com.example.weatherapplication.data.objects.AppState
 import com.example.weatherapplication.data.objects.CustomCities
-import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesRepository
+import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -19,23 +19,22 @@ class ObjectModule {
     @Provides
     @Singleton
     fun provideCustomCities(
-        customCitiesRepository: CustomCitiesRepository,
+        customCitiesDbRepository: CustomCitiesDbRepository,
         appDisposable: AppDisposable
     ): CustomCities {
         return CustomCities(
-            customCitiesRepository = customCitiesRepository,
+            customCitiesDbRepository = customCitiesDbRepository,
             appDisposable = appDisposable
         )
     }
 
     @Provides
     @Singleton
-    fun provideDisposeBack(): AppDisposable {
-        return AppDisposable()
+    fun provideAppDisposable(compositeDisposable: CompositeDisposable): AppDisposable {
+        return AppDisposable(compositeDisposable)
     }
 
     @Provides
-    @Singleton
     fun provideCompositeDisposable(): CompositeDisposable {
         return CompositeDisposable()
     }
@@ -56,7 +55,6 @@ class ObjectModule {
     }
 
     @Provides
-    @Singleton
     fun provideWorkManager(context: Context): WorkManager {
         return WorkManager.getInstance(context)
     }

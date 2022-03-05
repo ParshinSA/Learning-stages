@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.weatherapplication.data.models.city.City
-import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesRepository
+import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import io.reactivex.schedulers.Schedulers
 
 class CustomCities(
-    private val customCitiesRepository: CustomCitiesRepository,
+    private val customCitiesDbRepository: CustomCitiesDbRepository,
     private val appDisposable: AppDisposable
 ) {
 
@@ -19,7 +19,7 @@ class CustomCities(
     init {
         Log.d(TAG, "subscribeCustomCitiesDb: start")
         appDisposable.disposableList.add(
-            customCitiesRepository.observeCustomCitiesDb().subscribe { cityList ->
+            customCitiesDbRepository.observeCustomCitiesDb().subscribe { cityList ->
                 Log.d(TAG, "add livedata from bd: $cityList ")
                 listCitiesMutableLiveData.postValue(cityList)
             }
@@ -28,7 +28,7 @@ class CustomCities(
 
     fun addCity(city: City) {
         appDisposable.disposableList.add(
-            customCitiesRepository.addCity(city)
+            customCitiesDbRepository.addCity(city)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     Log.d(TAG, "addCity: completed $city")

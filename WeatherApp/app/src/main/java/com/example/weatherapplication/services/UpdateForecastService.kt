@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
 import com.example.weatherapplication.data.objects.AppDisposable
 import com.example.weatherapplication.data.objects.AppState
-import com.example.weatherapplication.data.repositories.repo_interface.DatabaseRepository
+import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.ui.AppApplication
 import javax.inject.Inject
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class UpdateForecastService : Service() {
 
     @Inject
-    lateinit var databaseRepo: DatabaseRepository
+    lateinit var forecastDbRepo: ForecastDbRepository
     @Inject
     lateinit var remoteRepo: RemoteRepository
     @Inject
@@ -49,15 +49,15 @@ class UpdateForecastService : Service() {
 
     private fun updateForecast() {
 
-        if (checkSDK() && appState.isCollapsedAppLiveData.value == true) {
+        if (checkSDK() && appState.isCollapsed) {
             Log.d(TAG, "updateForecast: startForeground")
             startForeground(FOREGROUND_ID, createNotification())
         } else Log.d(TAG, "updateForecast: startService")
 
         appDisposable.disposableList.add(
             remoteRepo.requestForecastAllCity().subscribe({ forecast ->
-                Log.d(TAG, "updateForecast: $forecast")
-                databaseRepo.saveForecastInDatabase(forecast)
+                Log.d(TAG, "response update -> save db: $forecast")
+                forecastDbRepo.saveForecastInDatabase(forecast)
             }, {
                 Log.d(TAG, "updateForecast: ERROR $it")
             }, {
@@ -65,7 +65,7 @@ class UpdateForecastService : Service() {
             })
         )
 
-        if (checkSDK() && appState.isCollapsedAppLiveData.value == true) {
+        if (checkSDK() && appState.isCollapsed) {
             stopForeground(true)
             Log.d(TAG, "updateForecast: stopForeground")
         }
