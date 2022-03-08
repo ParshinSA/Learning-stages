@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class ForecastDbRepositoryImpl(
-    private val forecastDao: ForecastDao
+    private val forecastDao: ForecastDao,
 ) : ForecastDbRepository {
 
     override fun saveForecastInDatabase(forecast: Forecast) {
@@ -24,4 +24,5 @@ class ForecastDbRepositoryImpl(
     companion object {
         const val TAG = "ForecastDBRepo_Logging"
     }
+
 }

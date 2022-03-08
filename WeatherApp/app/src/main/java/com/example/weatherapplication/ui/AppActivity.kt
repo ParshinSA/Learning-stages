@@ -3,9 +3,9 @@ package com.example.weatherapplication.ui
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapplication.R
-import com.example.weatherapplication.data.objects.AppDisposable
-import com.example.weatherapplication.data.objects.AppState
+import com.example.weatherapplication.common.AppState
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
@@ -13,7 +13,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     @Inject
     lateinit var remoteRepository: RemoteRepository
     @Inject
-    lateinit var appDisposable: AppDisposable
+    lateinit var compositeDisposable: CompositeDisposable
     @Inject
     lateinit var appState: AppState
 
@@ -36,7 +36,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     }
 
     private fun unsubscribeAll(){
-        appDisposable.disposableList.clear()
+        compositeDisposable.clear()
     }
 
     override fun onStop() {

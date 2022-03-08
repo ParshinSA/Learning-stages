@@ -30,15 +30,19 @@
     <string name="DetailsForecastFragment_fab_transition_name">AppActivity_FAB_transition_name</string>
 
     <!--    WeatherReportFragment-->
-    <string name="WeatherReportFragment_report_text">Сформировать отчет</string>
-    <string name="WeatherReportFragment_transition_name">WeatherReportFragment_transition_name</string>
-    <string name="WeatherReportFragment_city_text">Город</string>
-    <string name="WeatherReportFragment_period_text">Период</string>
-    <string name="WeatherReportFragment_text_ok">Ок</string>
-    <string name="WeatherReportFragment_text_cancel">Cancel</string>
-    <string name="WeatherReportFragment_city_name_and_country">%1$s, %2$s</string>
-    <string name="WeatherReportFragment_default_period">Десять дней</string>
-    <string-array name="WeatherReportFragment_period_list">
+    <string name="ReportFragment_report_text">Сформировать отчет</string>
+    <string name="ReportFragment_transition_name">WeatherReportFragment_transition_name</string>
+    <string name="ReportFragment_city_text">Город</string>
+    <string name="ReportFragment_period_text">Период</string>
+    <string name="ReportFragment_text_ok">Ок</string>
+    <string name="ReportFragment_dialog_text_Report">Отчет</string>
+    <string name="ReportFragment_text_cancel">Cancel</string>
+    <string name="ReportFragment_city_name_and_country">%1$s, %2$s</string>
+    <string name="ReportFragment_default_period">Десять дней</string>
+    <string name="ReportFragment_Text_Report_generated">Отчет сформирован</string>
+    <string name="ReportFragment_Text_Report_open">Открыть</string>
+    <string name="ReportFragment_Text_Report_file_open">Файл открыт</string>
+    <string-array name="ReportFragment_period_list">
         <item>Десять дней</item>
         <item>Один месяц</item>
         <item>Три месяца</item>
@@ -49,8 +53,5 @@
     <string name="SearchCityFragment_search_in_toolbar">Search_city</string>
     <string name="SearchCityFragment_Text_no_result">Результатов нет</string>
     <string name="SearchCityFragment_Text_Enter_the_title">Введите название</string>
-    <string name="SearchCityFragment_Text_Report_generated">Отчет сформирован</string>
-    <string name="SearchCityFragment_Text_Report_open">Открыть</string>
-    <string name="SearchCityFragment_Text_Report_file_open">Файл открыт</string>
 
 </resources>

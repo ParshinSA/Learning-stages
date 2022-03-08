@@ -1,11 +1,10 @@
 package com.example.weatherapplication.ui.weather.search_city
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -15,20 +14,16 @@ import androidx.navigation.ui.NavigationUI.navigateUp
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
+import com.example.weatherapplication.common.ItemDecoration
 import com.example.weatherapplication.data.models.city.City
-import com.example.weatherapplication.data.objects.CustomCities
 import com.example.weatherapplication.databinding.FragmentSearchCityBinding
 import com.example.weatherapplication.ui.AppApplication
-import com.example.weatherapplication.utils.ItemDecoration
+import com.google.android.material.transition.MaterialContainerTransform
 import io.reactivex.Observable
 import javax.inject.Inject
 
 
 class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
-
-    @Inject
-    lateinit var customCities: CustomCities
-
     @Inject
     lateinit var searchViewModelFactory: SearchCityViewModelFactory
     private val searchViewModel: SearchCityViewModel by viewModels { searchViewModelFactory }
@@ -103,8 +98,7 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
 
     private fun initRv() {
         resultSearchAdapter = ResultSearchAdapter { city: City ->
-            Log.d(TAG, "customCities: ${customCities.hashCode()}")
-            customCities.addCity(city)
+            addCity(city)
         }
 
         with(bind.rvResultSearchCity) {
@@ -113,6 +107,10 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
             addItemDecoration(ItemDecoration(requireContext(), 10))
             setHasFixedSize(true)
         }
+    }
+
+    private fun addCity(city: City) {
+        searchViewModel.addCity(city)
     }
 
     private fun showResultSearchCity(cityList: List<City>) {

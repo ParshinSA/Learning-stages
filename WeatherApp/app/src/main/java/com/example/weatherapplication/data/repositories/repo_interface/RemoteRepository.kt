@@ -12,7 +12,7 @@ interface RemoteRepository {
     fun oneTimeUpdateForecastAllCity()
     fun periodUpdateForecastAllCityList()
 
-    fun requestForecastAllCity(): Observable<Forecast>
+    fun requestForecastAllCity(cityList: List<City>): Observable<Forecast>
     fun searchCity(userInput: String): Single<List<City>>
     fun requestHistory(forecast: Forecast, period: Period): Observable<DataHistory>
 }

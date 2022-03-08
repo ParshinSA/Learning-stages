@@ -8,7 +8,7 @@ import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.models.report.DataHistory
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
-import com.example.weatherapplication.utils.SingleLiveEvent
+import com.example.weatherapplication.common.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class ReportViewModel(

@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.weatherapplication.data.models.report.DataHistory
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.ui.weather.report.Period
-import com.example.weatherapplication.utils.toStringDoubleFormat
+import com.example.weatherapplication.common.toStringDoubleFormat
 import io.reactivex.Completable
 import java.io.File
 

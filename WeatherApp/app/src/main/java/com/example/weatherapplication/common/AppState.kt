@@ -1,4 +1,4 @@
-package com.example.weatherapplication.data.objects
+package com.example.weatherapplication.common
 
 import android.util.Log
 

@@ -4,14 +4,14 @@ import com.example.weatherapplication.data.db.custom_cities_db.CustomCitiesDao
 import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import io.reactivex.Completable
-import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
 class CustomCitiesDbRepositoryImpl(
     private val citiesDao: CustomCitiesDao
 ) : CustomCitiesDbRepository {
 
-    override fun observeCustomCitiesDb(): Observable<List<City>> {
+   override fun getCityList(): Single<List<City>> {
         return citiesDao.getCityList()
             .observeOn(Schedulers.io())
     }

@@ -8,12 +8,15 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
-import com.example.weatherapplication.data.objects.AppDisposable
-import com.example.weatherapplication.data.objects.AppState
+import com.example.weatherapplication.common.AppState
+import com.example.weatherapplication.data.common.SharedPrefsContract
+import com.example.weatherapplication.data.models.city.City
+import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.ui.AppApplication
+import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class UpdateForecastService : Service() {
@@ -23,11 +26,13 @@ class UpdateForecastService : Service() {
     @Inject
     lateinit var remoteRepo: RemoteRepository
     @Inject
-    lateinit var appDisposable: AppDisposable
+    lateinit var compositeDisposable: CompositeDisposable
     @Inject
     lateinit var sharedPrefs: SharedPreferences
     @Inject
     lateinit var appState: AppState
+    @Inject
+    lateinit var customCitiesDbRepo: CustomCitiesDbRepository
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -52,18 +57,9 @@ class UpdateForecastService : Service() {
         if (checkSDK() && appState.isCollapsed) {
             Log.d(TAG, "updateForecast: startForeground")
             startForeground(FOREGROUND_ID, createNotification())
-        } else Log.d(TAG, "updateForecast: startService")
+        } else Log.d(TAG, "updateForecast: startStartedService")
 
-        appDisposable.disposableList.add(
-            remoteRepo.requestForecastAllCity().subscribe({ forecast ->
-                Log.d(TAG, "response update -> save db: $forecast")
-                forecastDbRepo.saveForecastInDatabase(forecast)
-            }, {
-                Log.d(TAG, "updateForecast: ERROR $it")
-            }, {
-                saveTimeUpdateForecast()
-            })
-        )
+        update()
 
         if (checkSDK() && appState.isCollapsed) {
             stopForeground(true)
@@ -74,10 +70,29 @@ class UpdateForecastService : Service() {
         Log.d(TAG, "updateForecast: stopSelf")
     }
 
+    private fun update() {
+        compositeDisposable.add(
+            customCitiesDbRepo.getCityList()
+                .subscribe({ cityList ->
+                    compositeDisposable.add(
+                        remoteRepo.requestForecastAllCity(cityList).subscribe({ forecast ->
+                            Log.d(TAG, "response update -> save db: $forecast")
+                            forecastDbRepo.saveForecastInDatabase(forecast)
+                        }, {
+                            Log.d(TAG, "updateForecast: ERROR $it")
+                        }, {
+                            saveTimeUpdateForecast()
+                            compositeDisposable.clear()
+                        })
+                    )
+                }, {
+                    Log.d(TAG, "update: no city in database $it")
+                })
+        )
+    }
+
     private fun saveTimeUpdateForecast() {
-
         val currentTime = System.currentTimeMillis()
-
         sharedPrefs.edit()
             .putLong(SharedPrefsContract.TIME_LAST_REQUEST_KEY, currentTime)
             .apply()

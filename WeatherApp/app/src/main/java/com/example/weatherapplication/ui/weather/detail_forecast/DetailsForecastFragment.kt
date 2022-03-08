@@ -3,9 +3,7 @@ package com.example.weatherapplication.ui.weather.detail_forecast
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,7 +18,7 @@ import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentDetailsForecastBinding
 import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.ui.weather.short_forecast.ShortForecastListFragment
-import com.example.weatherapplication.utils.convertToDate
+import com.example.weatherapplication.common.convertToDate
 import com.google.android.material.transition.MaterialContainerTransform
 import javax.inject.Inject
 import kotlin.math.round
@@ -44,7 +42,6 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ")
-        thisTransition(view)
         actionInFragment()
     }
 
@@ -52,25 +49,11 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
         (requireContext().applicationContext as AppApplication).appComponent.inject(this)
     }
 
-    private fun thisTransition(view: View) {
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
-    }
-
     private fun actionInFragment() {
-        exitTransform()
         sendForecastInViewModel()
         generateReportWeatherInCity()
         observeData()
         backButtonClickListener()
-    }
-
-    private fun exitTransform() {
-        sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.frg_nav_host
-            duration = 300
-            scrimColor = Color.TRANSPARENT
-        }
     }
 
     private fun observeData() {
@@ -202,8 +185,6 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
         bind.fabOpenReport.setOnClickListener {
             bind.fabOpenReport.visibility = View.INVISIBLE
 
-            val extras = getMyExtras()
-
             val bundle = Bundle()
 
             bundle.putParcelable(KEY_FORECAST, currentForecast)
@@ -212,15 +193,9 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
                 R.id.action_detailsForecastFragment_to_weatherReportFragment,
                 bundle,
                 null,
-                extras
+                null
             )
         }
-    }
-
-    private fun getMyExtras(): FragmentNavigator.Extras {
-        val transitionName =
-            resources.getString(R.string.WeatherReportFragment_transition_name)
-        return FragmentNavigatorExtras(bind.fabOpenReport to transitionName)
     }
 
     override fun onDestroy() {

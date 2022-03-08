@@ -1,13 +1,12 @@
-package com.example.weatherapplication.data.objects
+package com.example.weatherapplication.data.common
 
 import androidx.room.TypeConverter
-import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.models.forecast.coord.Coordination
 import com.example.weatherapplication.data.models.forecast.main.Main
 import com.example.weatherapplication.data.models.forecast.sys.Sys
 import com.example.weatherapplication.data.models.forecast.weather.Weather
 import com.example.weatherapplication.data.models.forecast.wind.Wind
-import com.example.weatherapplication.utils.Converter
+import com.example.weatherapplication.common.Converter
 
 object AppTypeConverter {
 

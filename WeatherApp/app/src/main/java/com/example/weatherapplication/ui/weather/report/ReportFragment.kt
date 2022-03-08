@@ -1,12 +1,9 @@
 package com.example.weatherapplication.ui.weather.report
 
 import android.app.AlertDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
@@ -15,16 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.navigateUp
-import androidx.transition.Slide
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentWeatherReportBinding
 import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.ui.weather.detail_forecast.DetailsForecastFragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.transition.MaterialContainerTransform
 import javax.inject.Inject
 
 class ReportFragment : Fragment(R.layout.fragment_weather_report) {
@@ -35,7 +29,6 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
 
     private val bind by viewBinding(FragmentWeatherReportBinding::bind)
 
-    private lateinit var fabInDetailFrg: FloatingActionButton
     private var snackbar: Snackbar? = null
     private var dialog: AlertDialog? = null
 
@@ -54,9 +47,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fabInDetailFrg = requireActivity().findViewById(R.id.fab_Open_report)
         Log.d(TAG, "onViewCreated: ")
-        enterReturnAnimation()
         actionInFragment()
     }
 
@@ -94,7 +85,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
 
     private fun openFile(it: String) {
         dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Отчет")
+            .setTitle(this.getString(R.string.ReportFragment_dialog_text_Report))
             .setMessage(it)
             .create()
         dialog?.show()
@@ -103,10 +94,10 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     private fun showSnackBar() {
         snackbar = Snackbar.make(
             requireView(),
-            this.getString(R.string.SearchCityFragment_Text_Report_generated),
+            this.getString(R.string.ReportFragment_Text_Report_generated),
             Snackbar.LENGTH_INDEFINITE
         )
-            .setAction(this.getString(R.string.SearchCityFragment_Text_Report_open)) {
+            .setAction(this.getString(R.string.ReportFragment_Text_Report_open)) {
                 openReport()
             }
         snackbar?.show()
@@ -116,7 +107,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
         reportViewModel.openReport()
         Toast.makeText(
             requireContext(),
-            this.getString(R.string.SearchCityFragment_Text_Report_open),
+            this.getString(R.string.ReportFragment_Text_Report_open),
             Toast.LENGTH_LONG
         ).show()
     }
@@ -146,7 +137,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
 
     private fun setSelectedCityName() {
         bind.tvCityName.text = this.getString(
-            R.string.WeatherReportFragment_city_name_and_country,
+            R.string.ReportFragment_city_name_and_country,
             currentForecast.cityName,
             currentForecast.sys.country
         )
@@ -157,7 +148,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
             ?: error("Incorrect autoCompPeriodList")
 
         autoCompPeriodList.setText(
-            this.getString(R.string.WeatherReportFragment_default_period)
+            this.getString(R.string.ReportFragment_default_period)
         )
 
         autoCompPeriodList.setAdapter(
@@ -172,22 +163,6 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     private fun backButtonClickListener() {
         bind.tbReportFrg.setNavigationOnClickListener {
             navigateUp(findNavController(), null)
-        }
-    }
-
-    private fun enterReturnAnimation() {
-        enterTransition = MaterialContainerTransform().apply {
-            startView = fabInDetailFrg
-            endView = bind.report
-            duration = 300
-            scrimColor = Color.TRANSPARENT
-            containerColor = requireContext().getColor(R.color.white)
-            startContainerColor = requireContext().getColor(R.color.white)
-            endContainerColor = requireContext().getColor(R.color.white)
-        }
-        returnTransition = Slide().apply {
-            duration = 300
-            addTarget(R.id.frg_nav_host)
         }
     }
 

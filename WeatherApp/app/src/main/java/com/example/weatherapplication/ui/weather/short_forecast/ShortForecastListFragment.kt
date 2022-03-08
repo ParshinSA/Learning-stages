@@ -16,12 +16,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
-import com.example.weatherapplication.data.db.app_sp.SharedPrefsContract
+import com.example.weatherapplication.data.common.SharedPrefsContract
 import com.example.weatherapplication.data.models.forecast.Forecast
-import com.example.weatherapplication.data.objects.CustomCities
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
 import com.example.weatherapplication.ui.AppApplication
-import com.example.weatherapplication.utils.ItemDecoration
+import com.example.weatherapplication.common.ItemDecoration
 import com.google.android.material.transition.MaterialElevationScale
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,8 +30,6 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
 
     @Inject
     lateinit var shortViewModelFactory: ShortForecastViewModelFactory
-    @Inject
-    lateinit var customCities: CustomCities
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
@@ -58,7 +55,6 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         initComponents()
         addNewCity()
         updateForecastsSwipe()
-        exitEnterTransition()
         observeData()
     }
 
@@ -122,15 +118,6 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         view.doOnPreDraw { startPostponedEnterTransition() }
     }
 
-    private fun exitEnterTransition() {
-        exitTransition = MaterialElevationScale(false).apply {
-            duration = 200.toLong()
-        }
-        reenterTransition = MaterialElevationScale(true).apply {
-            duration = 200.toLong()
-        }
-    }
-
     private fun updateForecastsSwipe() {
         bind.swlSwipeContainer.setOnRefreshListener {
             Log.d(TAG, "refreshForecastListSwipe: start")
@@ -150,11 +137,6 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         shortViewModel.forecastListLiveData.observe(viewLifecycleOwner) { listForecast ->
             Log.d(TAG, "observeData: forecastListLiveData $listForecast")
             updateForecastListInRV(listForecast)
-        }
-
-        customCities.listCitiesLiveData.observe(viewLifecycleOwner) { listCustomCities ->
-            Log.d(TAG, "observeData: listCitiesLiveData $listCustomCities")
-            if (listCustomCities.isNotEmpty()) getForecastList()
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.weatherapplication.data.db.app_sp
+package com.example.weatherapplication.data.common
 
 object SharedPrefsContract {
     const val SHARED_PREFS_NAME = "com.example.android.sharedprefs"

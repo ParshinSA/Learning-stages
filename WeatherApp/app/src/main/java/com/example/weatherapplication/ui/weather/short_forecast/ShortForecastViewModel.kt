@@ -4,17 +4,19 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.weatherapplication.common.SingleLiveEvent
+import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.models.forecast.Forecast
-import com.example.weatherapplication.data.objects.AppDisposable
+import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
-import com.example.weatherapplication.utils.SingleLiveEvent
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 class ShortForecastViewModel(
     private val remoteRepo: RemoteRepository,
-    private val appDisposable: AppDisposable,
-    private val forecastDbRepo: ForecastDbRepository
+    compositeDisposable: CompositeDisposable,
+    forecastDbRepo: ForecastDbRepository,
 ) : ViewModel() {
     var disposables: Disposable? = null
 
@@ -29,13 +31,14 @@ class ShortForecastViewModel(
     val isLoadingMutableLiveData = MutableLiveData<Boolean>()
 
     init {
-        appDisposable.disposableList.add(
+        compositeDisposable.add(
             forecastDbRepo.observeForecastDatabase().subscribe { forecastList ->
                 isLoadingMutableLiveData.postValue(true)
                 forecastListMutableLiveData.postValue(forecastList)
                 isLoadingMutableLiveData.postValue(false)
                 Log.d(TAG, "DatabaseListener: $forecastList")
-            })
+            }
+        )
     }
 
     fun getForecastList() {

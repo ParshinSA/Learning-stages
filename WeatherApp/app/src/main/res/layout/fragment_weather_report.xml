@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/myPrimary"
         app:navigationIcon="@drawable/ic_arrow_back"
-        app:title="@string/WeatherReportFragment_report_text"
+        app:title="@string/ReportFragment_report_text"
         app:titleTextColor="@color/darkColorText" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -23,7 +23,7 @@
         android:background="@drawable/bg_item"
         android:orientation="vertical"
         android:padding="8dp"
-        android:transitionName="@string/WeatherReportFragment_transition_name">
+        android:transitionName="@string/ReportFragment_transition_name">
 
         <TextView
             android:id="@+id/tvCityName"
@@ -44,7 +44,7 @@
             <AutoCompleteTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/WeatherReportFragment_period_text"
+                android:hint="@string/ReportFragment_period_text"
                 android:inputType="none" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/WeatherReportFragment_text_cancel"
+                android:text="@string/ReportFragment_text_cancel"
                 android:textColor="@color/darkColorText" />
 
             <com.google.android.material.button.MaterialButton
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="@string/WeatherReportFragment_text_ok"
+                android:text="@string/ReportFragment_text_ok"
                 android:textColor="@color/darkColorText" />
 
         </LinearLayout>

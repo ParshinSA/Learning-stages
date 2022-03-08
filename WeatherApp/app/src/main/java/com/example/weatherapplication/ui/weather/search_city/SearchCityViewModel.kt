@@ -5,26 +5,41 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.data.models.city.City
-import com.example.weatherapplication.data.repositories.repo_implementation.RemoteRepositoryImpl
+import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class SearchCityViewModel(
     private val remoteRepository: RemoteRepository,
-    private val disposeBack: CompositeDisposable
+    private val compositeDisposable: CompositeDisposable,
+    private val customCitiesDbRepo: CustomCitiesDbRepository
 ) : ViewModel() {
 
     private val resultSearchListMutableLiveData = MutableLiveData<List<City>>(emptyList())
     val resultCityLiveData: LiveData<List<City>>
         get() = resultSearchListMutableLiveData
 
+
+    fun addCity(city: City) {
+        compositeDisposable.add(
+            customCitiesDbRepo.addCity(city)
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    Log.d(TAG, "addCity: completed $city")
+                }, {
+                    Log.d(TAG, "addCity: error $it")
+                })
+        )
+    }
+
     fun textInputProcessing(userInput: Observable<String>) {
-        disposeBack.add(
+        compositeDisposable.add(
             userInput
                 .filter { it.length >= 3 }
-                .debounce(250, TimeUnit.MILLISECONDS)
+                .debounce(350, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .subscribe {
                     searchCity(it)
@@ -33,7 +48,7 @@ class SearchCityViewModel(
     }
 
     private fun searchCity(userInput: String) {
-        disposeBack.add(
+        compositeDisposable.add(
             remoteRepository.searchCity(userInput)
                 .subscribe({ listCity ->
                     Log.d(TAG, "searchCity: RESULT $listCity")
@@ -45,7 +60,7 @@ class SearchCityViewModel(
     }
 
     override fun onCleared() {
-        disposeBack.clear()
+        compositeDisposable.clear()
         super.onCleared()
     }
 

@@ -18,7 +18,7 @@ object NotificationChannels {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createUpdateServiceChannelId(context: Context) {
-        val name = "Update Forecast..."
+        val name = "Update Forecast"
         val priority = NotificationManager.IMPORTANCE_HIGH
 
         val channel = NotificationChannel(UPDATE_SERVICE_CHANNEL_ID, name, priority)

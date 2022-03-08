@@ -13,7 +13,7 @@ import com.example.weatherapplication.data.models.forecast.ForecastContract.Gson
 import com.example.weatherapplication.data.models.forecast.ForecastContract.TableDatabase.Columns
 import com.example.weatherapplication.data.models.forecast.ForecastContract.TableDatabase.TABLE_NAME
 import com.example.weatherapplication.data.models.forecast.coord.Coordination
-import com.example.weatherapplication.data.objects.AppTypeConverter
+import com.example.weatherapplication.data.common.AppTypeConverter
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 

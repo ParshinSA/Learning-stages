@@ -1,7 +1,7 @@
-package com.example.weatherapplication.data.retrofit.api
+package com.example.weatherapplication.data.networking.api
 
 import com.example.weatherapplication.data.models.city.City
-import com.example.weatherapplication.data.retrofit.NetworkContract
+import com.example.weatherapplication.data.networking.NetworkContract
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query

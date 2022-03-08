@@ -1,4 +1,4 @@
-package com.example.weatherapplication.data.retrofit
+package com.example.weatherapplication.data.networking
 
 object NetworkContract {
     const val API_KEY = "1357e31f17dff00c5e7ba287807cf428"

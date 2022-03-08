@@ -6,7 +6,7 @@ import android.os.Build
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.example.weatherapplication.data.objects.AppState
+import com.example.weatherapplication.common.AppState
 import com.example.weatherapplication.services.UpdateForecastService
 import com.example.weatherapplication.ui.AppApplication
 import javax.inject.Inject
@@ -25,11 +25,10 @@ class UpdateForecastWorker(
     override fun doWork(): Result {
         (this.applicationContext as AppApplication).appComponent.inject(this)
         return try {
-            Log.d(TAG, "doWork: try")
             startUpdateService()
             Result.success()
         } catch (t: Throwable) {
-            Log.d(TAG, "doWork: catch")
+            Log.d(TAG, "doWork: error $t")
             Result.failure()
         }
     }

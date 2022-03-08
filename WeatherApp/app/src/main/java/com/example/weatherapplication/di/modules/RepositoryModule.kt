@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.work.WorkManager
 import com.example.weatherapplication.data.db.custom_cities_db.CustomCitiesDao
 import com.example.weatherapplication.data.db.forecast_db.ForecastDao
-import com.example.weatherapplication.data.objects.CustomCities
+import com.example.weatherapplication.data.networking.api.CoordinationApi
+import com.example.weatherapplication.data.networking.api.ForecastApi
+import com.example.weatherapplication.data.networking.api.HistoryApi
 import com.example.weatherapplication.data.repositories.repo_implementation.CustomCitiesDbRepositoryImpl
 import com.example.weatherapplication.data.repositories.repo_implementation.ForecastDbRepositoryImpl
 import com.example.weatherapplication.data.repositories.repo_implementation.MemoryRepositoryImpl
@@ -15,32 +17,41 @@ import com.example.weatherapplication.data.repositories.repo_interface.MemoryRep
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 class RepositoryModule {
 
     @Provides
+    @Singleton
     fun provideRemoteRepositoryImpl(
         workManager: WorkManager,
-        customCities: CustomCities
+        forecastApi: ForecastApi,
+        historyApi: HistoryApi,
+        coordinationApi: CoordinationApi
     ): RemoteRepository {
         return RemoteRepositoryImpl(
             workManager = workManager,
-            customCities = customCities
+            forecastApi = forecastApi,
+            historyApi = historyApi,
+            coordinationApi = coordinationApi
         )
     }
 
     @Provides
+    @Singleton
     fun provideForecastDbRepositoryImpl(forecastDao: ForecastDao): ForecastDbRepository {
         return ForecastDbRepositoryImpl(forecastDao)
     }
 
     @Provides
+    @Singleton
     fun provideCustomCitiesDbRepositoryImpl(customCitiesDao: CustomCitiesDao): CustomCitiesDbRepository {
         return CustomCitiesDbRepositoryImpl(customCitiesDao)
     }
 
     @Provides
+    @Singleton
     fun provideMemoryRepositoryImpl(context: Context): MemoryRepository {
         return MemoryRepositoryImpl(context)
     }

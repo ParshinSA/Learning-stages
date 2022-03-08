@@ -2,14 +2,16 @@ package com.example.weatherapplication.data.repositories.repo_implementation
 
 import android.util.Log
 import androidx.work.*
+import com.example.weatherapplication.data.db.custom_cities_db.CustomCitiesDao
 import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.models.report.DataHistory
 import com.example.weatherapplication.data.models.report.FieldValue
-import com.example.weatherapplication.data.models.report.ResponseHistoryApi
-import com.example.weatherapplication.data.objects.CustomCities
+import com.example.weatherapplication.data.models.report.HistoryWeather
+import com.example.weatherapplication.data.networking.api.CoordinationApi
+import com.example.weatherapplication.data.networking.api.ForecastApi
+import com.example.weatherapplication.data.networking.api.HistoryApi
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
-import com.example.weatherapplication.data.retrofit.Networking
 import com.example.weatherapplication.ui.weather.report.Period
 import com.example.weatherapplication.ui.weather.report.Period.TEN_DAYS
 import com.example.weatherapplication.workers.UpdateForecastWorker
@@ -23,7 +25,9 @@ import java.util.concurrent.TimeUnit
 
 class RemoteRepositoryImpl(
     private val workManager: WorkManager,
-    private val customCities: CustomCities
+    private val forecastApi: ForecastApi,
+    private val historyApi: HistoryApi,
+    private val coordinationApi: CoordinationApi
 ) : RemoteRepository {
 
     override fun oneTimeUpdateForecastAllCity() {
@@ -38,12 +42,12 @@ class RemoteRepositoryImpl(
         )
     }
 
-    override fun requestForecastAllCity(): Observable<Forecast> {
-        return Observable.fromIterable(customCities.listCitiesLiveData.value)
+    override fun requestForecastAllCity(cityList: List<City>): Observable<Forecast> {
+        return Observable.fromIterable(cityList)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .flatMap {
-                Networking.forecastApi.requestForecast(it.latitude, it.longitude)
+                forecastApi.requestForecast(it.latitude, it.longitude)
             }
     }
 
@@ -76,9 +80,9 @@ class RemoteRepositoryImpl(
                     requestHistoryMonth(forecast, step)
                 }
             }
-            .map { responseHistory: ResponseHistoryApi ->
-                Log.d(TAG, "requestHistory: $responseHistory")
-                responseHistory.dataHistory
+            .map { history: HistoryWeather ->
+                Log.d(TAG, "requestHistory: $history")
+                history.dataHistory
             }
             .buffer(period.quantity)
             .map { listHistoryData ->
@@ -91,19 +95,19 @@ class RemoteRepositoryImpl(
 
     override fun searchCity(userInput: String): Single<List<City>> {
         Log.d(TAG, "searchCity: $userInput")
-        return Networking.coordinationApi.getCoordinationByNameCity(userInput)
+        return coordinationApi.getCoordinationByNameCity(userInput)
     }
 
-    private fun requestHistoryMonth(forecast: Forecast, step: Int): Observable<ResponseHistoryApi> {
-        return Networking.historyApi.requestHistoryMonth(
+    private fun requestHistoryMonth(forecast: Forecast, step: Int): Observable<HistoryWeather> {
+        return historyApi.requestHistoryMonth(
             forecast.coordination.latitude,
             forecast.coordination.longitude,
             calculateMonthStepMonth(step) // step 30 day
         )
     }
 
-    private fun requestHistoryDay(forecast: Forecast, step: Int): Observable<ResponseHistoryApi> {
-        return Networking.historyApi.requestHistoryDay(
+    private fun requestHistoryDay(forecast: Forecast, step: Int): Observable<HistoryWeather> {
+        return historyApi.requestHistoryDay(
             forecast.coordination.latitude,
             forecast.coordination.longitude,
             calculateDayStepDay(step),

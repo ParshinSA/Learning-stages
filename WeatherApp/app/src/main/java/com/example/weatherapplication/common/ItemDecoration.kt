@@ -1,10 +1,9 @@
-package com.example.weatherapplication.utils
+package com.example.weatherapplication.common
 
 import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapplication.utils.fromDpToPixels
 
 class ItemDecoration(
     private val context: Context,

@@ -1,6 +1,6 @@
 package com.example.weatherapplication.di.modules
 
-import com.example.weatherapplication.data.objects.AppDisposable
+import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
@@ -18,12 +18,12 @@ class ViewModelFactoryModule {
     @Provides
     fun provideShortForecastViewModelFactory(
         remoteRepo: RemoteRepository,
-        appDisposable: AppDisposable,
+        compositeDisposable: CompositeDisposable,
         forecastDbRepo: ForecastDbRepository
     ): ShortForecastViewModelFactory {
         return ShortForecastViewModelFactory(
             remoteRepo = remoteRepo,
-            appDisposable = appDisposable,
+            compositeDisposable = compositeDisposable,
             forecastDbRepo = forecastDbRepo
         )
     }
@@ -44,11 +44,13 @@ class ViewModelFactoryModule {
     @Provides
     fun providerSearchCityViewModelFactory(
         remoteRepository: RemoteRepository,
-        compositeDisposable: CompositeDisposable
+        compositeDisposable: CompositeDisposable,
+        customCitiesDbRepo: CustomCitiesDbRepository
     ): SearchCityViewModelFactory {
         return SearchCityViewModelFactory(
             remoteRepository = remoteRepository,
-            compositeDisposable = compositeDisposable
+            compositeDisposable = compositeDisposable,
+            customCitiesDbRepo = customCitiesDbRepo
         )
     }
 

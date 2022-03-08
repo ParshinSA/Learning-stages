@@ -1,18 +1,13 @@
 package com.example.weatherapplication.data.models.city
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.TypeConverters
-import androidx.room.PrimaryKey
 import com.example.weatherapplication.data.models.city.CityContract.GsonName
 import com.example.weatherapplication.data.models.city.CityContract.TableDatabase.Columns
 import com.example.weatherapplication.data.models.city.CityContract.TableDatabase.TABLE_NAME
-import com.example.weatherapplication.data.objects.AppTypeConverter
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
+
 @Entity(tableName = TABLE_NAME, primaryKeys = [Columns.LATITUDE, Columns.LONGITUDE])
 data class City(
 
@@ -36,4 +31,4 @@ data class City(
     @SerializedName(GsonName.STATE)
     val state: String
 
-) : Parcelable
+)
