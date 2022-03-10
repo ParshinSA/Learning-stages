@@ -3,21 +3,18 @@ package com.example.weatherapplication.ui.viewmodels.viewmodels
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.models.report.DataHistory
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
-import com.example.weatherapplication.ui.common.SingleLiveEvent
 import com.example.weatherapplication.ui.common.ReportPeriods
-import io.reactivex.disposables.CompositeDisposable
+import com.example.weatherapplication.ui.common.SingleLiveEvent
+import com.example.weatherapplication.ui.viewmodels.BaseViewModel
 
 class ReportViewModel(
-    private val disposeBack: CompositeDisposable,
     private val remoteRepo: RemoteRepository,
     private val memoryRepository: MemoryRepository
-) : ViewModel() {
-
+) : BaseViewModel() {
 
     private val isLoadingMutableLiveData = MutableLiveData(false)
     val isLoadingLiveData: LiveData<Boolean>
@@ -39,7 +36,7 @@ class ReportViewModel(
         Log.d(TAG, "generateReport: start")
         isLoadingMutableLiveData.postValue(true)
 
-        disposeBack.add(
+        compositeDisposable.add(
             remoteRepo.requestHistory(forecast, period)
                 .subscribe(
                     {
@@ -56,7 +53,7 @@ class ReportViewModel(
     }
 
     private fun saveReport(forecast: Forecast, period: ReportPeriods, medianSata: DataHistory) {
-        disposeBack.add(
+        compositeDisposable.add(
             memoryRepository.saveReportInCacheDirection(forecast.cityName, period, medianSata)
                 .subscribe({
                     Log.d(TAG, "saveReport: success")
@@ -75,7 +72,7 @@ class ReportViewModel(
     }
 
     override fun onCleared() {
-        disposeBack.clear()
+        compositeDisposable.clear()
         Log.d(TAG, "onCleared: ")
         super.onCleared()
     }

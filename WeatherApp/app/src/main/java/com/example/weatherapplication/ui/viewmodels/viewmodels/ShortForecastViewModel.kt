@@ -8,15 +8,14 @@ import com.example.weatherapplication.ui.common.SingleLiveEvent
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
+import com.example.weatherapplication.ui.viewmodels.BaseViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 class ShortForecastViewModel(
     private val remoteRepo: RemoteRepository,
-    compositeDisposable: CompositeDisposable,
     forecastDbRepo: ForecastDbRepository,
-) : ViewModel() {
-    var disposables: Disposable? = null
+) : BaseViewModel() {
 
     private val forecastListMutableLiveData = MutableLiveData<List<Forecast>>()
     val forecastListLiveData: LiveData<List<Forecast>>

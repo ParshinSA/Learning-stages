@@ -9,14 +9,12 @@ import io.reactivex.disposables.CompositeDisposable
 
 class ShortForecastViewModelFactory(
     private val remoteRepo: RemoteRepository,
-    private val compositeDisposable: CompositeDisposable,
     private val forecastDbRepo: ForecastDbRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return ShortForecastViewModel(
             remoteRepo = remoteRepo,
-            compositeDisposable = compositeDisposable,
-            forecastDbRepo = forecastDbRepo,
+            forecastDbRepo = forecastDbRepo
         ) as T
     }
 }

@@ -18,38 +18,32 @@ class ViewModelFactoryModule {
     @Provides
     fun provideShortForecastViewModelFactory(
         remoteRepo: RemoteRepository,
-        compositeDisposable: CompositeDisposable,
         forecastDbRepo: ForecastDbRepository
     ): ShortForecastViewModelFactory {
         return ShortForecastViewModelFactory(
             remoteRepo = remoteRepo,
-            compositeDisposable = compositeDisposable,
             forecastDbRepo = forecastDbRepo
         )
     }
 
     @Provides
     fun provideReportViewModelFactory(
-        compositeDisposable: CompositeDisposable,
         remoteRepo: RemoteRepository,
-        memoryRepository: MemoryRepository
+        memoryRepo: MemoryRepository
     ): ReportViewModelFactory {
         return ReportViewModelFactory(
-            compositeDisposable = compositeDisposable,
             remoteRepo = remoteRepo,
-            memoryRepository = memoryRepository
+            memoryRepository = memoryRepo
         )
     }
 
     @Provides
     fun providerSearchCityViewModelFactory(
-        remoteRepository: RemoteRepository,
-        compositeDisposable: CompositeDisposable,
+        remoteRepo: RemoteRepository,
         customCitiesDbRepo: CustomCitiesDbRepository
     ): SearchCityViewModelFactory {
         return SearchCityViewModelFactory(
-            remoteRepository = remoteRepository,
-            compositeDisposable = compositeDisposable,
+            remoteRepo = remoteRepo,
             customCitiesDbRepo = customCitiesDbRepo
         )
     }
