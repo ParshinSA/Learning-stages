@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.report
+package com.example.weatherapplication.ui.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -17,7 +17,9 @@ import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentWeatherReportBinding
 import com.example.weatherapplication.ui.AppApplication
-import com.example.weatherapplication.ui.weather.detail_forecast.DetailsForecastFragment
+import com.example.weatherapplication.ui.common.ReportPeriods
+import com.example.weatherapplication.ui.viewmodels.viewmodels.ReportViewModel
+import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.ReportViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
@@ -124,7 +126,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
 
             reportViewModel.generateReport(
                 currentForecast,
-                Period.values().filter { it.stringQuantity == userChoice }[0]
+                ReportPeriods.values().filter { it.stringQuantity == userChoice }[0]
             )
         }
     }
@@ -155,7 +157,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
             ArrayAdapter(
                 requireContext(),
                 R.layout.item_period_list,
-                Period.values().map { it.stringQuantity }
+                ReportPeriods.values().map { it.stringQuantity }
             )
         )
     }

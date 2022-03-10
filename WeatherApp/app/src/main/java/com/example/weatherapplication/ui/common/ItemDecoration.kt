@@ -1,9 +1,18 @@
-package com.example.weatherapplication.common
+package com.example.weatherapplication.ui.common
 
 import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherapplication.common.fromDpToPixels
+
+/**
+ * Устанавливаем расстояние между View-элементами в RecyclerView
+ * @author Parshin Sergey
+ * @param offsetDp значение расстояния в dp
+ * @property fromDpToPixels конвертация dp в pixel
+ * @property getItemOffsets установка полученных значений
+ *  */
 
 class ItemDecoration(
     private val context: Context,

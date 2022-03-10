@@ -2,7 +2,6 @@ package com.example.weatherapplication.data.repositories.repo_implementation
 
 import android.util.Log
 import androidx.work.*
-import com.example.weatherapplication.data.db.custom_cities_db.CustomCitiesDao
 import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.models.report.DataHistory
@@ -12,8 +11,8 @@ import com.example.weatherapplication.data.networking.api.CoordinationApi
 import com.example.weatherapplication.data.networking.api.ForecastApi
 import com.example.weatherapplication.data.networking.api.HistoryApi
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
-import com.example.weatherapplication.ui.weather.report.Period
-import com.example.weatherapplication.ui.weather.report.Period.TEN_DAYS
+import com.example.weatherapplication.ui.common.ReportPeriods
+import com.example.weatherapplication.ui.common.ReportPeriods.TEN_DAYS
 import com.example.weatherapplication.workers.UpdateForecastWorker
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -69,7 +68,7 @@ class RemoteRepositoryImpl(
 
     override fun requestHistory(
         forecast: Forecast,
-        period: Period
+        period: ReportPeriods
     ): Observable<DataHistory> {
         return Observable.fromIterable(0 until period.quantity)
             .observeOn(Schedulers.io())
@@ -130,7 +129,7 @@ class RemoteRepositoryImpl(
 
     private fun calculateAveragesHistoryData(
         sumItemDataHistory: DataHistory,
-        period: Period
+        period: ReportPeriods
     ): DataHistory {
         return DataHistory(
             temperature = FieldValue(sumItemDataHistory.temperature.medianValue / period.quantity),

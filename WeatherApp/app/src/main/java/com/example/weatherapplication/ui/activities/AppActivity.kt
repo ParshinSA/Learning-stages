@@ -1,10 +1,11 @@
-package com.example.weatherapplication.ui
+package com.example.weatherapplication.ui.activities
 
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.common.AppState
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
+import com.example.weatherapplication.ui.AppApplication
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 

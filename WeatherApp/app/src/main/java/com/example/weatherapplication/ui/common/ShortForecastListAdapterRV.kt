@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.short_forecast
+package com.example.weatherapplication.ui.common
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +12,10 @@ import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.ItemShortForecastBinding
 import kotlin.math.roundToInt
 
-class ForecastListAdapterRV(
+class ShortForecastListAdapterRV(
     private val onItemClick: (clickOnPosition: Int, currentView: View) -> Unit
 ) :
-    ListAdapter<Forecast, ForecastListAdapterRV.WeatherForecastHolder>(DiffUtilItemCallback()) {
+    ListAdapter<Forecast, ShortForecastListAdapterRV.WeatherForecastHolder>(DiffUtilItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherForecastHolder {
         val inflater = LayoutInflater.from(parent.context)

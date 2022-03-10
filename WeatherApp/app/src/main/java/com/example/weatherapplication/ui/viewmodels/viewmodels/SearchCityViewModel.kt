@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.search_city
+package com.example.weatherapplication.ui.viewmodels.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData

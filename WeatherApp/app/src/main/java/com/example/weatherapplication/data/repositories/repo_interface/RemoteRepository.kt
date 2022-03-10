@@ -3,7 +3,7 @@ package com.example.weatherapplication.data.repositories.repo_interface
 import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.models.report.DataHistory
-import com.example.weatherapplication.ui.weather.report.Period
+import com.example.weatherapplication.ui.common.ReportPeriods
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -14,5 +14,5 @@ interface RemoteRepository {
 
     fun requestForecastAllCity(cityList: List<City>): Observable<Forecast>
     fun searchCity(userInput: String): Single<List<City>>
-    fun requestHistory(forecast: Forecast, period: Period): Observable<DataHistory>
+    fun requestHistory(forecast: Forecast, period: ReportPeriods): Observable<DataHistory>
 }

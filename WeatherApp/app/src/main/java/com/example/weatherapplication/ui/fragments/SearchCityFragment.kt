@@ -1,7 +1,6 @@
-package com.example.weatherapplication.ui.weather.search_city
+package com.example.weatherapplication.ui.fragments
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,11 +13,13 @@ import androidx.navigation.ui.NavigationUI.navigateUp
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
-import com.example.weatherapplication.common.ItemDecoration
+import com.example.weatherapplication.ui.common.ItemDecoration
 import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.databinding.FragmentSearchCityBinding
 import com.example.weatherapplication.ui.AppApplication
-import com.google.android.material.transition.MaterialContainerTransform
+import com.example.weatherapplication.ui.common.SearchCityAdapterRV
+import com.example.weatherapplication.ui.viewmodels.viewmodels.SearchCityViewModel
+import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.SearchCityViewModelFactory
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -30,7 +31,7 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
 
     private val bind by viewBinding(FragmentSearchCityBinding::bind)
 
-    private lateinit var resultSearchAdapter: ResultSearchAdapter
+    private lateinit var searchCityAdapterRV: SearchCityAdapterRV
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -97,12 +98,12 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
     }
 
     private fun initRv() {
-        resultSearchAdapter = ResultSearchAdapter { city: City ->
+        searchCityAdapterRV = SearchCityAdapterRV { city: City ->
             addCity(city)
         }
 
         with(bind.rvResultSearchCity) {
-            adapter = resultSearchAdapter
+            adapter = searchCityAdapterRV
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(ItemDecoration(requireContext(), 10))
             setHasFixedSize(true)
@@ -114,7 +115,7 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
     }
 
     private fun showResultSearchCity(cityList: List<City>) {
-        resultSearchAdapter.submitList(cityList)
+        searchCityAdapterRV.submitList(cityList)
     }
 
     companion object {

@@ -1,14 +1,10 @@
-package com.example.weatherapplication.ui.weather.detail_forecast
+package com.example.weatherapplication.ui.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.navigateUp
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -17,9 +13,9 @@ import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentDetailsForecastBinding
 import com.example.weatherapplication.ui.AppApplication
-import com.example.weatherapplication.ui.weather.short_forecast.ShortForecastListFragment
 import com.example.weatherapplication.common.convertToDate
-import com.google.android.material.transition.MaterialContainerTransform
+import com.example.weatherapplication.ui.viewmodels.viewmodels.DetailsForecastViewModel
+import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.DetailsForecastViewModelFactory
 import javax.inject.Inject
 import kotlin.math.round
 import kotlin.math.roundToInt

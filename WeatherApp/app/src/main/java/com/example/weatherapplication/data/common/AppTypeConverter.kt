@@ -8,6 +8,12 @@ import com.example.weatherapplication.data.models.forecast.weather.Weather
 import com.example.weatherapplication.data.models.forecast.wind.Wind
 import com.example.weatherapplication.common.Converter
 
+/**
+ * @author Parshin Sergey
+ * Объект производящий конвертацию объектов в строку Json и обратно.
+ * Конвертация производяится для хронения объектов в базах данных.
+ * */
+
 object AppTypeConverter {
 
     @TypeConverter

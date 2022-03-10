@@ -1,13 +1,11 @@
-package com.example.weatherapplication.ui.weather.short_forecast
+package com.example.weatherapplication.ui.viewmodels.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.weatherapplication.common.SingleLiveEvent
-import com.example.weatherapplication.data.models.city.City
+import com.example.weatherapplication.ui.common.SingleLiveEvent
 import com.example.weatherapplication.data.models.forecast.Forecast
-import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import io.reactivex.disposables.CompositeDisposable

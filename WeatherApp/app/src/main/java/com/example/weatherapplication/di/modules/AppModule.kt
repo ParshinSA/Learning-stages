@@ -3,12 +3,16 @@ package com.example.weatherapplication.di.modules
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.work.WorkManager
-import com.example.weatherapplication.data.common.SharedPrefsContract
 import com.example.weatherapplication.common.AppState
-import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
+import com.example.weatherapplication.data.common.SharedPrefsContract
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Singleton
 
 @Module
@@ -21,17 +25,31 @@ class AppModule(private val context: Context) {
     }
 
     @Provides
+    @Singleton
+    fun provideContextObservable(contextLazy: Lazy<Context>): Observable<Context> {
+        return Observable.fromCallable(contextLazy::get)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    @Provides
     fun provideCompositeDisposable(): CompositeDisposable {
         return CompositeDisposable()
     }
 
     @Provides
     @Singleton
-    fun provideSharedPreference(context: Context): SharedPreferences {
-        return context.getSharedPreferences(
-            SharedPrefsContract.SHARED_PREFS_NAME,
-            Context.MODE_PRIVATE
-        )
+    fun provideSharedPreference(context: Observable<Context>): Single<SharedPreferences> {
+        return Single.create { subscribeSharedPrefs ->
+            val t = context.subscribe { context ->
+                subscribeSharedPrefs.onSuccess(
+                    context.getSharedPreferences(
+                        SharedPrefsContract.SHARED_PREFS_NAME,
+                        Context.MODE_PRIVATE
+                    )
+                )
+            }
+        }
     }
 
     @Provides

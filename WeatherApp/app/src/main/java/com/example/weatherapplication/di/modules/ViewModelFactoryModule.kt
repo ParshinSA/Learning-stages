@@ -4,10 +4,10 @@ import com.example.weatherapplication.data.repositories.repo_interface.CustomCit
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
-import com.example.weatherapplication.ui.weather.detail_forecast.DetailsForecastViewModelFactory
-import com.example.weatherapplication.ui.weather.report.ReportViewModelFactory
-import com.example.weatherapplication.ui.weather.search_city.SearchCityViewModelFactory
-import com.example.weatherapplication.ui.weather.short_forecast.ShortForecastViewModelFactory
+import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.DetailsForecastViewModelFactory
+import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.ReportViewModelFactory
+import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.SearchCityViewModelFactory
+import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.ShortForecastViewModelFactory
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable

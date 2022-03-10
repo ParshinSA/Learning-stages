@@ -1,10 +1,10 @@
-package com.example.weatherapplication.ui.weather.short_forecast
+package com.example.weatherapplication.ui.viewmodels.viewnodels_factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
+import com.example.weatherapplication.ui.viewmodels.viewmodels.ShortForecastViewModel
 import io.reactivex.disposables.CompositeDisposable
 
 class ShortForecastViewModelFactory(

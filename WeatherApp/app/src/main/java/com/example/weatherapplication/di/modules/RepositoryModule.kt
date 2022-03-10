@@ -1,6 +1,7 @@
 package com.example.weatherapplication.di.modules
 
 import android.content.Context
+import android.util.Log
 import androidx.work.WorkManager
 import com.example.weatherapplication.data.db.custom_cities_db.CustomCitiesDao
 import com.example.weatherapplication.data.db.forecast_db.ForecastDao
@@ -17,6 +18,7 @@ import com.example.weatherapplication.data.repositories.repo_interface.MemoryRep
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import dagger.Module
 import dagger.Provides
+import io.reactivex.Observable
 import javax.inject.Singleton
 
 @Module
@@ -52,7 +54,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideMemoryRepositoryImpl(context: Context): MemoryRepository {
+    fun provideMemoryRepositoryImpl(context: Observable<Context>): MemoryRepository {
         return MemoryRepositoryImpl(context)
     }
 }

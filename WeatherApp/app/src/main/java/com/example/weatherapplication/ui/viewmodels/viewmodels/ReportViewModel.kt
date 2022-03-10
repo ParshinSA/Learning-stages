@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.report
+package com.example.weatherapplication.ui.viewmodels.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,7 +8,8 @@ import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.data.models.report.DataHistory
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
-import com.example.weatherapplication.common.SingleLiveEvent
+import com.example.weatherapplication.ui.common.SingleLiveEvent
+import com.example.weatherapplication.ui.common.ReportPeriods
 import io.reactivex.disposables.CompositeDisposable
 
 class ReportViewModel(
@@ -34,7 +35,7 @@ class ReportViewModel(
     val errorMessage: LiveData<String>
         get() = errorMessageMutableLiveData
 
-    fun generateReport(forecast: Forecast, period: Period) {
+    fun generateReport(forecast: Forecast, period: ReportPeriods) {
         Log.d(TAG, "generateReport: start")
         isLoadingMutableLiveData.postValue(true)
 
@@ -54,7 +55,7 @@ class ReportViewModel(
         )
     }
 
-    private fun saveReport(forecast: Forecast, period: Period, medianSata: DataHistory) {
+    private fun saveReport(forecast: Forecast, period: ReportPeriods, medianSata: DataHistory) {
         disposeBack.add(
             memoryRepository.saveReportInCacheDirection(forecast.cityName, period, medianSata)
                 .subscribe({

@@ -10,27 +10,33 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.weatherapplication.common.AppState
 import com.example.weatherapplication.data.common.SharedPrefsContract
-import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.ui.AppApplication
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class UpdateForecastService : Service() {
 
     @Inject
     lateinit var forecastDbRepo: ForecastDbRepository
+
     @Inject
     lateinit var remoteRepo: RemoteRepository
+
     @Inject
     lateinit var compositeDisposable: CompositeDisposable
+
     @Inject
+    lateinit var sharedPrefsObservable: Single<SharedPreferences>
     lateinit var sharedPrefs: SharedPreferences
+
     @Inject
     lateinit var appState: AppState
+
     @Inject
     lateinit var customCitiesDbRepo: CustomCitiesDbRepository
 
@@ -50,6 +56,13 @@ class UpdateForecastService : Service() {
 
     private fun inject() {
         (this.applicationContext as AppApplication).appComponent.inject(this)
+        subscribeInject()
+    }
+
+    private fun subscribeInject() {
+        compositeDisposable.addAll(
+            sharedPrefsObservable.subscribe({ sharedPrefs = it }, {})
+        )
     }
 
     private fun updateForecast() {
@@ -73,6 +86,7 @@ class UpdateForecastService : Service() {
     private fun update() {
         compositeDisposable.add(
             customCitiesDbRepo.getCityList()
+                .subscribeOn(Schedulers.io())
                 .subscribe({ cityList ->
                     compositeDisposable.add(
                         remoteRepo.requestForecastAllCity(cityList).subscribe({ forecast ->

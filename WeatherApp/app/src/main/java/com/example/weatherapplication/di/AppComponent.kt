@@ -2,11 +2,11 @@ package com.example.weatherapplication.di
 
 import com.example.weatherapplication.di.modules.*
 import com.example.weatherapplication.services.UpdateForecastService
-import com.example.weatherapplication.ui.AppActivity
-import com.example.weatherapplication.ui.weather.detail_forecast.DetailsForecastFragment
-import com.example.weatherapplication.ui.weather.report.ReportFragment
-import com.example.weatherapplication.ui.weather.search_city.SearchCityFragment
-import com.example.weatherapplication.ui.weather.short_forecast.ShortForecastListFragment
+import com.example.weatherapplication.ui.activities.AppActivity
+import com.example.weatherapplication.ui.fragments.DetailsForecastFragment
+import com.example.weatherapplication.ui.fragments.ReportFragment
+import com.example.weatherapplication.ui.fragments.SearchCityFragment
+import com.example.weatherapplication.ui.fragments.ShortForecastListFragment
 import com.example.weatherapplication.workers.UpdateForecastWorker
 import dagger.Component
 import javax.inject.Singleton

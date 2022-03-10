@@ -1,4 +1,4 @@
-package com.example.weatherapplication.ui.weather.search_city
+package com.example.weatherapplication.ui.common
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +10,10 @@ import com.example.weatherapplication.R
 import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.databinding.ItemResultSearchBinding
 
-class ResultSearchAdapter(
+class SearchCityAdapterRV(
     private val clickAdd: (city: City) -> Unit
 ) :
-    ListAdapter<City, ResultSearchAdapter.CityHolder>(DiffUtilItemCallback()) {
+    ListAdapter<City, SearchCityAdapterRV.CityHolder>(DiffUtilItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityHolder {
         val inflater = LayoutInflater.from(parent.context)
