@@ -14,7 +14,7 @@ import com.example.weatherapplication.data.repositories.repo_interface.CustomCit
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
 import com.example.weatherapplication.ui.AppApplication
-import io.reactivex.Single
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -31,7 +31,7 @@ class UpdateForecastService : Service() {
     lateinit var compositeDisposable: CompositeDisposable
 
     @Inject
-    lateinit var sharedPrefsObservable: Single<SharedPreferences>
+    lateinit var sharedPrefsObservable: Observable<SharedPreferences>
     lateinit var sharedPrefs: SharedPreferences
 
     @Inject
@@ -61,7 +61,7 @@ class UpdateForecastService : Service() {
 
     private fun subscribeInject() {
         compositeDisposable.addAll(
-            sharedPrefsObservable.subscribe({ sharedPrefs = it }, {})
+            sharedPrefsObservable.subscribe { sharedPrefs = it }
         )
     }
 

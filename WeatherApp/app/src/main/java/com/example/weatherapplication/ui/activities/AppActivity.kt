@@ -13,8 +13,10 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
     @Inject
     lateinit var remoteRepository: RemoteRepository
+
     @Inject
     lateinit var compositeDisposable: CompositeDisposable
+
     @Inject
     lateinit var appState: AppState
 
@@ -32,11 +34,11 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         appState.changeStateApp(isCollapsed)
     }
 
-    private fun startBackgroundUpdateForecast(){
+    private fun startBackgroundUpdateForecast() {
         remoteRepository.periodUpdateForecastAllCityList()
     }
 
-    private fun unsubscribeAll(){
+    private fun unsubscribeAll() {
         compositeDisposable.clear()
     }
 

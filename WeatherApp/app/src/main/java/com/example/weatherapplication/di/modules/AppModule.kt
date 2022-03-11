@@ -9,7 +9,6 @@ import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -39,10 +38,10 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideSharedPreference(context: Observable<Context>): Single<SharedPreferences> {
-        return Single.create { subscribeSharedPrefs ->
-            val t = context.subscribe { context ->
-                subscribeSharedPrefs.onSuccess(
+    fun provideSharedPreferenceSingleObserver(contextObservable: Observable<Context>): Observable<SharedPreferences> {
+        return Observable.create { subscribeSharedPrefs ->
+            val t = contextObservable.subscribe { context ->
+                subscribeSharedPrefs.onNext(
                     context.getSharedPreferences(
                         SharedPrefsContract.SHARED_PREFS_NAME,
                         Context.MODE_PRIVATE

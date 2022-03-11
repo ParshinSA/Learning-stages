@@ -24,9 +24,9 @@ import java.util.concurrent.TimeUnit
 
 class RemoteRepositoryImpl(
     private val workManager: WorkManager,
-    private val forecastApi: ForecastApi,
-    private val historyApi: HistoryApi,
-    private val coordinationApi: CoordinationApi
+    private val retrofitForecastApi: ForecastApi,
+    private val retrofitHistoryApi: HistoryApi,
+    private val retrofitCoordinationApi: CoordinationApi
 ) : RemoteRepository {
 
     override fun oneTimeUpdateForecastAllCity() {
@@ -46,7 +46,7 @@ class RemoteRepositoryImpl(
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .flatMap {
-                forecastApi.requestForecast(it.latitude, it.longitude)
+                retrofitForecastApi.requestForecast(it.latitude, it.longitude)
             }
     }
 
@@ -94,11 +94,11 @@ class RemoteRepositoryImpl(
 
     override fun searchCity(userInput: String): Single<List<City>> {
         Log.d(TAG, "searchCity: $userInput")
-        return coordinationApi.getCoordinationByNameCity(userInput)
+        return retrofitCoordinationApi.getCoordinationByNameCity(userInput)
     }
 
     private fun requestHistoryMonth(forecast: Forecast, step: Int): Observable<HistoryWeather> {
-        return historyApi.requestHistoryMonth(
+        return retrofitHistoryApi.requestHistoryMonth(
             forecast.coordination.latitude,
             forecast.coordination.longitude,
             calculateMonthStepMonth(step) // step 30 day
@@ -106,7 +106,7 @@ class RemoteRepositoryImpl(
     }
 
     private fun requestHistoryDay(forecast: Forecast, step: Int): Observable<HistoryWeather> {
-        return historyApi.requestHistoryDay(
+        return retrofitHistoryApi.requestHistoryDay(
             forecast.coordination.latitude,
             forecast.coordination.longitude,
             calculateDayStepDay(step),

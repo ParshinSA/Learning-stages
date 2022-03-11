@@ -29,7 +29,7 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
     lateinit var searchViewModelFactory: SearchCityViewModelFactory
     private val searchViewModel: SearchCityViewModel by viewModels { searchViewModelFactory }
 
-    private val bind by viewBinding(FragmentSearchCityBinding::bind)
+    private val binding by viewBinding(FragmentSearchCityBinding::bind)
 
     private lateinit var searchCityAdapterRV: SearchCityAdapterRV
 
@@ -55,14 +55,14 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
     }
 
     private fun backButtonClickListener() {
-        bind.tbSearchCity.setNavigationOnClickListener {
+        binding.tbSearchCity.setNavigationOnClickListener {
             navigateUp(findNavController(), null)
         }
     }
 
     private fun observeData() {
         searchViewModel.resultCityLiveData.observe(viewLifecycleOwner) {
-            bind.tvTextNoResult.isVisible = it.isEmpty()
+            binding.tvTextNoResult.isVisible = it.isEmpty()
             showResultSearchCity(it)
         }
     }
@@ -73,7 +73,7 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
     }
 
     private fun initSearchMenu() {
-        val searchItemMenu = bind.tbSearchCity.menu.findItem(R.id.search_menu_item)
+        val searchItemMenu = binding.tbSearchCity.menu.findItem(R.id.search_menu_item)
         val searchView = searchItemMenu.actionView as SearchView
         searchView.queryHint = this.getString(R.string.SearchCityFragment_Text_Enter_the_title)
 
@@ -102,7 +102,7 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
             addCity(city)
         }
 
-        with(bind.rvResultSearchCity) {
+        with(binding.rvResultSearchCity) {
             adapter = searchCityAdapterRV
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(ItemDecoration(requireContext(), 10))

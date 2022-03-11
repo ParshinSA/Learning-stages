@@ -29,11 +29,10 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     lateinit var reportViewModelFactory: ReportViewModelFactory
     private val reportViewModel: ReportViewModel by viewModels { reportViewModelFactory }
 
-    private val bind by viewBinding(FragmentWeatherReportBinding::bind)
+    private val binding by viewBinding(FragmentWeatherReportBinding::bind)
 
     private var snackbar: Snackbar? = null
     private var dialog: AlertDialog? = null
-
     private val currentForecast: Forecast
         get() = requireArguments().getParcelable(DetailsForecastFragment.KEY_FORECAST)
             ?: error("$TAG No default forecast")
@@ -68,7 +67,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
         }
 
         reportViewModel.isSaveReportLiveData.observe(viewLifecycleOwner) { loadingComplete ->
-            bind.pbLoader.isVisible = false
+            binding.pbLoader.isVisible = false
             if (loadingComplete) showSnackBar()
         }
 
@@ -115,14 +114,14 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     }
 
     private fun changeStateComponentView(isLoading: Boolean) {
-        bind.tilContainerPeriod.isEnabled = !isLoading
-        bind.btnOk.isEnabled = !isLoading
-        bind.pbLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.tilContainerPeriod.isEnabled = !isLoading
+        binding.btnOk.isEnabled = !isLoading
+        binding.pbLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun generateReport() {
-        bind.btnOk.setOnClickListener {
-            val userChoice = bind.tilContainerPeriod.editText?.text.toString()
+        binding.btnOk.setOnClickListener {
+            val userChoice = binding.tilContainerPeriod.editText?.text.toString()
 
             reportViewModel.generateReport(
                 currentForecast,
@@ -132,13 +131,13 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     }
 
     private fun cancelReport() {
-        bind.btnCancel.setOnClickListener {
+        binding.btnCancel.setOnClickListener {
             navigateUp(findNavController(), null)
         }
     }
 
     private fun setSelectedCityName() {
-        bind.tvCityName.text = this.getString(
+        binding.tvCityName.text = this.getString(
             R.string.ReportFragment_city_name_and_country,
             currentForecast.cityName,
             currentForecast.sys.country
@@ -146,7 +145,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     }
 
     private fun setPeriodList() {
-        val autoCompPeriodList = bind.tilContainerPeriod.editText as? AutoCompleteTextView
+        val autoCompPeriodList = binding.tilContainerPeriod.editText as? AutoCompleteTextView
             ?: error("Incorrect autoCompPeriodList")
 
         autoCompPeriodList.setText(
@@ -163,7 +162,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     }
 
     private fun backButtonClickListener() {
-        bind.tbReportFrg.setNavigationOnClickListener {
+        binding.tbReportFrg.setNavigationOnClickListener {
             navigateUp(findNavController(), null)
         }
     }

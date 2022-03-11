@@ -16,15 +16,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
-import com.example.weatherapplication.ui.common.ItemDecoration
 import com.example.weatherapplication.data.common.SharedPrefsContract
 import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
 import com.example.weatherapplication.ui.AppApplication
+import com.example.weatherapplication.ui.common.ItemDecoration
 import com.example.weatherapplication.ui.common.ShortForecastListAdapterRV
 import com.example.weatherapplication.ui.viewmodels.viewmodels.ShortForecastViewModel
 import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.ShortForecastViewModelFactory
-import io.reactivex.Single
+import io.reactivex.Observable
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -35,11 +35,11 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     lateinit var shortViewModelFactory: ShortForecastViewModelFactory
 
     @Inject
-    lateinit var sharedPrefsObservable: Single<SharedPreferences>
+    lateinit var sharedPrefsObservable: Observable<SharedPreferences>
     private lateinit var sharedPrefs: SharedPreferences
 
     private val shortViewModel: ShortForecastViewModel by viewModels { shortViewModelFactory }
-    private val bind by viewBinding(FragmentShortForecastListBinding::bind)
+    private val binding by viewBinding(FragmentShortForecastListBinding::bind)
 
     private lateinit var adapterRVShort: ShortForecastListAdapterRV
     private var myDialog: AlertDialog? = null
@@ -65,7 +65,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
 
     private fun inject() {
         (requireContext().applicationContext as AppApplication).appComponent.inject(this)
-        sharedPrefsObservable.subscribe({ sharedPrefs = it }, {})
+        sharedPrefsObservable.subscribe { sharedPrefs = it }
     }
 
     private fun initComponents() {
@@ -73,7 +73,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun addNewCity() {
-        bind.fabAddCity.setOnClickListener {
+        binding.fabAddCity.setOnClickListener {
             findNavController().navigate(R.id.action_shortForecastListFragment_to_addCityFragment)
         }
     }
@@ -86,7 +86,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
                 this.getString(R.string.ShortForecastListFragment_time_format_ddMMMMHHmmss),
                 Locale("ru")
             ).format(dateFormat)
-        bind.tvLastUpdateTime.text = this.getString(
+        binding.tvLastUpdateTime.text = this.getString(
             R.string.ShortForecastListFragment_updateText_text,
             sdf
         )
@@ -99,11 +99,11 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun changeStateInfoView(state: Boolean) {
-        bind.tvTextHeader.text =
+        binding.tvTextHeader.text =
             if (!state)
                 this.getString(R.string.ShortForecastListFragment_text_No_city_in_list)
             else this.getString(R.string.ShortForecastListFragment_text_Click_for_detailed_forecast)
-        bind.tvLastUpdateTime.isVisible = state
+        binding.tvLastUpdateTime.isVisible = state
     }
 
     private fun getForecastList() {
@@ -116,7 +116,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun changeStateProgressView(isLoading: Boolean) {
-        bind.swlSwipeContainer.isRefreshing = isLoading
+        binding.swlSwipeContainer.isRefreshing = isLoading
     }
 
     private fun thisTransition(view: View) {
@@ -125,7 +125,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
     }
 
     private fun updateForecastsSwipe() {
-        bind.swlSwipeContainer.setOnRefreshListener {
+        binding.swlSwipeContainer.setOnRefreshListener {
             Log.d(TAG, "refreshForecastListSwipe: start")
             getForecastList()
         }
@@ -173,7 +173,7 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
                 transitionInDetailsForecastFragment(position, currentViewInRV)
             }
 
-        with(bind.rvListCity) {
+        with(binding.rvListCity) {
             adapter = adapterRVShort
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(ItemDecoration(requireContext(), 10))

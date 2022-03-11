@@ -13,7 +13,7 @@ import com.example.weatherapplication.ui.viewmodels.BaseViewModel
 
 class ReportViewModel(
     private val remoteRepo: RemoteRepository,
-    private val memoryRepository: MemoryRepository
+    private val memoryRepo: MemoryRepository
 ) : BaseViewModel() {
 
     private val isLoadingMutableLiveData = MutableLiveData(false)
@@ -54,7 +54,7 @@ class ReportViewModel(
 
     private fun saveReport(forecast: Forecast, period: ReportPeriods, medianSata: DataHistory) {
         compositeDisposable.add(
-            memoryRepository.saveReportInCacheDirection(forecast.cityName, period, medianSata)
+            memoryRepo.saveReportInCacheDirection(forecast.cityName, period, medianSata)
                 .subscribe({
                     Log.d(TAG, "saveReport: success")
                     isSaveReportSingleLiveEvent.postValue(true)
@@ -67,7 +67,7 @@ class ReportViewModel(
 
     fun openReport() {
         reportFileMutableLiveData.postValue(
-            memoryRepository.openReportFromCacheDir()
+            memoryRepo.openReportFromCacheDir()
         )
     }
 

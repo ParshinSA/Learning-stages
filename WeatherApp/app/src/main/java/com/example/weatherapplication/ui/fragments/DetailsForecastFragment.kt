@@ -27,7 +27,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     lateinit var detailsViewModelFactory: DetailsForecastViewModelFactory
     private val detailsViewModel: DetailsForecastViewModel by viewModels { detailsViewModelFactory }
 
-    private val bind by viewBinding(FragmentDetailsForecastBinding::bind)
+    private val binding by viewBinding(FragmentDetailsForecastBinding::bind)
     private lateinit var currentForecast: Forecast
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,31 +74,31 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun backButtonClickListener() {
-        bind.tbDetailFrg.setNavigationOnClickListener {
+        binding.tbDetailFrg.setNavigationOnClickListener {
             navigateUp(findNavController(), null)
         }
     }
 
     private fun setTimeSunriseAndSunset() {
-        bind.tvValueSunrise.text = this.getString(
+        binding.tvValueSunrise.text = this.getString(
             R.string.DetailsForecastFragment_date_text,
             currentForecast.sys.sunrise.convertToDate("HH:mm")
         )
-        bind.tvValueSunset.text = this.getString(
+        binding.tvValueSunset.text = this.getString(
             R.string.DetailsForecastFragment_date_text,
             currentForecast.sys.sunset.convertToDate("HH:mm")
         )
     }
 
     private fun setVisibility() {
-        bind.tvValueVisibility.text = this.getString(
+        binding.tvValueVisibility.text = this.getString(
             R.string.DetailsForecastFragment_text_km,
             currentForecast.visibility / 1000L
         )
     }
 
     private fun setHumidity() {
-        bind.tvValueHumidity.text =
+        binding.tvValueHumidity.text =
             this.getString(
                 R.string.DetailsForecastFragment_text_percent,
                 currentForecast.main.humidity
@@ -106,7 +106,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setPressure() {
-        bind.tvValuePressure.text = this.getString(
+        binding.tvValuePressure.text = this.getString(
             R.string.DetailsForecastFragment_text_pressure,
             currentForecast.main.pressure
         )
@@ -118,7 +118,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setInfoTextWind() {
-        bind.tvValueWind.text =
+        binding.tvValueWind.text =
             this.getString(
                 R.string.DetailsForecastFragment_text_ms,
                 currentForecast.wind.speed.roundToInt()
@@ -126,11 +126,11 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun rotationIconWind() {
-        bind.imvIcWindRoute.animate().rotation(currentForecast.wind.routeDegrees.toFloat())
+        binding.imvIcWindRoute.animate().rotation(currentForecast.wind.routeDegrees.toFloat())
     }
 
     private fun setDescription() {
-        bind.tvDescription.text = currentForecast.weather[0].description
+        binding.tvDescription.text = currentForecast.weather[0].description
     }
 
     private fun setIcon() {
@@ -143,15 +143,15 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
             )
             .placeholder(R.drawable.ic_cloud)
             .error(R.drawable.ic_no_internet)
-            .into(bind.imvIcWeather)
+            .into(binding.imvIcWeather)
     }
 
     private fun setTemp() {
-        bind.tvValueTemp.text = round(currentForecast.main.temperature).toInt().toString()
+        binding.tvValueTemp.text = round(currentForecast.main.temperature).toInt().toString()
     }
 
     private fun setNameCity() {
-        bind.tvCityName.text = this.getString(
+        binding.tvCityName.text = this.getString(
             R.string.DetailsForecastFragment_text_name_city,
             currentForecast.cityName,
             currentForecast.sys.country
@@ -159,7 +159,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setTime() {
-        bind.tvDateTimeLastUpdate.text = this.getString(
+        binding.tvDateTimeLastUpdate.text = this.getString(
             R.string.DetailsForecastFragment_updateText_text,
             currentForecast.timeForecast.convertToDate("dd MMM yyyy HH:mm")
         )
@@ -176,10 +176,10 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun generateReportWeatherInCity() {
-        bind.fabOpenReport.visibility = View.VISIBLE
+        binding.fabOpenReport.visibility = View.VISIBLE
 
-        bind.fabOpenReport.setOnClickListener {
-            bind.fabOpenReport.visibility = View.INVISIBLE
+        binding.fabOpenReport.setOnClickListener {
+            binding.fabOpenReport.visibility = View.INVISIBLE
 
             val bundle = Bundle()
 
