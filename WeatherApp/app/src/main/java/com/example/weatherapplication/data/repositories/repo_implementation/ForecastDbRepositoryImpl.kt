@@ -6,8 +6,9 @@ import com.example.weatherapplication.data.repositories.repo_interface.ForecastD
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class ForecastDbRepositoryImpl(
+class ForecastDbRepositoryImpl @Inject constructor(
     private val forecastDao: ForecastDao,
 ) : ForecastDbRepository {
 

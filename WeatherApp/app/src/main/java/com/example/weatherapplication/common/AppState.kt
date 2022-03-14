@@ -1,6 +1,8 @@
 package com.example.weatherapplication.common
 
 import android.util.Log
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * @author Parshin Sergey
@@ -9,7 +11,8 @@ import android.util.Log
  * @see changeStateApp метод изменяющий состояние приложения
  * */
 
-class AppState {
+@Singleton
+class AppState @Inject constructor() {
 
     var isCollapsed: Boolean = false
 

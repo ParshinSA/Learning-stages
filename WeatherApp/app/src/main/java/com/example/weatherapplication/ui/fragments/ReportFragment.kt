@@ -18,8 +18,8 @@ import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentWeatherReportBinding
 import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.ui.common.ReportPeriods
-import com.example.weatherapplication.ui.viewmodels.viewmodels.ReportViewModel
-import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.ReportViewModelFactory
+import com.example.weatherapplication.ui.viewmodels.viewmodel_classes.ReportViewModel
+import com.example.weatherapplication.ui.viewmodels.viewmodel_factory.ReportViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 

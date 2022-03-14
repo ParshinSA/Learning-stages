@@ -2,27 +2,20 @@ package com.example.weatherapplication.data.repositories.repo_implementation
 
 import android.content.Context
 import android.util.Log
+import com.example.weatherapplication.common.toStringDoubleFormat
 import com.example.weatherapplication.data.models.report.DataHistory
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.ui.common.ReportPeriods
-import com.example.weatherapplication.common.toStringDoubleFormat
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class MemoryRepositoryImpl(
-    private val contextObs: Observable<Context>
+class MemoryRepositoryImpl @Inject constructor(
+    private val context: Context
 ) : MemoryRepository {
-
-    var context: Context? = null
-
-    init {
-        Log.d("OBser2", "provideMemoryRepositoryImpl: ObservContext")
-        contextObs.subscribe {
-            context = it
-        }
-    }
 
     override fun saveReportInCacheDirection(
         nameCity: String,
@@ -30,7 +23,7 @@ class MemoryRepositoryImpl(
         report: DataHistory
     ): Completable {
         return Completable.create { subscriber ->
-            val file = File(context?.cacheDir, "report.txt")
+            val file = File(context.cacheDir, "report.txt")
             try {
                 file.outputStream().buffered().use {
                     it.write(
@@ -52,7 +45,7 @@ class MemoryRepositoryImpl(
     }
 
     override fun openReportFromCacheDir(): String {
-        val folder = context?.cacheDir
+        val folder = context.cacheDir
         val file = File(folder, "report.txt")
         file.inputStream().bufferedReader().use {
             return it.readText()

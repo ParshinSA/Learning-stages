@@ -21,24 +21,12 @@ import javax.inject.Inject
 
 class UpdateForecastService : Service() {
 
-    @Inject
-    lateinit var forecastDbRepo: ForecastDbRepository
-
-    @Inject
-    lateinit var remoteRepo: RemoteRepository
-
-    @Inject
-    lateinit var compositeDisposable: CompositeDisposable
-
-    @Inject
-    lateinit var sharedPrefsObservable: Observable<SharedPreferences>
-    lateinit var sharedPrefs: SharedPreferences
-
-    @Inject
-    lateinit var appState: AppState
-
-    @Inject
-    lateinit var customCitiesDbRepo: CustomCitiesDbRepository
+    private lateinit var forecastDbRepo: ForecastDbRepository
+    private lateinit var remoteRepo: RemoteRepository
+    private lateinit var compositeDisposable: CompositeDisposable
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var appState: AppState
+    private lateinit var customCitiesDbRepo: CustomCitiesDbRepository
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -56,13 +44,23 @@ class UpdateForecastService : Service() {
 
     private fun inject() {
         (this.applicationContext as AppApplication).appComponent.inject(this)
-        subscribeInject()
     }
 
-    private fun subscribeInject() {
-        compositeDisposable.addAll(
-            sharedPrefsObservable.subscribe { sharedPrefs = it }
-        )
+    @Inject
+     fun injectDependency(
+        forecastDbRepo: ForecastDbRepository,
+        remoteRepo: RemoteRepository,
+        compositeDisposable: CompositeDisposable,
+        sharedPreferences: SharedPreferences,
+        appState: AppState,
+        customCitiesDbRepo: CustomCitiesDbRepository
+    ) {
+        this.forecastDbRepo = forecastDbRepo
+        this.remoteRepo = remoteRepo
+        this.compositeDisposable = compositeDisposable
+        this.sharedPreferences = sharedPreferences
+        this.appState = appState
+        this.customCitiesDbRepo = customCitiesDbRepo
     }
 
     private fun updateForecast() {
@@ -107,11 +105,9 @@ class UpdateForecastService : Service() {
 
     private fun saveTimeUpdateForecast() {
         val currentTime = System.currentTimeMillis()
-        sharedPrefs.edit()
+        sharedPreferences.edit()
             .putLong(SharedPrefsContract.TIME_LAST_REQUEST_KEY, currentTime)
             .apply()
-
-        Log.d(TAG, "saveTimeUpdateForecast: time:$currentTime")
     }
 
     private fun createNotification(): Notification {

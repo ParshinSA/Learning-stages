@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,25 +22,18 @@ import com.example.weatherapplication.databinding.FragmentShortForecastListBindi
 import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.ui.common.ItemDecoration
 import com.example.weatherapplication.ui.common.ShortForecastListAdapterRV
-import com.example.weatherapplication.ui.viewmodels.viewmodels.ShortForecastViewModel
-import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.ShortForecastViewModelFactory
-import io.reactivex.Observable
+import com.example.weatherapplication.ui.viewmodels.viewmodel_classes.ShortForecastViewModel
+import com.example.weatherapplication.ui.viewmodels.viewmodel_factory.ShortForecastViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
-    @Inject
-    lateinit var shortViewModelFactory: ShortForecastViewModelFactory
-
-    @Inject
-    lateinit var sharedPrefsObservable: Observable<SharedPreferences>
+    private lateinit var shortViewModel: ShortForecastViewModel
     private lateinit var sharedPrefs: SharedPreferences
 
-    private val shortViewModel: ShortForecastViewModel by viewModels { shortViewModelFactory }
     private val binding by viewBinding(FragmentShortForecastListBinding::bind)
-
     private lateinit var adapterRVShort: ShortForecastListAdapterRV
     private var myDialog: AlertDialog? = null
 
@@ -65,7 +58,17 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
 
     private fun inject() {
         (requireContext().applicationContext as AppApplication).appComponent.inject(this)
-        sharedPrefsObservable.subscribe { sharedPrefs = it }
+    }
+
+    @Inject
+    fun injectDependency(
+        shortViewModelFactory: ShortForecastViewModelFactory,
+        sharedPreferences: SharedPreferences
+    ) {
+        sharedPrefs = sharedPreferences
+
+        shortViewModel =
+            ViewModelProvider(this, shortViewModelFactory)[ShortForecastViewModel::class.java]
     }
 
     private fun initComponents() {
@@ -143,6 +146,10 @@ class ShortForecastListFragment : Fragment(R.layout.fragment_short_forecast_list
         shortViewModel.forecastListLiveData.observe(viewLifecycleOwner) { listForecast ->
             Log.d(TAG, "observeData: forecastListLiveData $listForecast")
             updateForecastListInRV(listForecast)
+        }
+
+        shortViewModel.customCityListLivaData.observe(viewLifecycleOwner) { listCity ->
+            if (listCity.isNotEmpty()) getForecastList()
         }
     }
 

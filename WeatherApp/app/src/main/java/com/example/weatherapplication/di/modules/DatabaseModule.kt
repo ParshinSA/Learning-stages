@@ -50,5 +50,4 @@ class DatabaseModule {
     fun provideCustomCitiesDao(customCitiesDbModels: CustomCitiesDbModels): CustomCitiesDao {
         return customCitiesDbModels.getCustomCitiesDao()
     }
-
 }

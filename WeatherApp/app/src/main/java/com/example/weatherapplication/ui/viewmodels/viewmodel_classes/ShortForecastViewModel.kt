@@ -1,20 +1,20 @@
-package com.example.weatherapplication.ui.viewmodels.viewmodels
+package com.example.weatherapplication.ui.viewmodels.viewmodel_classes
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.weatherapplication.ui.common.SingleLiveEvent
+import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.data.models.forecast.Forecast
+import com.example.weatherapplication.data.repositories.repo_interface.CustomCitiesDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
+import com.example.weatherapplication.ui.common.SingleLiveEvent
 import com.example.weatherapplication.ui.viewmodels.BaseViewModel
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 class ShortForecastViewModel(
     private val remoteRepo: RemoteRepository,
-    forecastDbRepo: ForecastDbRepository,
+    private val forecastDbRepo: ForecastDbRepository,
+    private val customCitiesDbRepo: CustomCitiesDbRepository
 ) : BaseViewModel() {
 
     private val forecastListMutableLiveData = MutableLiveData<List<Forecast>>()
@@ -25,16 +25,35 @@ class ShortForecastViewModel(
     val errorMessageLiveData: LiveData<String>
         get() = errorMessageMutableLiveData
 
+    private val customCityListMutableLiveData = MutableLiveData<List<City>>(emptyList())
+    val customCityListLivaData: LiveData<List<City>>
+        get() = customCityListMutableLiveData
+
     val isLoadingMutableLiveData = MutableLiveData<Boolean>()
 
     init {
+        observeForecastDb()
+        observeCustomCityDb()
+    }
+
+    private fun observeCustomCityDb() {
         compositeDisposable.add(
-            forecastDbRepo.observeForecastDatabase().subscribe { forecastList ->
-                isLoadingMutableLiveData.postValue(true)
-                forecastListMutableLiveData.postValue(forecastList)
-                isLoadingMutableLiveData.postValue(false)
-                Log.d(TAG, "DatabaseListener: $forecastList")
-            }
+            customCitiesDbRepo.getCityList()
+                .subscribe({ cityListFromDb ->
+                    customCityListMutableLiveData.postValue(cityListFromDb)
+                }, {
+                    Log.d(TAG, "observeCustomCityDb: $it")
+                })
+        )
+    }
+
+    private fun observeForecastDb() {
+        compositeDisposable.add(
+            forecastDbRepo.observeForecastDatabase()
+                .subscribe { forecastList ->
+                    forecastListMutableLiveData.postValue(forecastList)
+                    Log.d(TAG, "DatabaseListener: $forecastList")
+                }
         )
     }
 

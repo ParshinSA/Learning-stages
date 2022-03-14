@@ -1,13 +1,5 @@
 package com.example.weatherapplication.di.modules
 
-import android.content.Context
-import android.util.Log
-import androidx.work.WorkManager
-import com.example.weatherapplication.data.db.custom_cities_db.CustomCitiesDao
-import com.example.weatherapplication.data.db.forecast_db.ForecastDao
-import com.example.weatherapplication.data.networking.api.CoordinationApi
-import com.example.weatherapplication.data.networking.api.ForecastApi
-import com.example.weatherapplication.data.networking.api.HistoryApi
 import com.example.weatherapplication.data.repositories.repo_implementation.CustomCitiesDbRepositoryImpl
 import com.example.weatherapplication.data.repositories.repo_implementation.ForecastDbRepositoryImpl
 import com.example.weatherapplication.data.repositories.repo_implementation.MemoryRepositoryImpl
@@ -16,45 +8,33 @@ import com.example.weatherapplication.data.repositories.repo_interface.CustomCit
 import com.example.weatherapplication.data.repositories.repo_interface.ForecastDbRepository
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import io.reactivex.Observable
-import javax.inject.Singleton
 
 @Module
-class RepositoryModule {
+interface RepositoryModule {
 
-    @Provides
-    @Singleton
-    fun provideRemoteRepositoryImpl(
-        workManager: WorkManager,
-        forecastApi: ForecastApi,
-        historyApi: HistoryApi,
-        coordinationApi: CoordinationApi
-    ): RemoteRepository {
-        return RemoteRepositoryImpl(
-            workManager = workManager,
-            forecastApi = forecastApi,
-            historyApi = historyApi,
-            coordinationApi = coordinationApi
-        )
-    }
+    @Suppress("FunctionName")
+    @Binds
+    fun bindForecastRemoteRepositoryImpl_to_RemoteRepository(
+        remoteRepositoryImpl: RemoteRepositoryImpl
+    ): RemoteRepository
 
-    @Provides
-    @Singleton
-    fun provideForecastDbRepositoryImpl(forecastDao: ForecastDao): ForecastDbRepository {
-        return ForecastDbRepositoryImpl(forecastDao)
-    }
+    @Suppress("FunctionName")
+    @Binds
+    fun bindForecastDbRepositoryImpl_to_ForecastDbRepository(
+        forecastDbRepositoryImpl: ForecastDbRepositoryImpl
+    ): ForecastDbRepository
 
-    @Provides
-    @Singleton
-    fun provideCustomCitiesDbRepositoryImpl(customCitiesDao: CustomCitiesDao): CustomCitiesDbRepository {
-        return CustomCitiesDbRepositoryImpl(customCitiesDao)
-    }
+    @Suppress("FunctionName")
+    @Binds
+    fun bindCustomCitiesDbRepositoryImpl_to_CustomCitiesDbRepository(
+        customCitiesDbRepositoryImpl: CustomCitiesDbRepositoryImpl
+    ): CustomCitiesDbRepository
 
-    @Provides
-    @Singleton
-    fun provideMemoryRepositoryImpl(context: Observable<Context>): MemoryRepository {
-        return MemoryRepositoryImpl(context)
-    }
+    @Suppress("FunctionName")
+    @Binds
+    fun bindMemoryRepositoryImpl_to_MemoryRepository(
+        memoryRepositoryImpl: MemoryRepositoryImpl
+    ): MemoryRepository
 }

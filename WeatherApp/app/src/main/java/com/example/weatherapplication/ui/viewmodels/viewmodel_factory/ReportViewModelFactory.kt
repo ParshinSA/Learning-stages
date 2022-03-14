@@ -1,12 +1,13 @@
-package com.example.weatherapplication.ui.viewmodels.viewnodels_factory
+package com.example.weatherapplication.ui.viewmodels.viewmodel_factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapplication.data.repositories.repo_interface.MemoryRepository
 import com.example.weatherapplication.data.repositories.repo_interface.RemoteRepository
-import com.example.weatherapplication.ui.viewmodels.viewmodels.ReportViewModel
+import com.example.weatherapplication.ui.viewmodels.viewmodel_classes.ReportViewModel
+import javax.inject.Inject
 
-class ReportViewModelFactory(
+class ReportViewModelFactory @Inject constructor(
     private val remoteRepo: RemoteRepository,
     private val memoryRepo: MemoryRepository
 ) : ViewModelProvider.Factory {

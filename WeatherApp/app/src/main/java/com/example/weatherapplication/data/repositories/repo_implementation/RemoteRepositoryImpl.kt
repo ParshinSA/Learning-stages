@@ -20,9 +20,10 @@ import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class RemoteRepositoryImpl(
+class RemoteRepositoryImpl @Inject constructor(
     private val workManager: WorkManager,
     private val retrofitForecastApi: ForecastApi,
     private val retrofitHistoryApi: HistoryApi,

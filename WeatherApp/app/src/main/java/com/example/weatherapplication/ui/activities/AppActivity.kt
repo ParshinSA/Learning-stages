@@ -11,19 +11,25 @@ import javax.inject.Inject
 
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
-    @Inject
-    lateinit var remoteRepository: RemoteRepository
-
-    @Inject
-    lateinit var compositeDisposable: CompositeDisposable
-
-    @Inject
-    lateinit var appState: AppState
+    private lateinit var remoteRepository: RemoteRepository
+    private lateinit var compositeDisposable: CompositeDisposable
+    private lateinit var appState: AppState
 
     override fun onStart() {
         inject()
         changeStateCollapsedApp(false)
         super.onStart()
+    }
+
+    @Inject
+    fun injectDependency(
+        remoteRepository: RemoteRepository,
+        compositeDisposable: CompositeDisposable,
+        appState: AppState
+    ) {
+        this.remoteRepository = remoteRepository
+        this.compositeDisposable = compositeDisposable
+        this.appState = appState
     }
 
     private fun inject() {

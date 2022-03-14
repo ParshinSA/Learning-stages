@@ -14,8 +14,8 @@ import com.example.weatherapplication.data.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentDetailsForecastBinding
 import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.common.convertToDate
-import com.example.weatherapplication.ui.viewmodels.viewmodels.DetailsForecastViewModel
-import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.DetailsForecastViewModelFactory
+import com.example.weatherapplication.ui.viewmodels.viewmodel_classes.DetailsForecastViewModel
+import com.example.weatherapplication.ui.viewmodels.viewmodel_factory.DetailsForecastViewModelFactory
 import javax.inject.Inject
 import kotlin.math.round
 import kotlin.math.roundToInt

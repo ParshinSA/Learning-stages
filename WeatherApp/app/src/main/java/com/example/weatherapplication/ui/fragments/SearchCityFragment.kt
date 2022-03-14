@@ -18,8 +18,8 @@ import com.example.weatherapplication.data.models.city.City
 import com.example.weatherapplication.databinding.FragmentSearchCityBinding
 import com.example.weatherapplication.ui.AppApplication
 import com.example.weatherapplication.ui.common.SearchCityAdapterRV
-import com.example.weatherapplication.ui.viewmodels.viewmodels.SearchCityViewModel
-import com.example.weatherapplication.ui.viewmodels.viewnodels_factory.SearchCityViewModelFactory
+import com.example.weatherapplication.ui.viewmodels.viewmodel_classes.SearchCityViewModel
+import com.example.weatherapplication.ui.viewmodels.viewmodel_factory.SearchCityViewModelFactory
 import io.reactivex.Observable
 import javax.inject.Inject
 
