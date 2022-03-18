@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/shortForecastListFragment"
-        android:name="com.example.weatherapplication.ui.fragments.ShortForecastListFragment"
+        android:name="com.example.weatherapplication.app.ui.fragments.ShortForecastFragment"
         android:label="ShortForecastListFragment"
         tools:layout="@layout/fragment_short_forecast_list">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/detailsForecastFragment"
-        android:name="com.example.weatherapplication.ui.fragments.DetailsForecastFragment"
+        android:name="com.example.weatherapplication.app.ui.fragments.DetailsForecastFragment"
         android:label="DetailsForecastFragment"
         tools:layout="@layout/fragment_details_forecast">
         <action
@@ -30,12 +30,12 @@
 
     <fragment
         android:id="@+id/weatherReportFragment"
-        android:name="com.example.weatherapplication.ui.fragments.ReportFragment"
+        android:name="com.example.weatherapplication.app.ui.fragments.ReportFragment"
         android:label="WeatherReportFragment"
         tools:layout="@layout/fragment_weather_report" />
     <fragment
         android:id="@+id/addCityFragment"
         tools:layout="@layout/fragment_search_city"
-        android:name="com.example.weatherapplication.ui.fragments.SearchCityFragment"
+        android:name="com.example.weatherapplication.app.ui.fragments.SearchCityFragment"
         android:label="AddCityFragment" />
 </navigation>
