@@ -1,11 +1,12 @@
 package com.example.weatherapplication.data.data_source.forecast
 
-import com.example.weatherapplication.app.framework.database.models.forecast.Forecast
+import com.example.weatherapplication.data.database.models.forecast.Forecast
+import io.reactivex.Completable
 import io.reactivex.Observable
 
 interface RoomForecastDataSource {
 
-    fun addForecast(forecast: Forecast)
-    fun getForecasts(): Observable<List<Forecast>>
+    fun addForecast(forecast: Forecast): Completable
+    fun subscribeToForecastDatabase(): Observable<List<Forecast>>
 
 }
