@@ -1,27 +1,21 @@
 package com.example.weatherapplication.domain.interactors
 
-import android.content.Context
 import com.example.weatherapplication.data.database.models.report.FieldValue
 import com.example.weatherapplication.data.database.models.report.ReportData
 import com.example.weatherapplication.data.database.models.report.WeatherStatistic
 import com.example.weatherapplication.data.reporitories.ReportRepository
 import com.example.weatherapplication.domain.ReportingPeriod
 import com.example.weatherapplication.domain.interactors.interactors_interface.ReportInteractor
-import com.example.weatherapplication.presentation.common.contracts.ReportContract
 import com.example.weatherapplication.presentation.common.toStringDoubleFormat
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 class ReportInteractorImpl @Inject constructor(
-    private val reportRepository: ReportRepository,
-    private val context: Context,
-    private val compositeDisposable: CompositeDisposable
+    private val reportRepository: ReportRepository
 ) : ReportInteractor {
 
     override fun generateReport(
@@ -45,28 +39,6 @@ class ReportInteractorImpl @Inject constructor(
             .flatMapCompletable { reportString ->
                 saveInCache(reportString)
             }
-    }
-
-    override fun openReportFromCache(): String {
-        val folder = context.cacheDir
-        val file = File(folder, ReportContract.NAME_FILE)
-        file.inputStream().bufferedReader().use {
-            return it.readText()
-        }
-    }
-
-    private fun convertReportDataToReportString(
-        cityName: String,
-        reportingPeriod: ReportingPeriod,
-        reportData: ReportData
-    ): String {
-        return "Город: $cityName\n" +
-                "Средние значения за период \"${reportingPeriod.stringQuantity}\":\n" +
-                "температура ${(reportData.temperature.medianValue - 273.15).toStringDoubleFormat()} °C\n" +
-                "влажность ${reportData.humidity.medianValue.toStringDoubleFormat()} %\n" +
-                "давление ${reportData.pressure.medianValue.toStringDoubleFormat()} гПа\n" +
-                "ветер ${reportData.wind.medianValue.toStringDoubleFormat()} м/с\n" +
-                "осадки ${reportData.precipitation.medianValue.toStringDoubleFormat()} мм"
     }
 
     private fun requestReportData(
@@ -110,20 +82,26 @@ class ReportInteractorImpl @Inject constructor(
             }
     }
 
-    private fun saveInCache(
-        report: String
-    ): Completable {
-        return Completable.create { subscriber ->
-            val file = File(context.cacheDir, ReportContract.NAME_FILE)
-            try {
-                file.outputStream().buffered().use {
-                    it.write(report.toByteArray())
-                }
-                subscriber.onComplete()
-            } catch (t: Throwable) {
-                subscriber.onError(t)
-            }
-        }
+    private fun saveInCache(report: String): Completable {
+        return reportRepository.saveInCache(report)
+    }
+
+    override fun openReportFromCache(): String {
+        return reportRepository.openReportFromCache()
+    }
+
+    private fun convertReportDataToReportString(
+        cityName: String,
+        reportingPeriod: ReportingPeriod,
+        reportData: ReportData
+    ): String {
+        return "Город: $cityName\n" +
+                "Средние значения за период \"${reportingPeriod.stringQuantity}\":\n" +
+                "температура ${(reportData.temperature.medianValue - 273.15).toStringDoubleFormat()} °C\n" +
+                "влажность ${reportData.humidity.medianValue.toStringDoubleFormat()} %\n" +
+                "давление ${reportData.pressure.medianValue.toStringDoubleFormat()} гПа\n" +
+                "ветер ${reportData.wind.medianValue.toStringDoubleFormat()} м/с\n" +
+                "осадки ${reportData.precipitation.medianValue.toStringDoubleFormat()} мм"
     }
 
     private fun calculationOfAverageReportData(

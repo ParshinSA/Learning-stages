@@ -21,9 +21,6 @@ class UpdateForecastService : Service() {
     @Inject
     lateinit var appState: AppState
 
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
-
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
