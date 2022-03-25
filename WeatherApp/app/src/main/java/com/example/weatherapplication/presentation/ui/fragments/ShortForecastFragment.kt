@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,15 +14,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
-import com.example.weatherapplication.data.database.models.forecast.Forecast
+import com.example.weatherapplication.data.networking.models.forecast.response.RemoteResponseForecastDto
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
+import com.example.weatherapplication.presentation.models.forecast.short.UiShortForecastDto
 import com.example.weatherapplication.presentation.ui.AppApplication
 import com.example.weatherapplication.presentation.ui.common.ItemDecoration
 import com.example.weatherapplication.presentation.ui.common.ShortForecastListAdapterRV
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_classes.ShortForecastViewModel
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_factory.ShortForecastViewModelFactory
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
@@ -43,7 +41,6 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d(TAG, "onViewCreated: ")
-        thisTransition(view)
         actionInFragment()
         super.onViewCreated(view, savedInstanceState)
     }
@@ -70,16 +67,9 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
     }
 
     private fun setLastTimeUpdateForecast() {
-        val lastTimeUpdate = shortViewModel.getLastUpdateTime()
-        val dateFormat = Date(lastTimeUpdate)
-        val sdf =
-            SimpleDateFormat(
-                this.getString(R.string.ShortForecastListFragment_time_format_ddMMMMHHmmss),
-                Locale("ru")
-            ).format(dateFormat)
         binding.tvLastUpdateTime.text = this.getString(
             R.string.ShortForecastListFragment_updateText_text,
-            sdf
+            shortViewModel.getLastUpdateTimeString()
         )
     }
 
@@ -110,11 +100,6 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
         binding.swlSwipeContainer.isRefreshing = isLoading
     }
 
-    private fun thisTransition(view: View) {
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
-    }
-
     private fun updateForecastsSwipe() {
         binding.swlSwipeContainer.setOnRefreshListener {
             Log.d(TAG, "refreshForecastListSwipe: start")
@@ -136,18 +121,13 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
             updateForecastListInRV(listForecast)
         }
 
-        shortViewModel.customCityListLivaData.observe(viewLifecycleOwner) { listCity ->
-            if (listCity.isNotEmpty()) getForecastList()
-        }
     }
 
-    private fun updateForecastListInRV(listForecast: List<Forecast>) {
+    private fun updateForecastListInRV(listForecast: List<UiShortForecastDto>) {
         if (listForecast.isEmpty())
             changeStateInfoView(false)
         else {
-            adapterRVShort.submitList(listForecast.sortedBy {
-                it.cityName
-            })
+            adapterRVShort.submitList(listForecast.sortedBy { it.cityName })
             changeStateInfoView(true)
             setLastTimeUpdateForecast()
         }
@@ -164,8 +144,8 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
     private fun initRV() {
         adapterRVShort =
-            ShortForecastListAdapterRV { position: Int, currentViewInRV: View ->
-                transitionInDetailsForecastFragment(position, currentViewInRV)
+            ShortForecastListAdapterRV { coordinationCity: Pair<Double, Double>, currentView: View ->
+                transitionInDetailsForecastFragment(coordinationCity, currentView)
             }
 
         with(binding.rvListCity) {
@@ -176,10 +156,10 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
         }
     }
 
-    private fun transitionInDetailsForecastFragment(position: Int, currentView: View) {
-        val forecast = shortViewModel.forecastListLiveData.value!![position]
+    private fun transitionInDetailsForecastFragment(coordinationCity: Pair<Double, Double>, currentView: View) {
+        val detailsForecast = shortViewModel.getDetailForecast(coordinationCity)
         val bundle = Bundle()
-        bundle.putParcelable(KEY_FORECAST, forecast)
+        bundle.putParcelable(KEY_FORECAST, detailsForecast)
 
         val transitionName =
             this.resources.getString(R.string.DetailsForecastFragment_transition_name)

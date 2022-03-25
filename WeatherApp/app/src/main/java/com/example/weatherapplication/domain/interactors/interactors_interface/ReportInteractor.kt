@@ -1,17 +1,13 @@
 package com.example.weatherapplication.domain.interactors.interactors_interface
 
-import com.example.weatherapplication.domain.ReportingPeriod
+import com.example.weatherapplication.domain.models.report.DomainReportDto
+import com.example.weatherapplication.presentation.models.report.request.UiRequestReportDto
 import io.reactivex.Completable
 
 interface ReportInteractor {
 
-    fun generateReport(
-        cityName: String,
-        latitude: Double,
-        longitude: Double,
-        reportingPeriod: ReportingPeriod
-    ): Completable
+    fun generateReport(uiRequestReportDto: UiRequestReportDto): Completable
 
-    fun openReportFromCache(): String
+    fun openReportFromCache(): DomainReportDto
 
 }

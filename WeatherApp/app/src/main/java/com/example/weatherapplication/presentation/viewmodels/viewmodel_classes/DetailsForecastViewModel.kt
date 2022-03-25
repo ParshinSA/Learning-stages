@@ -4,16 +4,22 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.weatherapplication.data.database.models.forecast.Forecast
+import com.example.weatherapplication.presentation.models.city.UiCityDto
+import com.example.weatherapplication.presentation.models.forecast.details.UiDetailsForecastDto
+import com.example.weatherapplication.presentation.models.forecast.details.convertToUiCityDto
 
 class DetailsForecastViewModel : ViewModel() {
 
-    private val detailsForecastMutableLiveData = MutableLiveData<Forecast>()
-    val detailsForecastLiveData: LiveData<Forecast>
+    private val detailsForecastMutableLiveData = MutableLiveData<UiDetailsForecastDto>()
+    val detailsForecastLiveData: LiveData<UiDetailsForecastDto>
         get() = detailsForecastMutableLiveData
 
-    fun setDataDetailsForecastInView(forecast: Forecast) {
-        detailsForecastMutableLiveData.postValue(forecast)
+    fun setDataDetailsForecastInView(responseForecast: UiDetailsForecastDto) {
+        detailsForecastMutableLiveData.postValue(responseForecast)
+    }
+
+    fun currentCity(): UiCityDto {
+        return detailsForecastMutableLiveData.value!!.convertToUiCityDto()
     }
 
     override fun onCleared() {

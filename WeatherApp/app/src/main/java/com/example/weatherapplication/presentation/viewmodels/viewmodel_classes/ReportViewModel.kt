@@ -3,10 +3,11 @@ package com.example.weatherapplication.presentation.viewmodels.viewmodel_classes
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.weatherapplication.data.database.models.forecast.Forecast
-import com.example.weatherapplication.domain.ReportingPeriod
 import com.example.weatherapplication.domain.interactors.interactors_interface.ReportInteractor
 import com.example.weatherapplication.presentation.common.SingleLiveEvent
+import com.example.weatherapplication.presentation.models.city.UiCityDto
+import com.example.weatherapplication.presentation.models.report.ReportPeriod
+import com.example.weatherapplication.presentation.models.report.request.UiRequestReportDto
 import com.example.weatherapplication.presentation.viewmodels.BaseViewModel
 
 class ReportViewModel(
@@ -29,15 +30,12 @@ class ReportViewModel(
     val errorMessage: LiveData<String>
         get() = errorMessageMutableLiveData
 
-    fun generateReport(forecast: Forecast, reportingPeriod: ReportingPeriod) {
+    fun generateReport(uiCityDto: UiCityDto, reportPeriod: ReportPeriod) {
         isLoadingMutableLiveData.postValue(true)
+
+        val uiRequestReportDto = createUiRequestReport(uiCityDto, reportPeriod)
         compositeDisposable.add(
-            interactor.generateReport(
-                cityName = forecast.cityName,
-                latitude = forecast.coordination.latitude,
-                longitude = forecast.coordination.longitude,
-                reportingPeriod = reportingPeriod
-            ).subscribe({
+            interactor.generateReport(uiRequestReportDto).subscribe({
                 generateReportIsCompletedSingleLiveEvent.postValue(true)
                 isLoadingMutableLiveData.postValue(false)
             }, {
@@ -49,7 +47,19 @@ class ReportViewModel(
 
     fun openReport() {
         reportFileMutableLiveData.postValue(
-            interactor.openReportFromCache()
+            interactor.openReportFromCache().reportString
+        )
+    }
+
+    private fun createUiRequestReport(
+        uiCityDto: UiCityDto,
+        reportPeriod: ReportPeriod
+    ): UiRequestReportDto {
+        return UiRequestReportDto(
+            cityName = uiCityDto.cityName,
+            latitude = uiCityDto.latitude,
+            longitude = uiCityDto.longitude,
+            reportPeriod = reportPeriod
         )
     }
 

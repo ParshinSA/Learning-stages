@@ -3,7 +3,6 @@ package com.example.weatherapplication.services
 import android.app.Notification
 import android.app.Service
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
@@ -11,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import com.example.weatherapplication.domain.interactors.interactors_interface.ForecastInteractor
 import com.example.weatherapplication.presentation.common.AppState
 import com.example.weatherapplication.presentation.ui.AppApplication
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class UpdateForecastService : Service() {
@@ -20,6 +20,9 @@ class UpdateForecastService : Service() {
 
     @Inject
     lateinit var appState: AppState
+
+    @Inject
+    lateinit var disposable: CompositeDisposable
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -46,11 +49,11 @@ class UpdateForecastService : Service() {
             startForeground(FOREGROUND_ID, createNotification())
         } else Log.d(TAG, "updateForecast: startStartedService")
 
-        interactor.updateForecast().subscribe({
-
-        },{
+        disposable.add(interactor.updateForecastFromService().subscribe({
+            Log.d(TAG, "updateForecast: completed")
+        }, {
             Log.d(TAG, "updateForecast: error $it")
-        })
+        }))
 
         if (checkSDK() && appState.isCollapsed) {
             stopForeground(true)

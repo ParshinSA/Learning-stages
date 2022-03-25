@@ -1,12 +1,13 @@
 package com.example.weatherapplication.domain.interactors
 
-import com.example.weatherapplication.data.database.models.report.FieldValue
-import com.example.weatherapplication.data.database.models.report.ReportData
-import com.example.weatherapplication.data.database.models.report.WeatherStatistic
-import com.example.weatherapplication.data.reporitories.ReportRepository
-import com.example.weatherapplication.domain.ReportingPeriod
 import com.example.weatherapplication.domain.interactors.interactors_interface.ReportInteractor
+import com.example.weatherapplication.domain.models.report.DomainReportDto
+import com.example.weatherapplication.domain.models.report.request.DomainRequestReportDto
+import com.example.weatherapplication.domain.models.report.response.DomainResponseReportDto
+import com.example.weatherapplication.domain.repository.ReportRepository
 import com.example.weatherapplication.presentation.common.toStringDoubleFormat
+import com.example.weatherapplication.presentation.models.report.ReportPeriod
+import com.example.weatherapplication.presentation.models.report.request.UiRequestReportDto
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -15,25 +16,16 @@ import java.util.*
 import javax.inject.Inject
 
 class ReportInteractorImpl @Inject constructor(
-    private val reportRepository: ReportRepository
+    private val repository: ReportRepository
 ) : ReportInteractor {
 
-    override fun generateReport(
-        cityName: String,
-        latitude: Double,
-        longitude: Double,
-        reportingPeriod: ReportingPeriod
-    ): Completable {
-        return requestReportData(
-            latitude = latitude,
-            longitude = longitude,
-            reportingPeriod = reportingPeriod
-        )
-            .map { reportData ->
+    override fun generateReport(uiRequestReportDto: UiRequestReportDto): Completable {
+        return requestRemoteReport(uiRequestReportDto)
+            .map { domainResponseReportDto ->
                 convertReportDataToReportString(
-                    cityName = cityName,
-                    reportingPeriod = reportingPeriod,
-                    reportData = reportData
+                    cityName = uiRequestReportDto.cityName,
+                    reportPeriod = uiRequestReportDto.reportPeriod,
+                    domainResponseReportDto = domainResponseReportDto
                 )
             }
             .flatMapCompletable { reportString ->
@@ -41,93 +33,94 @@ class ReportInteractorImpl @Inject constructor(
             }
     }
 
-    private fun requestReportData(
-        latitude: Double,
-        longitude: Double,
-        reportingPeriod: ReportingPeriod
-    ): Observable<ReportData> {
-        return Observable.fromIterable(0 until reportingPeriod.quantity)
+    private fun requestRemoteReport(
+        uiRequestReportDto: UiRequestReportDto
+    ): Observable<DomainResponseReportDto> {
+        return Observable.fromIterable(0 until uiRequestReportDto.reportPeriod.quantity)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .flatMap { step ->
+            .flatMap { stepTime ->
 
-                if (reportingPeriod.stringQuantity == ReportingPeriod.TEN_DAYS.stringQuantity) {
+                if (uiRequestReportDto.reportPeriod.stringQuantity == ReportPeriod.TEN_DAYS.stringQuantity) {
 
-                    val day = calculateDayStepDay(step)
-                    val month = calculateMonthStepDay(step)
+                    val day = calculateDayStepDay(stepTime)
+                    val month = calculateMonthStepDay(stepTime)
 
-                    reportRepository.requestReportToDay(
-                        latitude = latitude,
-                        longitude = longitude,
-                        day = day,
-                        month = month
+                    repository.requestReportToDay(
+                        DomainRequestReportDto(
+                            latitude = uiRequestReportDto.latitude,
+                            longitude = uiRequestReportDto.longitude,
+                            day = day,
+                            month = month
+                        )
                     )
 
                 } else {
-                    val month = calculateMonthStepMonth(step)
+                    val month = calculateMonthStepMonth(stepTime)
 
-                    reportRepository.requestReportToMonth(
-                        latitude = latitude,
-                        longitude = longitude,
-                        month = month
+                    repository.requestReportToMonth(
+                        DomainRequestReportDto(
+                            latitude = uiRequestReportDto.latitude,
+                            longitude = uiRequestReportDto.longitude,
+                            month = month
+                        )
                     )
                 }
             }
-            .map { statistical: WeatherStatistic ->
-                statistical.reportData
-            }
-            .buffer(reportingPeriod.quantity)
+            .buffer(uiRequestReportDto.reportPeriod.quantity)
             .map { listOfReports ->
-                calculationOfAverageReportData(listOfReports, reportingPeriod)
+                calculationOfAverageReportData(listOfReports, uiRequestReportDto.reportPeriod)
             }
     }
 
-    private fun saveInCache(report: String): Completable {
-        return reportRepository.saveInCache(report)
+    private fun saveInCache(domainReportDto: DomainReportDto): Completable {
+        return repository.saveInCache(domainReportDto)
     }
 
-    override fun openReportFromCache(): String {
-        return reportRepository.openReportFromCache()
+    override fun openReportFromCache(): DomainReportDto {
+        return repository.openReportFromCache()
     }
 
     private fun convertReportDataToReportString(
         cityName: String,
-        reportingPeriod: ReportingPeriod,
-        reportData: ReportData
-    ): String {
-        return "Город: $cityName\n" +
-                "Средние значения за период \"${reportingPeriod.stringQuantity}\":\n" +
-                "температура ${(reportData.temperature.medianValue - 273.15).toStringDoubleFormat()} °C\n" +
-                "влажность ${reportData.humidity.medianValue.toStringDoubleFormat()} %\n" +
-                "давление ${reportData.pressure.medianValue.toStringDoubleFormat()} гПа\n" +
-                "ветер ${reportData.wind.medianValue.toStringDoubleFormat()} м/с\n" +
-                "осадки ${reportData.precipitation.medianValue.toStringDoubleFormat()} мм"
-    }
-
-    private fun calculationOfAverageReportData(
-        listOfReports: List<ReportData>,
-        reportingPeriod: ReportingPeriod
-    ): ReportData {
-        val sumItemReportData = calculateSumHistoryData(listOfReports)
-
-        return ReportData(
-            temperature = FieldValue(sumItemReportData.temperature.medianValue / reportingPeriod.quantity),
-            pressure = FieldValue(sumItemReportData.pressure.medianValue / reportingPeriod.quantity),
-            humidity = FieldValue(sumItemReportData.humidity.medianValue / reportingPeriod.quantity),
-            wind = FieldValue(sumItemReportData.wind.medianValue / reportingPeriod.quantity),
-            precipitation = FieldValue(sumItemReportData.precipitation.medianValue / reportingPeriod.quantity),
+        reportPeriod: ReportPeriod,
+        domainResponseReportDto: DomainResponseReportDto
+    ): DomainReportDto {
+        return DomainReportDto(
+            reportString = "Город: $cityName\n" +
+                    "Средние значения за период \"${reportPeriod.stringQuantity}\":\n" +
+                    "температура ${(domainResponseReportDto.temperature - 273.15).toStringDoubleFormat()} °C\n" +
+                    "влажность ${domainResponseReportDto.humidity.toStringDoubleFormat()} %\n" +
+                    "давление ${domainResponseReportDto.pressure.toStringDoubleFormat()} гПа\n" +
+                    "ветер ${domainResponseReportDto.wind.toStringDoubleFormat()} м/с\n" +
+                    "осадки ${domainResponseReportDto.precipitation.toStringDoubleFormat()} мм"
         )
     }
 
-    private fun calculateSumHistoryData(list: List<ReportData>): ReportData {
+    private fun calculationOfAverageReportData(
+        listOfReports: List<DomainResponseReportDto>,
+        reportPeriod: ReportPeriod
+    ): DomainResponseReportDto {
+        val sumItemReportData = calculateSumHistoryData(listOfReports)
+
+        return DomainResponseReportDto(
+            temperature = sumItemReportData.temperature / reportPeriod.quantity,
+            pressure = sumItemReportData.pressure / reportPeriod.quantity,
+            humidity = sumItemReportData.humidity / reportPeriod.quantity,
+            wind = sumItemReportData.wind / reportPeriod.quantity,
+            precipitation = sumItemReportData.precipitation / reportPeriod.quantity,
+        )
+    }
+
+    private fun calculateSumHistoryData(list: List<DomainResponseReportDto>): DomainResponseReportDto {
         return Observable.fromIterable(list)
-            .scan { accumulator: ReportData, itemDataHistory: ReportData ->
-                ReportData(
-                    temperature = FieldValue(accumulator.temperature.medianValue + itemDataHistory.temperature.medianValue),
-                    pressure = FieldValue(accumulator.pressure.medianValue + itemDataHistory.pressure.medianValue),
-                    humidity = FieldValue(accumulator.humidity.medianValue + itemDataHistory.humidity.medianValue),
-                    wind = FieldValue(accumulator.wind.medianValue + itemDataHistory.wind.medianValue),
-                    precipitation = FieldValue(accumulator.precipitation.medianValue + itemDataHistory.precipitation.medianValue)
+            .scan { accumulator: DomainResponseReportDto, itemDataHistory: DomainResponseReportDto ->
+                DomainResponseReportDto(
+                    temperature = accumulator.temperature + itemDataHistory.temperature,
+                    pressure = accumulator.pressure + itemDataHistory.pressure,
+                    humidity = accumulator.humidity + itemDataHistory.humidity,
+                    wind = accumulator.wind + itemDataHistory.wind,
+                    precipitation = accumulator.precipitation + itemDataHistory.precipitation
                 )
             }.blockingLast()
     }

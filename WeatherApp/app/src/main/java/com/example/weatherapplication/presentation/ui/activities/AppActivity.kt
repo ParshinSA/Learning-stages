@@ -41,7 +41,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     }
 
     private fun startBackgroundUpdateForecast() {
-        forecastInteractor.periodUpdateForecasts()
+        forecastInteractor.updateForecast()
     }
 
     private fun unsubscribeAll() {

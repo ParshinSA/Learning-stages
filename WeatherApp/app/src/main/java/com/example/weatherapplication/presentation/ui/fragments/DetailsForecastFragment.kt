@@ -10,15 +10,12 @@ import androidx.navigation.ui.NavigationUI.navigateUp
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
-import com.example.weatherapplication.data.database.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentDetailsForecastBinding
+import com.example.weatherapplication.presentation.models.forecast.details.UiDetailsForecastDto
 import com.example.weatherapplication.presentation.ui.AppApplication
-import com.example.weatherapplication.presentation.common.convertToDate
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_classes.DetailsForecastViewModel
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_factory.DetailsForecastViewModelFactory
 import javax.inject.Inject
-import kotlin.math.round
-import kotlin.math.roundToInt
 
 
 class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
@@ -28,7 +25,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     private val detailsViewModel: DetailsForecastViewModel by viewModels { detailsViewModelFactory }
 
     private val binding by viewBinding(FragmentDetailsForecastBinding::bind)
-    private lateinit var currentForecast: Forecast
+    private lateinit var currentForecast: UiDetailsForecastDto
 
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
@@ -47,7 +44,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
 
     private fun actionInFragment() {
         sendForecastInViewModel()
-        generateReportWeatherInCity()
+        transitionInReportFragment()
         observeData()
         backButtonClickListener()
     }
@@ -82,33 +79,32 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     private fun setTimeSunriseAndSunset() {
         binding.tvValueSunrise.text = this.getString(
             R.string.DetailsForecastFragment_date_text,
-            currentForecast.sys.sunrise.convertToDate("HH:mm")
+            currentForecast.sunrise
         )
         binding.tvValueSunset.text = this.getString(
             R.string.DetailsForecastFragment_date_text,
-            currentForecast.sys.sunset.convertToDate("HH:mm")
+            currentForecast.sunset
         )
     }
 
     private fun setVisibility() {
         binding.tvValueVisibility.text = this.getString(
             R.string.DetailsForecastFragment_text_km,
-            currentForecast.visibility / 1000L
+            currentForecast.visibility
         )
     }
 
     private fun setHumidity() {
-        binding.tvValueHumidity.text =
-            this.getString(
-                R.string.DetailsForecastFragment_text_percent,
-                currentForecast.main.humidity
-            )
+        binding.tvValueHumidity.text = this.getString(
+            R.string.DetailsForecastFragment_text_percent,
+            currentForecast.humidity
+        )
     }
 
     private fun setPressure() {
         binding.tvValuePressure.text = this.getString(
             R.string.DetailsForecastFragment_text_pressure,
-            currentForecast.main.pressure
+            currentForecast.pressure
         )
     }
 
@@ -118,19 +114,18 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setInfoTextWind() {
-        binding.tvValueWind.text =
-            this.getString(
-                R.string.DetailsForecastFragment_text_ms,
-                currentForecast.wind.speed.roundToInt()
-            )
+        binding.tvValueWind.text = this.getString(
+            R.string.DetailsForecastFragment_text_ms,
+            currentForecast.windSpeed
+        )
     }
 
     private fun rotationIconWind() {
-        binding.imvIcWindRoute.animate().rotation(currentForecast.wind.routeDegrees.toFloat())
+        binding.imvIcWindRoute.animate().rotation(currentForecast.windDirectionDegrees)
     }
 
     private fun setDescription() {
-        binding.tvDescription.text = currentForecast.weather[0].description
+        binding.tvDescription.text = currentForecast.description
     }
 
     private fun setIcon() {
@@ -138,7 +133,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
             .load(
                 this.getString(
                     R.string.URL_loading_image_weather,
-                    currentForecast.weather[0].iconId
+                    currentForecast.iconId
                 )
             )
             .placeholder(R.drawable.ic_cloud)
@@ -147,21 +142,21 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun setTemp() {
-        binding.tvValueTemp.text = round(currentForecast.main.temperature).toInt().toString()
+        binding.tvValueTemp.text = currentForecast.temperature
     }
 
     private fun setNameCity() {
         binding.tvCityName.text = this.getString(
             R.string.DetailsForecastFragment_text_name_city,
             currentForecast.cityName,
-            currentForecast.sys.country
+            currentForecast.country
         )
     }
 
     private fun setTime() {
         binding.tvDateTimeLastUpdate.text = this.getString(
             R.string.DetailsForecastFragment_updateText_text,
-            currentForecast.timeForecast.convertToDate("dd MMM yyyy HH:mm")
+            currentForecast.forecastTime
         )
     }
 
@@ -175,7 +170,8 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
         detailsViewModel.setDataDetailsForecastInView(currentForecast)
     }
 
-    private fun generateReportWeatherInCity() {
+    private fun transitionInReportFragment() {
+        val currentCity = detailsViewModel.currentCity()
         binding.fabOpenReport.visibility = View.VISIBLE
 
         binding.fabOpenReport.setOnClickListener {
@@ -183,7 +179,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
 
             val bundle = Bundle()
 
-            bundle.putParcelable(KEY_FORECAST, currentForecast)
+            bundle.putParcelable(KEY_FORECAST, currentCity)
 
             findNavController().navigate(
                 R.id.action_detailsForecastFragment_to_weatherReportFragment,

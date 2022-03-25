@@ -14,9 +14,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.navigateUp
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
-import com.example.weatherapplication.data.database.models.forecast.Forecast
 import com.example.weatherapplication.databinding.FragmentWeatherReportBinding
-import com.example.weatherapplication.domain.ReportingPeriod
+import com.example.weatherapplication.presentation.models.city.UiCityDto
+import com.example.weatherapplication.presentation.models.report.ReportPeriod
 import com.example.weatherapplication.presentation.ui.AppApplication
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_classes.ReportViewModel
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_factory.ReportViewModelFactory
@@ -33,7 +33,8 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
 
     private var snackbar: Snackbar? = null
     private var dialog: AlertDialog? = null
-    private val currentForecast: Forecast
+
+    private val currentCity: UiCityDto
         get() = requireArguments().getParcelable(DetailsForecastFragment.KEY_FORECAST)
             ?: error("$TAG No default forecast")
 
@@ -124,8 +125,8 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
             val userChoice = binding.tilContainerPeriod.editText?.text.toString()
 
             reportViewModel.generateReport(
-                currentForecast,
-                ReportingPeriod.values().filter { it.stringQuantity == userChoice }[0]
+                currentCity,
+                ReportPeriod.values().filter { it.stringQuantity == userChoice }[0]
             )
         }
     }
@@ -139,8 +140,8 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     private fun setSelectedCityName() {
         binding.tvCityName.text = this.getString(
             R.string.ReportFragment_city_name_and_country,
-            currentForecast.cityName,
-            currentForecast.sys.country
+            currentCity.cityName,
+            currentCity.country
         )
     }
 
@@ -156,7 +157,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
             ArrayAdapter(
                 requireContext(),
                 R.layout.item_period_list,
-                ReportingPeriod.values().map { it.stringQuantity }
+                ReportPeriod.values().map { it.stringQuantity }
             )
         )
     }

@@ -1,7 +1,7 @@
 package com.example.weatherapplication.data.networking.api
 
-import com.example.weatherapplication.data.database.models.report.WeatherStatistic
-import com.example.weatherapplication.presentation.common.contracts.NetworkContract
+import com.example.weatherapplication.data.networking.NetworkContract
+import com.example.weatherapplication.data.networking.models.report.response.RemoteResponseReportDto
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -14,7 +14,7 @@ interface ReportApi {
         @Query("lon") longitude: Double,
         @Query("month") month: Int,
         @Query("appid") apiKey: String = NetworkContract.API_KEY
-    ): Observable<WeatherStatistic>
+    ): Observable<RemoteResponseReportDto>
 
     @GET("data/2.5/aggregated/day")
     fun requestReportToDay(
@@ -23,6 +23,6 @@ interface ReportApi {
         @Query("day") day: Int,
         @Query("month") month: Int,
         @Query("appid") apiKey: String = NetworkContract.API_KEY
-    ): Observable<WeatherStatistic>
+    ): Observable<RemoteResponseReportDto>
 
 }

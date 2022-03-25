@@ -3,10 +3,7 @@ package com.example.weatherapplication.di.modules
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.work.WorkManager
-import com.example.weatherapplication.data.data_source.shared_preference.SharedPreferenceDataSource
-import com.example.weatherapplication.domain.datasource_impl.shared_preference.SharedPreferenceDataSourceImpl
-import com.example.weatherapplication.presentation.common.contracts.SharedPrefsContract
-import dagger.Binds
+import com.example.weatherapplication.data.shared_prefs.SharedPrefsContract
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable

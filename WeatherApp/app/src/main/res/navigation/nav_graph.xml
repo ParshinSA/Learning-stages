@@ -36,6 +36,6 @@
     <fragment
         android:id="@+id/addCityFragment"
         tools:layout="@layout/fragment_search_city"
-        android:name="com.example.weatherapplication.presentation.ui.fragments.CustomCityFragment"
+        android:name="com.example.weatherapplication.presentation.ui.fragments.SearchCityFragment"
         android:label="AddCityFragment" />
 </navigation>
