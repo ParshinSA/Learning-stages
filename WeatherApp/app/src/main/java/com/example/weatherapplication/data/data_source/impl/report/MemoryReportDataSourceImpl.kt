@@ -2,7 +2,7 @@ package com.example.weatherapplication.data.data_source.impl.report
 
 import android.content.Context
 import com.example.weatherapplication.data.data_source.interf.report.MemoryReportDataSource
-import com.example.weatherapplication.domain.models.report.DomainReportContract
+import com.example.weatherapplication.data.memory.ReportContract
 import io.reactivex.Completable
 import java.io.File
 import javax.inject.Inject
@@ -13,7 +13,7 @@ class MemoryReportDataSourceImpl @Inject constructor(
 
     override fun openReportFromCache(): String {
         val folder = context.cacheDir
-        val file = File(folder, DomainReportContract.NAME_FILE)
+        val file = File(folder, ReportContract.NAME_FILE)
         file.inputStream().bufferedReader().use {
             return it.readText()
         }
@@ -21,7 +21,7 @@ class MemoryReportDataSourceImpl @Inject constructor(
 
     override fun saveInCache(report: String): Completable {
         return Completable.create { subscriber ->
-            val file = File(context.cacheDir, DomainReportContract.NAME_FILE)
+            val file = File(context.cacheDir, ReportContract.NAME_FILE)
             try {
                 file.outputStream().buffered().use {
                     it.write(report.toByteArray())

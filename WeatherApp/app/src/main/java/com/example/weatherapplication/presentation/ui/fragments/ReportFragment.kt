@@ -15,7 +15,7 @@ import androidx.navigation.ui.NavigationUI.navigateUp
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentWeatherReportBinding
-import com.example.weatherapplication.presentation.models.city.UiCityDto
+import com.example.weatherapplication.presentation.models.city.UiCity
 import com.example.weatherapplication.presentation.models.report.ReportPeriod
 import com.example.weatherapplication.presentation.ui.AppApplication
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_classes.ReportViewModel
@@ -34,7 +34,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
     private var snackbar: Snackbar? = null
     private var dialog: AlertDialog? = null
 
-    private val currentCity: UiCityDto
+    private val currentCity: UiCity
         get() = requireArguments().getParcelable(DetailsForecastFragment.KEY_FORECAST)
             ?: error("$TAG No default forecast")
 

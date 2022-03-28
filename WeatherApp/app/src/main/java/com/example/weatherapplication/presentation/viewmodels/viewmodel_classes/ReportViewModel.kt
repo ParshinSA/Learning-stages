@@ -4,10 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.weatherapplication.domain.interactors.interactors_interface.ReportInteractor
+import com.example.weatherapplication.domain.models.report.DomainRequestReport
 import com.example.weatherapplication.presentation.common.SingleLiveEvent
-import com.example.weatherapplication.presentation.models.city.UiCityDto
+import com.example.weatherapplication.presentation.models.city.UiCity
 import com.example.weatherapplication.presentation.models.report.ReportPeriod
-import com.example.weatherapplication.presentation.models.report.request.UiRequestReportDto
+import com.example.weatherapplication.presentation.models.report.request.UiRequestReport
+import com.example.weatherapplication.presentation.models.report.request.convertToDomainRequestReport
 import com.example.weatherapplication.presentation.viewmodels.BaseViewModel
 
 class ReportViewModel(
@@ -30,12 +32,12 @@ class ReportViewModel(
     val errorMessage: LiveData<String>
         get() = errorMessageMutableLiveData
 
-    fun generateReport(uiCityDto: UiCityDto, reportPeriod: ReportPeriod) {
+    fun generateReport(uiCity: UiCity, reportPeriod: ReportPeriod) {
         isLoadingMutableLiveData.postValue(true)
 
-        val uiRequestReportDto = createUiRequestReport(uiCityDto, reportPeriod)
+        val uiRequestReport = createUiRequestReport(uiCity, reportPeriod)
         compositeDisposable.add(
-            interactor.generateReport(uiRequestReportDto).subscribe({
+            interactor.generateReport(uiRequestReport).subscribe({
                 generateReportIsCompletedSingleLiveEvent.postValue(true)
                 isLoadingMutableLiveData.postValue(false)
             }, {
@@ -52,15 +54,15 @@ class ReportViewModel(
     }
 
     private fun createUiRequestReport(
-        uiCityDto: UiCityDto,
+        uiCity: UiCity,
         reportPeriod: ReportPeriod
-    ): UiRequestReportDto {
-        return UiRequestReportDto(
-            cityName = uiCityDto.cityName,
-            latitude = uiCityDto.latitude,
-            longitude = uiCityDto.longitude,
+    ): DomainRequestReport {
+        return UiRequestReport(
+            cityName = uiCity.cityName,
+            latitude = uiCity.latitude,
+            longitude = uiCity.longitude,
             reportPeriod = reportPeriod
-        )
+        ).convertToDomainRequestReport()
     }
 
     override fun onCleared() {

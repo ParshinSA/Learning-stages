@@ -14,12 +14,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
-import com.example.weatherapplication.data.networking.models.forecast.response.RemoteResponseForecastDto
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
-import com.example.weatherapplication.presentation.models.forecast.short.UiShortForecastDto
+import com.example.weatherapplication.presentation.models.forecast.short_forecast.UiShortForecast
 import com.example.weatherapplication.presentation.ui.AppApplication
 import com.example.weatherapplication.presentation.ui.common.ItemDecoration
-import com.example.weatherapplication.presentation.ui.common.ShortForecastListAdapterRV
+import com.example.weatherapplication.presentation.ui.common.ShortForecastListAdapter
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_classes.ShortForecastViewModel
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_factory.ShortForecastViewModelFactory
 import javax.inject.Inject
@@ -31,7 +30,7 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
     private val shortViewModel: ShortForecastViewModel by viewModels { shortForecastViewModelFactory }
 
     private val binding by viewBinding(FragmentShortForecastListBinding::bind)
-    private lateinit var adapterRVShort: ShortForecastListAdapterRV
+    private lateinit var adapterRVShort: ShortForecastListAdapter
     private var myDialog: AlertDialog? = null
 
     override fun onAttach(context: Context) {
@@ -50,6 +49,7 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
         addNewCity()
         updateForecastsSwipe()
         observeData()
+        getForecastList()
     }
 
     private fun inject() {
@@ -102,7 +102,7 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
     private fun updateForecastsSwipe() {
         binding.swlSwipeContainer.setOnRefreshListener {
-            Log.d(TAG, "refreshForecastListSwipe: start")
+            Log.d(TAG, "swipe: start")
             getForecastList()
         }
     }
@@ -120,10 +120,9 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
             Log.d(TAG, "observeData: forecastListLiveData $listForecast")
             updateForecastListInRV(listForecast)
         }
-
     }
 
-    private fun updateForecastListInRV(listForecast: List<UiShortForecastDto>) {
+    private fun updateForecastListInRV(listForecast: List<UiShortForecast>) {
         if (listForecast.isEmpty())
             changeStateInfoView(false)
         else {
@@ -144,8 +143,8 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
     private fun initRV() {
         adapterRVShort =
-            ShortForecastListAdapterRV { coordinationCity: Pair<Double, Double>, currentView: View ->
-                transitionInDetailsForecastFragment(coordinationCity, currentView)
+            ShortForecastListAdapter { coordinationCity: Pair<Double, Double>, currentView: View ->
+                transitionInDetailsFragment(coordinationCity, currentView)
             }
 
         with(binding.rvListCity) {
@@ -156,8 +155,13 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
         }
     }
 
-    private fun transitionInDetailsForecastFragment(coordinationCity: Pair<Double, Double>, currentView: View) {
+    private fun transitionInDetailsFragment(
+        coordinationCity: Pair<Double, Double>,
+        currentView: View
+    ) {
+
         val detailsForecast = shortViewModel.getDetailForecast(coordinationCity)
+        Log.d(TAG, "transitionInDetailsFragment: $detailsForecast")
         val bundle = Bundle()
         bundle.putParcelable(KEY_FORECAST, detailsForecast)
 

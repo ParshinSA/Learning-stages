@@ -2,11 +2,11 @@ package com.example.weatherapplication.data.reporitories
 
 import com.example.weatherapplication.data.data_source.interf.custom_cities.RemoteCityDataSource
 import com.example.weatherapplication.data.data_source.interf.custom_cities.RoomCityDataSource
+import com.example.weatherapplication.data.database.models.city.convertToRoomCityDto
+import com.example.weatherapplication.data.networking.models.city.request.convertToRemoteRequestSearchByCityNameDto
 import com.example.weatherapplication.data.networking.models.city.response.convertToDomainCityDto
-import com.example.weatherapplication.domain.models.city.request.DomainRequestSearchByCityNameDto
-import com.example.weatherapplication.domain.models.city.response.DomainCityDto
-import com.example.weatherapplication.domain.models.city.response.convertToRoomCityDto
-import com.example.weatherapplication.domain.models.user_input.convertToRemoteRequestSearchByCityNameDto
+import com.example.weatherapplication.domain.models.city.DomainCity
+import com.example.weatherapplication.domain.models.city.DomainRequestSearchByCityNameDto
 import com.example.weatherapplication.domain.repository.CityRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -24,9 +24,9 @@ class CityRepositoryImpl @Inject constructor(
      * конвертируем:
      * DomainCityDto -> databaseCityDto
      * */
-    override fun addCity(domainCityDto: DomainCityDto): Completable {
+    override fun addCity(domainCity: DomainCity): Completable {
         return roomDataSource.addCity(
-            roomCityDto = domainCityDto.convertToRoomCityDto()
+            roomCityDto = domainCity.convertToRoomCityDto()
         )
     }
 
@@ -39,7 +39,7 @@ class CityRepositoryImpl @Inject constructor(
      * */
     override fun searchByCityName(
         domainRequestSearchByCityNameDto: DomainRequestSearchByCityNameDto
-    ): Observable<List<DomainCityDto>> {
+    ): Observable<List<DomainCity>> {
         return remoteDataSource
             .searchCityByName(
                 remoteRequestSearchByCityNameDto = domainRequestSearchByCityNameDto.convertToRemoteRequestSearchByCityNameDto()

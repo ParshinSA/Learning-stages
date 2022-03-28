@@ -2,12 +2,12 @@ package com.example.weatherapplication.di.modules
 
 import android.content.Context
 import androidx.room.Room
-import com.example.weatherapplication.data.database.description_db.custom_cities_db.CustomCitiesDao
-import com.example.weatherapplication.data.database.description_db.custom_cities_db.CustomCitiesDbModels
+import com.example.weatherapplication.data.database.description_db.city_db.CityDao
+import com.example.weatherapplication.data.database.description_db.city_db.CityDbContract
+import com.example.weatherapplication.data.database.description_db.city_db.CityDbModels
 import com.example.weatherapplication.data.database.description_db.forecast_db.ForecastDao
-import com.example.weatherapplication.data.database.description_db.forecast_db.ForecastDbModels
-import com.example.weatherapplication.data.database.description_db.custom_cities_db.CustomCitiesContract
 import com.example.weatherapplication.data.database.description_db.forecast_db.ForecastDbContract
+import com.example.weatherapplication.data.database.description_db.forecast_db.ForecastDbModels
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -30,11 +30,11 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideCustomCitiesDao(context: Context): CustomCitiesDao {
+    fun provideCustomCitiesDao(context: Context): CityDao {
         return Room.databaseBuilder(
             context,
-            CustomCitiesDbModels::class.java,
-            CustomCitiesContract.Database.NAME
+            CityDbModels::class.java,
+            CityDbContract.Database.NAME
         )
             .fallbackToDestructiveMigration()
             .build()

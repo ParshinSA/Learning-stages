@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.weatherapplication.data.database.models.forecast.RoomForecastDto
-import com.example.weatherapplication.data.database.models.forecast.RoomForecastDtoContract.TableDatabase
 import io.reactivex.Completable
 import io.reactivex.Observable
 
@@ -15,7 +14,7 @@ interface ForecastDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertForecast(roomForecastDto: RoomForecastDto): Completable
 
-    @Query("SELECT * FROM ${TableDatabase.TABLE_NAME}")
+    @Query("SELECT * FROM ${ForecastDbContract.Database.NAME}")
     fun getListForecast(): Observable<List<RoomForecastDto>>
 
 }

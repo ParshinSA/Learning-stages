@@ -14,7 +14,7 @@ interface InteractorModule {
 
     @Suppress("FunctionName")
     @Binds
-    fun bindCustomCitiesInteractorImpl_to_CustomCitiesInteractor(
+    fun bindCityInteractorImpl_to_CityInteractor(
         interactor: CityInteractorImpl
     ): CityInteractor
 
@@ -29,6 +29,4 @@ interface InteractorModule {
     fun bindReportInteractorImpl_to_ReportInteractor(
         interactor: ReportInteractorImpl
     ): ReportInteractor
-
-
 }

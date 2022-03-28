@@ -1,6 +1,6 @@
-package com.example.weatherapplication.domain.models.report.response
+package com.example.weatherapplication.domain.models.report
 
-data class DomainResponseReportDto(
+data class DomainResponseReport(
     val temperature: Double,
     val pressure: Double,
     val humidity: Double,

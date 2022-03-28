@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.weatherapplication.R
 import com.example.weatherapplication.domain.interactors.interactors_interface.ForecastInteractor
-import com.example.weatherapplication.domain.models.forecast.DomainForecastDto
-import com.example.weatherapplication.domain.models.forecast.convertToUiDetailsForecastDto
-import com.example.weatherapplication.domain.models.forecast.convertToUiShortForecastDto
+import com.example.weatherapplication.domain.models.forecast.DomainForecast
 import com.example.weatherapplication.presentation.common.SingleLiveEvent
-import com.example.weatherapplication.presentation.models.forecast.details.UiDetailsForecastDto
-import com.example.weatherapplication.presentation.models.forecast.short.UiShortForecastDto
+import com.example.weatherapplication.presentation.models.forecast.details_forecast.UiDetailsForecast
+import com.example.weatherapplication.presentation.models.forecast.details_forecast.convertToUiDetailsForecast
+import com.example.weatherapplication.presentation.models.forecast.short_forecast.UiShortForecast
+import com.example.weatherapplication.presentation.models.forecast.short_forecast.convertToUiShortForecast
 import com.example.weatherapplication.presentation.ui.common.ResourcesProvider
 import com.example.weatherapplication.presentation.viewmodels.BaseViewModel
 import java.text.SimpleDateFormat
@@ -21,14 +21,11 @@ class ShortForecastViewModel(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
-    private lateinit var listDomainForecastDto: List<DomainForecastDto>
+    private lateinit var listDomainForecast: List<DomainForecast>
 
-    private val forecastListMutableLiveData = MutableLiveData<List<UiShortForecastDto>>()
-    val forecastListLiveData: LiveData<List<UiShortForecastDto>>
-        get() {
-            getForecastList()
-            return forecastListMutableLiveData
-        }
+    private val forecastListMutableLiveData = MutableLiveData<List<UiShortForecast>>()
+    val forecastListLiveData: LiveData<List<UiShortForecast>>
+        get() = forecastListMutableLiveData
 
     private val errorMessageMutableLiveData = SingleLiveEvent<String>()
     val errorMessageLiveData: LiveData<String>
@@ -40,13 +37,22 @@ class ShortForecastViewModel(
         compositeDisposable.add(
             interactor.getListForecastFromDatabase()
                 .subscribe({ listDomainForecast ->
-                    listDomainForecastDto = listDomainForecast
-                    val listShortForecastDto =
-                        listDomainForecast.map { it.convertToUiShortForecastDto() }
+                    Log.d(TAG, "listDomain $listDomainForecast: ")
+                    if (listDomainForecast.isEmpty()) {
+                        forecastListMutableLiveData.postValue(emptyList())
+                    } else {
+                        this.listDomainForecast = listDomainForecast
+                        val listShortForecast =
+                            listDomainForecast.map { it.convertToUiShortForecast() }
 
-                    Log.d(TAG, "update forecastListMutableLiveData: completed")
+                        Log.d(
+                            TAG,
+                            "update forecastListMutableLiveData: completed $listShortForecast"
+                        )
 
-                    forecastListMutableLiveData.postValue(listShortForecastDto)
+                        forecastListMutableLiveData.postValue(listShortForecast)
+                    }
+
                 },
                     {
                         Log.d(TAG, "update forecastListMutableLiveData: error $it")
@@ -63,16 +69,13 @@ class ShortForecastViewModel(
         isLoadingMutableLiveData.postValue(false)
     }
 
-    fun getLastUpdateTimeString(): String { // TODO: 25.03.2022 return String?
+    fun getLastUpdateTimeString(): String {
         val lastTimeUpdate = interactor.getLastUpdateTime().time
         val dateFormat = Date(lastTimeUpdate)
-        val sdf =
-            SimpleDateFormat(
-                resourcesProvider.getString(R.string.ShortForecastListFragment_time_format_ddMMMMHHmmss),
-                Locale("ru")
-            ).format(dateFormat)
-
-        return sdf
+        return SimpleDateFormat(
+            resourcesProvider.getString(R.string.ShortForecastListFragment_time_format_ddMMMMHHmmss),
+            Locale("ru")
+        ).format(dateFormat)
     }
 
     fun errorMessage(message: String) {
@@ -84,11 +87,11 @@ class ShortForecastViewModel(
         super.onCleared()
     }
 
-    fun getDetailForecast(coordinationCity: Pair<Double, Double>): UiDetailsForecastDto {
-        return listDomainForecastDto.first { domainForecastDto ->
+    fun getDetailForecast(coordinationCity: Pair<Double, Double>): UiDetailsForecast {
+        return listDomainForecast.first { domainForecastDto ->
             domainForecastDto.latitude == coordinationCity.first &&
                     domainForecastDto.longitude == coordinationCity.second
-        }.convertToUiDetailsForecastDto()
+        }.convertToUiDetailsForecast()
     }
 
     companion object {

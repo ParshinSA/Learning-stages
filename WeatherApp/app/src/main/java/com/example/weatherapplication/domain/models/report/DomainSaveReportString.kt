@@ -1,5 +1,5 @@
 package com.example.weatherapplication.domain.models.report
 
-data class DomainReportDto(
+data class DomainSaveReportString(
     val reportString: String
 )

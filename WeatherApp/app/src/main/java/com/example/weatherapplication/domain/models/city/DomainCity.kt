@@ -1,6 +1,6 @@
-package com.example.weatherapplication.domain.models.city.response
+package com.example.weatherapplication.domain.models.city
 
-data class DomainCityDto(
+data class DomainCity(
     val name: String,
     val latitude: Double,
     val longitude: Double,

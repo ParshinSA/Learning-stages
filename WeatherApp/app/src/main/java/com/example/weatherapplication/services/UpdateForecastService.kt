@@ -49,7 +49,8 @@ class UpdateForecastService : Service() {
             startForeground(FOREGROUND_ID, createNotification())
         } else Log.d(TAG, "updateForecast: startStartedService")
 
-        disposable.add(interactor.updateForecastFromService().subscribe({
+        disposable.add(
+            interactor.updateForecastFromService().subscribe({
             Log.d(TAG, "updateForecast: completed")
         }, {
             Log.d(TAG, "updateForecast: error $it")

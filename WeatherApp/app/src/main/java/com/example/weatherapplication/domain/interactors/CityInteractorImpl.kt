@@ -1,8 +1,8 @@
 package com.example.weatherapplication.domain.interactors
 
 import com.example.weatherapplication.domain.interactors.interactors_interface.CityInteractor
-import com.example.weatherapplication.domain.models.city.request.DomainRequestSearchByCityNameDto
-import com.example.weatherapplication.domain.models.city.response.DomainCityDto
+import com.example.weatherapplication.domain.models.city.DomainCity
+import com.example.weatherapplication.domain.models.city.DomainRequestSearchByCityNameDto
 import com.example.weatherapplication.domain.repository.CityRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -13,9 +13,9 @@ class CityInteractorImpl @Inject constructor(
     private val repository: CityRepository
 ) : CityInteractor {
 
-    override fun addCityInDatabase(domainCityDto: DomainCityDto): Completable {
+    override fun addCityInDatabase(domainCity: DomainCity): Completable {
         return repository.addCity(
-            domainCityDto = domainCityDto
+            domainCity = domainCity
         )
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
@@ -23,7 +23,7 @@ class CityInteractorImpl @Inject constructor(
 
     override fun searchByCityName(
         domainRequestSearchByCityNameDto: DomainRequestSearchByCityNameDto
-    ): Observable<List<DomainCityDto>> {
+    ): Observable<List<DomainCity>> {
         return repository.searchByCityName(
             domainRequestSearchByCityNameDto = domainRequestSearchByCityNameDto
         )

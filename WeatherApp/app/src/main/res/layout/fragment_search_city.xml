@@ -21,7 +21,7 @@
         app:layout_constraintTop_toBottomOf="@id/tbSearchCity"
         android:layout_width="match_parent"
         android:text="@string/SearchCityFragment_Text_no_result"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvResultSearchCity"

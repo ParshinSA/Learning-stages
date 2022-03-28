@@ -1,10 +1,10 @@
-package com.example.weatherapplication.presentation.models.forecast.details
+package com.example.weatherapplication.presentation.models.forecast.details_forecast
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class UiDetailsForecastDto(
+data class UiDetailsForecast(
     val latitude: Double,
     val longitude: Double,
     val temperature: String,

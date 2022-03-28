@@ -48,7 +48,7 @@
         <item>Три месяца</item>
     </string-array>
 
-<!--    SearchCityFragment-->
+    <!--    SearchCityFragment-->
     <string name="SearchCityFragment_title_toolbar">Поиск города</string>
     <string name="SearchCityFragment_search_in_toolbar">Search_city</string>
     <string name="SearchCityFragment_Text_no_result">Результатов нет</string>

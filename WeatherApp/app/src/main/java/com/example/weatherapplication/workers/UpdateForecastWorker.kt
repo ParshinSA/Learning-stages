@@ -7,8 +7,8 @@ import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.weatherapplication.presentation.common.AppState
-import com.example.weatherapplication.services.UpdateForecastService
 import com.example.weatherapplication.presentation.ui.AppApplication
+import com.example.weatherapplication.services.UpdateForecastService
 import javax.inject.Inject
 
 class UpdateForecastWorker(
@@ -37,7 +37,7 @@ class UpdateForecastWorker(
         try {
             val intentUpdateService = Intent(context, UpdateForecastService::class.java)
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 context.startService(intentUpdateService)
                 return
             }

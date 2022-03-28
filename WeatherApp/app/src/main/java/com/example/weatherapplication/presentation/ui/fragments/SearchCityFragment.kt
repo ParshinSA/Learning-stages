@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentSearchCityBinding
-import com.example.weatherapplication.domain.models.city.response.DomainCityDto
+import com.example.weatherapplication.domain.models.city.DomainCity
 import com.example.weatherapplication.presentation.ui.AppApplication
 import com.example.weatherapplication.presentation.ui.common.ItemDecoration
 import com.example.weatherapplication.presentation.ui.common.SearchCityAdapterRV
@@ -25,6 +25,7 @@ import javax.inject.Inject
 
 
 class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
+
     @Inject
     lateinit var searchViewModelFactory: SearchCityViewModelFactory
     private val customViewModel: CityViewModel by viewModels { searchViewModelFactory }
@@ -98,7 +99,7 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
     }
 
     private fun initRv() {
-        searchCityAdapterRV = SearchCityAdapterRV { city: DomainCityDto ->
+        searchCityAdapterRV = SearchCityAdapterRV { city: DomainCity ->
             addCity(city)
         }
 
@@ -110,11 +111,11 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
         }
     }
 
-    private fun addCity(city: DomainCityDto) {
+    private fun addCity(city: DomainCity) {
         customViewModel.addCity(city)
     }
 
-    private fun showResultSearchCity(cityList: List<DomainCityDto>) {
+    private fun showResultSearchCity(cityList: List<DomainCity>) {
         searchCityAdapterRV.submitList(cityList)
     }
 

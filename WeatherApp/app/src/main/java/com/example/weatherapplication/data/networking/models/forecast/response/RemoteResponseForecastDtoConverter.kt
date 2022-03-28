@@ -1,9 +1,9 @@
 package com.example.weatherapplication.data.networking.models.forecast.response
 
-import com.example.weatherapplication.domain.models.forecast.DomainForecastDto
+import com.example.weatherapplication.domain.models.forecast.DomainForecast
 
-fun RemoteResponseForecastDto.convertToDomainForecastDto(): DomainForecastDto {
-    return DomainForecastDto(
+fun RemoteResponseForecastDto.convertToDomainForecastDto(): DomainForecast {
+    return DomainForecast(
         latitude = coordination.latitude,
         longitude = coordination.longitude,
         temperature = main.temperature,

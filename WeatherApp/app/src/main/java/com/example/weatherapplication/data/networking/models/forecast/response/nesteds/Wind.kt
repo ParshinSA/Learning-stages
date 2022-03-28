@@ -8,6 +8,6 @@ data class Wind(
     val speed: Double,
 
     @SerializedName("deg")
-    val routeDegrees: Int
+    val routeDegrees: Float
 )
 

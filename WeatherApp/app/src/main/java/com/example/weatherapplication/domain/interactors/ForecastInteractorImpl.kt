@@ -1,10 +1,11 @@
 package com.example.weatherapplication.domain.interactors
 
 import android.content.Context
+import android.util.Log
 import androidx.work.*
 import com.example.weatherapplication.domain.interactors.interactors_interface.ForecastInteractor
-import com.example.weatherapplication.domain.models.city.response.DomainCityDto
-import com.example.weatherapplication.domain.models.forecast.DomainForecastDto
+import com.example.weatherapplication.domain.models.city.DomainCity
+import com.example.weatherapplication.domain.models.forecast.DomainForecast
 import com.example.weatherapplication.domain.models.update_time.DomainLastTimeUpdate
 import com.example.weatherapplication.domain.repository.ForecastRepository
 import com.example.weatherapplication.presentation.common.AppState
@@ -37,7 +38,7 @@ class ForecastInteractorImpl @Inject constructor(
             }
     }
 
-    private fun getListCity(): Observable<List<DomainCityDto>> {
+    private fun getListCity(): Observable<List<DomainCity>> {
         return repository.getListCity()
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
@@ -75,18 +76,18 @@ class ForecastInteractorImpl @Inject constructor(
         )
     }
 
-    private fun requestForecast(listDomainCityDto: List<DomainCityDto>): Observable<List<DomainForecastDto>> {
-        return Observable.fromIterable(listDomainCityDto)
+    private fun requestForecast(listDomainCity: List<DomainCity>): Observable<List<DomainForecast>> {
+        return Observable.fromIterable(listDomainCity)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .flatMap { domainCityDto ->
-                repository.requestForecast(domainCityDto = domainCityDto)
+                repository.requestForecast(domainCity = domainCityDto)
             }
-            .buffer(listDomainCityDto.size)
+            .buffer(listDomainCity.size)
     }
 
-    private fun saveForecastToDatabase(listDomainForecastDto: List<DomainForecastDto>): Completable {
-        return Observable.fromIterable(listDomainForecastDto)
+    private fun saveForecastToDatabase(listDomainForecast: List<DomainForecast>): Completable {
+        return Observable.fromIterable(listDomainForecast)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .flatMapCompletable { domainForecastDto ->
@@ -94,7 +95,7 @@ class ForecastInteractorImpl @Inject constructor(
             }
     }
 
-    override fun getListForecastFromDatabase(): Observable<List<DomainForecastDto>> {
+    override fun getListForecastFromDatabase(): Observable<List<DomainForecast>> {
         return repository.getListForecastFromDatabase()
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())

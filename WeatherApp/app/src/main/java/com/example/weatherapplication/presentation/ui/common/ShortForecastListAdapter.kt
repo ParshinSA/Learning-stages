@@ -9,13 +9,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ItemShortForecastBinding
-import com.example.weatherapplication.presentation.models.forecast.short.UiShortForecastDto
+import com.example.weatherapplication.presentation.models.forecast.short_forecast.UiShortForecast
+import kotlin.math.roundToInt
 
-class ShortForecastListAdapterRV(
+class ShortForecastListAdapter(
     private val onItemClick: (coordinationCity: Pair<Double, Double>, currentView: View) -> Unit
-) : ListAdapter<UiShortForecastDto, ShortForecastListAdapterRV.ShortForecastHolder>(
+) : ListAdapter<UiShortForecast, ShortForecastListAdapter.ShortForecastHolder>(
     DiffUtilItemCallback()
 ) {
+
+    class DiffUtilItemCallback : DiffUtil.ItemCallback<UiShortForecast>() {
+        override fun areItemsTheSame(oldItem: UiShortForecast, newItem: UiShortForecast): Boolean {
+            return oldItem.latitude == newItem.latitude
+        }
+
+        override fun areContentsTheSame(
+            oldItem: UiShortForecast,
+            newItem: UiShortForecast
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShortForecastHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -23,7 +38,11 @@ class ShortForecastListAdapterRV(
         return ShortForecastHolder(view, onItemClick)
     }
 
-    override fun onBindViewHolder(holder: ShortForecastHolder, position: Int) {
+
+    override fun onBindViewHolder(
+        holder: ShortForecastHolder,
+        position: Int
+    ) {
         holder.itemView.transitionName = holder.itemView.context.resources.getString(
             R.string.ShortForecastListFragment_transition_name_item,
             position
@@ -32,30 +51,13 @@ class ShortForecastListAdapterRV(
         holder.bind(item)
     }
 
-    class DiffUtilItemCallback : DiffUtil.ItemCallback<UiShortForecastDto>() {
-
-        override fun areItemsTheSame(
-            oldItem: UiShortForecastDto,
-            newItem: UiShortForecastDto
-        ): Boolean {
-            return oldItem.latitude == newItem.latitude
-        }
-
-        override fun areContentsTheSame(
-            oldItem: UiShortForecastDto,
-            newItem: UiShortForecastDto
-        ): Boolean {
-            return oldItem == newItem
-        }
-    }
-
     class ShortForecastHolder(
         view: View,
         onItemClick: (coordinationCity: Pair<Double, Double>, currentView: View) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
         private val mContext = view.context
-        private var currentCoordinationCity: Pair<Double, Double> = Pair(0.0, 0.0)
+        private lateinit var currentCoordinationCity: Pair<Double, Double>
 
         init {
             view.setOnClickListener {
@@ -65,12 +67,12 @@ class ShortForecastListAdapterRV(
 
         private val viewBind = ItemShortForecastBinding.bind(view)
 
-        fun bind(item: UiShortForecastDto) {
+        fun bind(item: UiShortForecast) {
             currentCoordinationCity = Pair(item.latitude, item.longitude)
-            with(item) {
 
+            with(item) {
                 viewBind.tvCityName.text = cityName
-                viewBind.tvTemperature.text = temperature
+                viewBind.tvTemperature.text = temperature.roundToInt().toString()
 
                 Glide.with(itemView)
                     .load(
@@ -82,8 +84,8 @@ class ShortForecastListAdapterRV(
                     .placeholder(R.drawable.ic_cloud)
                     .error(R.drawable.ic_no_internet)
                     .into(viewBind.imvIcWeather)
-
             }
         }
     }
+
 }

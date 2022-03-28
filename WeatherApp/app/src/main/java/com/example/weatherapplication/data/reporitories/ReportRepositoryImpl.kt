@@ -2,11 +2,11 @@ package com.example.weatherapplication.data.reporitories
 
 import com.example.weatherapplication.data.data_source.interf.report.MemoryReportDataSource
 import com.example.weatherapplication.data.data_source.interf.report.RemoteReportDataSource
-import com.example.weatherapplication.data.networking.models.report.response.convertToDomainResponseReportDto
-import com.example.weatherapplication.domain.models.report.DomainReportDto
-import com.example.weatherapplication.domain.models.report.request.DomainRequestReportDto
-import com.example.weatherapplication.domain.models.report.request.convertToRemoteRequestReportDto
-import com.example.weatherapplication.domain.models.report.response.DomainResponseReportDto
+import com.example.weatherapplication.data.networking.models.report.request.convertToRemoteRequestReportDto
+import com.example.weatherapplication.data.networking.models.report.response.convertToDomainResponseReport
+import com.example.weatherapplication.domain.models.report.DomainRequestReport
+import com.example.weatherapplication.domain.models.report.DomainResponseReport
+import com.example.weatherapplication.domain.models.report.DomainSaveReportString
 import com.example.weatherapplication.domain.repository.ReportRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -18,35 +18,35 @@ class ReportRepositoryImpl @Inject constructor(
 ) : ReportRepository {
 
     override fun requestReportToDay(
-        domainRequestReportDto: DomainRequestReportDto
-    ): Observable<DomainResponseReportDto> {
+        domainRequestReport: DomainRequestReport
+    ): Observable<DomainResponseReport> {
         return remoteReportDataSource
             .requestReportToDay(
-                domainRequestReportDto.convertToRemoteRequestReportDto()
+                domainRequestReport.convertToRemoteRequestReportDto()
             )
             .map { remoteResponseReportDto ->
-                remoteResponseReportDto.convertToDomainResponseReportDto()
+                remoteResponseReportDto.convertToDomainResponseReport()
             }
     }
 
     override fun requestReportToMonth(
-        domainRequestReportToMonthDto: DomainRequestReportDto
-    ): Observable<DomainResponseReportDto> {
+        domainRequestReport: DomainRequestReport
+    ): Observable<DomainResponseReport> {
         return remoteReportDataSource
             .requestReportToMonth(
-                domainRequestReportToMonthDto.convertToRemoteRequestReportDto()
+                domainRequestReport.convertToRemoteRequestReportDto()
             )
             .map { remoteResponseReportDto ->
-                remoteResponseReportDto.convertToDomainResponseReportDto()
+                remoteResponseReportDto.convertToDomainResponseReport()
             }
     }
 
-    override fun saveInCache(domainReportDto: DomainReportDto): Completable {
-        return memoryReportDataSource.saveInCache(report = domainReportDto.reportString)
+    override fun saveInCache(domainSaveReportString: DomainSaveReportString): Completable {
+        return memoryReportDataSource.saveInCache(report = domainSaveReportString.reportString)
     }
 
-    override fun openReportFromCache(): DomainReportDto {
-        return DomainReportDto(
+    override fun openReportFromCache(): DomainSaveReportString {
+        return DomainSaveReportString(
             reportString = memoryReportDataSource.openReportFromCache()
         )
     }

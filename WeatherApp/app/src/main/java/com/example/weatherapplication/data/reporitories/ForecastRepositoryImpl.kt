@@ -1,16 +1,17 @@
 package com.example.weatherapplication.data.reporitories
 
+import android.util.Log
 import com.example.weatherapplication.data.data_source.interf.custom_cities.RoomCityDataSource
 import com.example.weatherapplication.data.data_source.interf.forecast.RemoteForecastDataSource
 import com.example.weatherapplication.data.data_source.interf.forecast.RoomForecastDataSource
 import com.example.weatherapplication.data.data_source.interf.shared_preference.SharedPreferenceDataSource
-import com.example.weatherapplication.data.database.models.city.convertToDomainCityDto
-import com.example.weatherapplication.data.database.models.forecast.convertToDomainForecastDto
+import com.example.weatherapplication.data.database.models.city.convertToDomainCity
+import com.example.weatherapplication.data.database.models.forecast.convertToDomainForecast
+import com.example.weatherapplication.data.database.models.forecast.convertToRoomForecastDto
+import com.example.weatherapplication.data.networking.models.forecast.request.convertToRemoteRequestForecastDto
 import com.example.weatherapplication.data.networking.models.forecast.response.convertToDomainForecastDto
-import com.example.weatherapplication.domain.models.city.response.DomainCityDto
-import com.example.weatherapplication.domain.models.city.response.convertToRemoteRequestForecastDto
-import com.example.weatherapplication.domain.models.forecast.DomainForecastDto
-import com.example.weatherapplication.domain.models.forecast.convertToRoomForecastDto
+import com.example.weatherapplication.domain.models.city.DomainCity
+import com.example.weatherapplication.domain.models.forecast.DomainForecast
 import com.example.weatherapplication.domain.models.update_time.DomainLastTimeUpdate
 import com.example.weatherapplication.domain.repository.ForecastRepository
 import io.reactivex.Completable
@@ -24,39 +25,48 @@ class ForecastRepositoryImpl @Inject constructor(
     private val sharedPreferenceDataSource: SharedPreferenceDataSource
 ) : ForecastRepository {
 
-    override fun requestForecast(domainCityDto: DomainCityDto): Observable<DomainForecastDto> {
+    override fun requestForecast(domainCity: DomainCity): Observable<DomainForecast> {
         return remoteForecastDataSource.requestForecast(
-            domainCityDto.convertToRemoteRequestForecastDto()
+            domainCity.convertToRemoteRequestForecastDto()
         ).map { remoteResponseForecastDto ->
             remoteResponseForecastDto.convertToDomainForecastDto()
         }
     }
 
-    override fun addForecastInDatabase(domainForecastDto: DomainForecastDto): Completable {
+    override fun addForecastInDatabase(domainForecast: DomainForecast): Completable {
         return roomForecastDataSource.addForecast(
-            domainForecastDto.convertToRoomForecastDto()
+            domainForecast.convertToRoomForecastDto()
         )
     }
 
-    override fun getListForecastFromDatabase(): Observable<List<DomainForecastDto>> {
+    override fun getListForecastFromDatabase(): Observable<List<DomainForecast>> {
         return roomForecastDataSource.getListForecastFromDatabase()
             .flatMap { listDatabaseForecastDto ->
-                Observable.fromIterable(listDatabaseForecastDto)
-                    .map { databaseForecastDto ->
-                        databaseForecastDto.convertToDomainForecastDto()
-                    }
-                    .buffer(listDatabaseForecastDto.size)
+                if (listDatabaseForecastDto.isNotEmpty()) {
+                    Observable.fromIterable(listDatabaseForecastDto)
+                        .map { roomForecastDto ->
+                            roomForecastDto.convertToDomainForecast()
+                        }
+                        .buffer(listDatabaseForecastDto.size)
+                } else {
+                    Observable.empty()
+                }
             }
     }
 
-    override fun getListCity(): Observable<List<DomainCityDto>> {
+    override fun getListCity(): Observable<List<DomainCity>> {
         return roomCityDataSource.getCity()
             .flatMap { listRoomCityDto ->
-                Observable.fromIterable(listRoomCityDto)
-                    .map { roomCityDto ->
-                        roomCityDto.convertToDomainCityDto()
-                    }
-                    .buffer(listRoomCityDto.size)
+                if (listRoomCityDto.isNotEmpty()) {
+                    Observable.fromIterable(listRoomCityDto)
+                        .map { roomCityDto ->
+                            roomCityDto.convertToDomainCity()
+                        }
+                        .buffer(listRoomCityDto.size)
+                } else {
+                    Log.d(TAG, "getListCity: empty")
+                    Observable.empty()
+                }
             }
     }
 
@@ -66,5 +76,9 @@ class ForecastRepositoryImpl @Inject constructor(
 
     override fun saveLastUpdateTime() {
         sharedPreferenceDataSource.saveLastUpdateTime()
+    }
+
+    companion object{
+        const val TAG = "ForecastRepo_Logging"
     }
 }

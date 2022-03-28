@@ -1,6 +1,6 @@
 package com.example.weatherapplication.domain.models.forecast
 
-data class DomainForecastDto(
+data class DomainForecast(
 
     val latitude: Double,
     val longitude: Double,

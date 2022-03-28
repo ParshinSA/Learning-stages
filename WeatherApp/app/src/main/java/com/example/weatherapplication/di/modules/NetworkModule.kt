@@ -1,9 +1,9 @@
 package com.example.weatherapplication.di.modules
 
 import com.example.weatherapplication.data.networking.NetworkContract
-import com.example.weatherapplication.data.networking.api.SearchCityApi
 import com.example.weatherapplication.data.networking.api.ForecastApi
 import com.example.weatherapplication.data.networking.api.ReportApi
+import com.example.weatherapplication.data.networking.api.SearchCityApi
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

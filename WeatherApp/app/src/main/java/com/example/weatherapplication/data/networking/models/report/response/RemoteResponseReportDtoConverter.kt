@@ -1,9 +1,9 @@
 package com.example.weatherapplication.data.networking.models.report.response
 
-import com.example.weatherapplication.domain.models.report.response.DomainResponseReportDto
+import com.example.weatherapplication.domain.models.report.DomainResponseReport
 
-fun RemoteResponseReportDto.convertToDomainResponseReportDto(): DomainResponseReportDto {
-    return DomainResponseReportDto(
+fun RemoteResponseReportDto.convertToDomainResponseReport(): DomainResponseReport {
+    return DomainResponseReport(
         temperature = reportData.temperature.medianValue,
         pressure = reportData.pressure.medianValue,
         humidity = reportData.humidity.medianValue,

@@ -1,23 +1,23 @@
 package com.example.weatherapplication.domain.repository
 
-import com.example.weatherapplication.domain.models.report.DomainReportDto
-import com.example.weatherapplication.domain.models.report.request.DomainRequestReportDto
-import com.example.weatherapplication.domain.models.report.response.DomainResponseReportDto
+import com.example.weatherapplication.domain.models.report.DomainRequestReport
+import com.example.weatherapplication.domain.models.report.DomainResponseReport
+import com.example.weatherapplication.domain.models.report.DomainSaveReportString
 import io.reactivex.Completable
 import io.reactivex.Observable
 
 interface ReportRepository {
 
     fun requestReportToDay(
-        domainRequestReportDto: DomainRequestReportDto
-    ): Observable<DomainResponseReportDto>
+        domainRequestReport: DomainRequestReport
+    ): Observable<DomainResponseReport>
 
     fun requestReportToMonth(
-        domainRequestReportToMonthDto: DomainRequestReportDto
-    ): Observable<DomainResponseReportDto>
+        domainRequestReport: DomainRequestReport
+    ): Observable<DomainResponseReport>
 
-    fun saveInCache(domainReportDto: DomainReportDto): Completable
+    fun saveInCache(domainSaveReportString: DomainSaveReportString): Completable
 
-    fun openReportFromCache(): DomainReportDto
+    fun openReportFromCache(): DomainSaveReportString
 
 }

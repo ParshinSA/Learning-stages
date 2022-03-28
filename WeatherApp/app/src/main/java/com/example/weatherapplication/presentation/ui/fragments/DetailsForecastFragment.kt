@@ -11,7 +11,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentDetailsForecastBinding
-import com.example.weatherapplication.presentation.models.forecast.details.UiDetailsForecastDto
+import com.example.weatherapplication.presentation.models.forecast.details_forecast.UiDetailsForecast
 import com.example.weatherapplication.presentation.ui.AppApplication
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_classes.DetailsForecastViewModel
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_factory.DetailsForecastViewModelFactory
@@ -25,7 +25,7 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     private val detailsViewModel: DetailsForecastViewModel by viewModels { detailsViewModelFactory }
 
     private val binding by viewBinding(FragmentDetailsForecastBinding::bind)
-    private lateinit var currentForecast: UiDetailsForecastDto
+    private lateinit var currentForecast: UiDetailsForecast
 
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
@@ -171,10 +171,10 @@ class DetailsForecastFragment : Fragment(R.layout.fragment_details_forecast) {
     }
 
     private fun transitionInReportFragment() {
-        val currentCity = detailsViewModel.currentCity()
         binding.fabOpenReport.visibility = View.VISIBLE
 
         binding.fabOpenReport.setOnClickListener {
+            val currentCity = detailsViewModel.currentCity()
             binding.fabOpenReport.visibility = View.INVISIBLE
 
             val bundle = Bundle()

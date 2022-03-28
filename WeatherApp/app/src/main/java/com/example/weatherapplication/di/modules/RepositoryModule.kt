@@ -20,7 +20,7 @@ interface RepositoryModule {
 
     @Suppress("FunctionName")
     @Binds
-    fun bindCustomCitiesRepositoryImpl_to_CustomCitiesRepository(
+    fun bindCityRepositoryImpl_to_CityRepository(
         repository: CityRepositoryImpl
     ): CityRepository
 
@@ -29,6 +29,5 @@ interface RepositoryModule {
     fun bindReportRepositoryImpl_to_ReportRepository(
         repository: ReportRepositoryImpl
     ): ReportRepository
-
 
 }

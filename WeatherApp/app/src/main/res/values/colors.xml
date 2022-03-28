@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-<!--    mainProjectColor    -->
+    <!--    mainProjectColor    -->
     <color name="myPrimary">#E3D48F</color>
     <color name="myPrimaryDark">#968E66</color>
     <color name="darkColorText">#48484A</color>

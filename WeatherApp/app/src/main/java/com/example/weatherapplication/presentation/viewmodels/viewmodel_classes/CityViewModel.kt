@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.weatherapplication.domain.interactors.interactors_interface.CityInteractor
-import com.example.weatherapplication.domain.models.city.request.DomainRequestSearchByCityNameDto
-import com.example.weatherapplication.domain.models.city.response.DomainCityDto
+import com.example.weatherapplication.domain.models.city.DomainCity
+import com.example.weatherapplication.domain.models.city.DomainRequestSearchByCityNameDto
 import com.example.weatherapplication.presentation.viewmodels.BaseViewModel
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
@@ -14,8 +14,8 @@ class CityViewModel(
     private val interactor: CityInteractor
 ) : BaseViewModel() {
 
-    private val resultSearchListMutableLiveData = MutableLiveData<List<DomainCityDto>>(emptyList())
-    val resultCityLiveData: LiveData<List<DomainCityDto>>
+    private val resultSearchListMutableLiveData = MutableLiveData<List<DomainCity>>(emptyList())
+    val resultCityLiveData: LiveData<List<DomainCity>>
         get() = resultSearchListMutableLiveData
 
     fun searchCity(userInput: Observable<String>) {
@@ -42,9 +42,9 @@ class CityViewModel(
         )
     }
 
-    fun addCity(domainCityDto: DomainCityDto) {
+    fun addCity(domainCity: DomainCity) {
         compositeDisposable.add(
-            interactor.addCityInDatabase(domainCityDto = domainCityDto).subscribe({
+            interactor.addCityInDatabase(domainCity = domainCity).subscribe({
                 Log.d(TAG, "addCity: complete")
             }, {
                 Log.d(TAG, "addCity: error $it")
@@ -58,6 +58,6 @@ class CityViewModel(
     }
 
     companion object {
-        const val TAG = "SearchCityVM_Logging"
+        const val TAG = "CityVM_Logging"
     }
 }
