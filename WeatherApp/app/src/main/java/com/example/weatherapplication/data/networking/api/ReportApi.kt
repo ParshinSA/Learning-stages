@@ -1,7 +1,7 @@
 package com.example.weatherapplication.data.networking.api
 
 import com.example.weatherapplication.data.networking.NetworkContract
-import com.example.weatherapplication.data.networking.models.report.response.RemoteResponseReportDto
+import com.example.weatherapplication.data.networking.models.report.RemoteResponseReportDto
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query

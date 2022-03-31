@@ -6,10 +6,9 @@ import com.example.weatherapplication.domain.models.report.DomainResponseReport
 import com.example.weatherapplication.domain.models.report.DomainSaveReportString
 import com.example.weatherapplication.domain.repository.ReportRepository
 import com.example.weatherapplication.presentation.common.toStringDoubleFormat
-import com.example.weatherapplication.presentation.models.report.ReportPeriod
+import com.example.weatherapplication.presentation.models.report.nested_request_report.ReportingPeriod
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -23,7 +22,7 @@ class ReportInteractorImpl @Inject constructor(
             .map { domainResponseReportDto ->
                 convertReportDataToReportString(
                     cityName = domainRequestReport.cityName,
-                    reportPeriod = domainRequestReport.reportPeriod,
+                    reportingPeriod = domainRequestReport.reportingPeriod,
                     domainResponseReport = domainResponseReportDto
                 )
             }
@@ -35,12 +34,10 @@ class ReportInteractorImpl @Inject constructor(
     private fun requestRemoteReport(
         domainRequestReport: DomainRequestReport
     ): Observable<DomainResponseReport> {
-        return Observable.fromIterable(0 until domainRequestReport.reportPeriod.quantity)
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
+        return Observable.fromIterable(0 until domainRequestReport.reportingPeriod.quantity)
             .flatMap { stepTime ->
 
-                if (domainRequestReport.reportPeriod.stringQuantity == ReportPeriod.TEN_DAYS.stringQuantity) {
+                if (domainRequestReport.reportingPeriod.stringQuantity == ReportingPeriod.TEN_DAYS.stringQuantity) {
 
                     val day = calculateDayStepDay(stepTime)
                     val month = calculateMonthStepDay(stepTime)
@@ -66,9 +63,9 @@ class ReportInteractorImpl @Inject constructor(
                     )
                 }
             }
-            .buffer(domainRequestReport.reportPeriod.quantity)
+            .buffer(domainRequestReport.reportingPeriod.quantity)
             .map { listOfReports ->
-                calculationOfAverageReportData(listOfReports, domainRequestReport.reportPeriod)
+                calculationOfAverageReportData(listOfReports, domainRequestReport.reportingPeriod)
             }
     }
 
@@ -82,12 +79,12 @@ class ReportInteractorImpl @Inject constructor(
 
     private fun convertReportDataToReportString(
         cityName: String,
-        reportPeriod: ReportPeriod,
+        reportingPeriod: ReportingPeriod,
         domainResponseReport: DomainResponseReport
     ): DomainSaveReportString {
         return DomainSaveReportString(
             reportString = "Город: $cityName\n" +
-                    "Средние значения за период \"${reportPeriod.stringQuantity}\":\n" +
+                    "Средние значения за период \"${reportingPeriod.stringQuantity}\":\n" +
                     "температура ${(domainResponseReport.temperature - 273.15).toStringDoubleFormat()} °C\n" +
                     "влажность ${domainResponseReport.humidity.toStringDoubleFormat()} %\n" +
                     "давление ${domainResponseReport.pressure.toStringDoubleFormat()} гПа\n" +
@@ -98,16 +95,16 @@ class ReportInteractorImpl @Inject constructor(
 
     private fun calculationOfAverageReportData(
         listOfReports: List<DomainResponseReport>,
-        reportPeriod: ReportPeriod
+        reportingPeriod: ReportingPeriod
     ): DomainResponseReport {
         val sumItemReportData = calculateSumHistoryData(listOfReports)
 
         return DomainResponseReport(
-            temperature = sumItemReportData.temperature / reportPeriod.quantity,
-            pressure = sumItemReportData.pressure / reportPeriod.quantity,
-            humidity = sumItemReportData.humidity / reportPeriod.quantity,
-            wind = sumItemReportData.wind / reportPeriod.quantity,
-            precipitation = sumItemReportData.precipitation / reportPeriod.quantity,
+            temperature = sumItemReportData.temperature / reportingPeriod.quantity,
+            pressure = sumItemReportData.pressure / reportingPeriod.quantity,
+            humidity = sumItemReportData.humidity / reportingPeriod.quantity,
+            wind = sumItemReportData.wind / reportingPeriod.quantity,
+            precipitation = sumItemReportData.precipitation / reportingPeriod.quantity,
         )
     }
 

@@ -11,18 +11,14 @@ import com.example.weatherapplication.domain.interactors.interactors_interface.F
 import com.example.weatherapplication.presentation.common.AppState
 import com.example.weatherapplication.presentation.ui.AppApplication
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class UpdateForecastService : Service() {
 
-    @Inject
-    lateinit var interactor: ForecastInteractor
-
-    @Inject
-    lateinit var appState: AppState
-
-    @Inject
-    lateinit var disposable: CompositeDisposable
+    private lateinit var interactor: ForecastInteractor
+    private lateinit var appState: AppState
+    private lateinit var disposable: CompositeDisposable
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -42,6 +38,17 @@ class UpdateForecastService : Service() {
         (this.applicationContext as AppApplication).appComponent.inject(this)
     }
 
+    @Inject
+    fun di(
+        interactor: ForecastInteractor,
+        appState: AppState,
+        disposable: CompositeDisposable
+    ) {
+        this.interactor = interactor
+        this.appState = appState
+        this.disposable = disposable
+    }
+
     private fun updateForecast() {
 
         if (checkSDK() && appState.isCollapsed) {
@@ -50,11 +57,14 @@ class UpdateForecastService : Service() {
         } else Log.d(TAG, "updateForecast: startStartedService")
 
         disposable.add(
-            interactor.updateForecastFromService().subscribe({
-            Log.d(TAG, "updateForecast: completed")
-        }, {
-            Log.d(TAG, "updateForecast: error $it")
-        }))
+            interactor.updateForecastFromService()
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    Log.d(TAG, "updateForecast: completed")
+                }, {
+                    Log.d(TAG, "updateForecast: error $it")
+                })
+        )
 
         if (checkSDK() && appState.isCollapsed) {
             stopForeground(true)

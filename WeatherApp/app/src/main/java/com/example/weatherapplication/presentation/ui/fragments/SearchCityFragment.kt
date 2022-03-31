@@ -20,7 +20,7 @@ import com.example.weatherapplication.presentation.ui.common.ItemDecoration
 import com.example.weatherapplication.presentation.ui.common.SearchCityAdapterRV
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_classes.CityViewModel
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_factory.SearchCityViewModelFactory
-import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 
@@ -83,7 +83,7 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
 
     private fun addTextChangeListener(searchView: SearchView) {
         customViewModel.searchCity(
-            Observable.create { subscriber ->
+            PublishSubject.create { subscriber ->
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(userInput: String?): Boolean {
                         return false

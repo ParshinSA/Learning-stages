@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.presentation.models.city.UiCity
-import com.example.weatherapplication.presentation.models.forecast.details_forecast.UiDetailsForecast
-import com.example.weatherapplication.presentation.models.forecast.details_forecast.convertToUiCityDto
+import com.example.weatherapplication.presentation.models.forecast.UiDetailsForecast
+import com.example.weatherapplication.presentation.models.forecast.convertToUiCityDto
 
 class DetailsForecastViewModel : ViewModel() {
 

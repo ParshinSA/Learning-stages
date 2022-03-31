@@ -1,8 +1,8 @@
 package com.example.weatherapplication.di.modules
 
-import com.example.weatherapplication.data.reporitories.CityRepositoryImpl
-import com.example.weatherapplication.data.reporitories.ForecastRepositoryImpl
-import com.example.weatherapplication.data.reporitories.ReportRepositoryImpl
+import com.example.weatherapplication.data.reporitory_impl.CityRepositoryImpl
+import com.example.weatherapplication.data.reporitory_impl.ForecastRepositoryImpl
+import com.example.weatherapplication.data.reporitory_impl.ReportRepositoryImpl
 import com.example.weatherapplication.domain.repository.CityRepository
 import com.example.weatherapplication.domain.repository.ForecastRepository
 import com.example.weatherapplication.domain.repository.ReportRepository

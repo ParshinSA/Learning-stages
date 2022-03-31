@@ -5,14 +5,14 @@
     <string name="URL_loading_image_weather">https://openweathermap.org/img/wn/%1$s@2x.png</string>
 
     <!--    ShortForecastListFragment-->
-    <string name="ShortForecastListFragment_check_internet">"Нет подключение к интернету"</string>
-    <string name="ShortForecastListFragment_attention">Внимание!</string>
-    <string name="ShortForecastListFragment_transition_name_item">ShortForecastListFragment_transition_name_item_(position)_%1$d</string>
-    <string name="ShortForecastListFragment_updateText_text">Данные обновленны: %1$s</string>
-    <string name="ShortForecastListFragment_time_format_ddMMMMHHmmss">dd MMMM  HH:mm:ss</string>
-    <string name="ShortForecastListFragment_text_title_toolbar">Список городов.</string>
-    <string name="ShortForecastListFragment_text_No_city_in_list">Вы ещё не добавили ни одного города</string>
-    <string name="ShortForecastListFragment_text_Click_for_detailed_forecast">Нажмите для детального прогноза</string>
+    <string name="ShortForecastFragment_check_internet">"Нет подключение к интернету"</string>
+    <string name="ShortForecastFragment_attention">Внимание!</string>
+    <string name="ShortForecastFragment_transition_name_item">ShortForecastFragment_transition_name_item_(position)_%1$d</string>
+    <string name="ShortForecastFragment_updateText_text">Данные обновленны: %1$s</string>
+    <string name="ShortForecastFragment_time_format_ddMMMMHHmmss">dd MMMM  HH:mm:ss</string>
+    <string name="ShortForecastFragment_text_title_toolbar">Список городов.</string>
+    <string name="ShortForecastFragment_text_No_city_in_list">Вы ещё не добавили ни одного города</string>
+    <string name="ShortForecastFragment_text_Click_for_detailed_forecast">Нажмите для детального прогноза</string>
 
     <!--    DetailsForecastFragment-->
     <string name="DetailsForecastFragment_date_text">%1$s</string>

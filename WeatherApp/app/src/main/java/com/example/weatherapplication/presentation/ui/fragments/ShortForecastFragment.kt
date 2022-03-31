@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentShortForecastListBinding
-import com.example.weatherapplication.presentation.models.forecast.short_forecast.UiShortForecast
+import com.example.weatherapplication.presentation.models.forecast.UiShortForecast
 import com.example.weatherapplication.presentation.ui.AppApplication
 import com.example.weatherapplication.presentation.ui.common.ItemDecoration
 import com.example.weatherapplication.presentation.ui.common.ShortForecastListAdapter
@@ -68,7 +68,7 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
     private fun setLastTimeUpdateForecast() {
         binding.tvLastUpdateTime.text = this.getString(
-            R.string.ShortForecastListFragment_updateText_text,
+            R.string.ShortForecastFragment_updateText_text,
             shortViewModel.getLastUpdateTimeString()
         )
     }
@@ -82,8 +82,8 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
     private fun changeStateInfoView(state: Boolean) {
         binding.tvTextHeader.text =
             if (!state)
-                this.getString(R.string.ShortForecastListFragment_text_No_city_in_list)
-            else this.getString(R.string.ShortForecastListFragment_text_Click_for_detailed_forecast)
+                this.getString(R.string.ShortForecastFragment_text_No_city_in_list)
+            else this.getString(R.string.ShortForecastFragment_text_Click_for_detailed_forecast)
         binding.tvLastUpdateTime.isVisible = state
     }
 
@@ -91,7 +91,7 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
         if (isConnect()) {
             shortViewModel.getForecastList()
         } else {
-            shortViewModel.errorMessage(this.getString(R.string.ShortForecastListFragment_check_internet))
+            shortViewModel.errorMessage(this.getString(R.string.ShortForecastFragment_check_internet))
             shortViewModel.isLoadingMutableLiveData.postValue(false)
         }
     }
@@ -134,7 +134,7 @@ class ShortForecastFragment : Fragment(R.layout.fragment_short_forecast_list) {
 
     private fun showDialogError(message: String) {
         myDialog = AlertDialog.Builder(requireContext())
-            .setTitle(this.getString(R.string.ShortForecastListFragment_attention))
+            .setTitle(this.getString(R.string.ShortForecastFragment_attention))
             .setMessage(message)
             .create()
 

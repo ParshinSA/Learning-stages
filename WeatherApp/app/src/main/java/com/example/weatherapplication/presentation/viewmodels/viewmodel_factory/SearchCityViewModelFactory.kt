@@ -10,6 +10,8 @@ class SearchCityViewModelFactory @Inject constructor(
     private val interactor: CityInteractor
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return CityViewModel(interactor = interactor) as T
+        return CityViewModel(
+            interactor = interactor,
+        ) as T
     }
 }

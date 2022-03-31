@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ItemShortForecastBinding
-import com.example.weatherapplication.presentation.models.forecast.short_forecast.UiShortForecast
+import com.example.weatherapplication.presentation.models.forecast.UiShortForecast
 import kotlin.math.roundToInt
 
 class ShortForecastListAdapter(
@@ -44,7 +44,7 @@ class ShortForecastListAdapter(
         position: Int
     ) {
         holder.itemView.transitionName = holder.itemView.context.resources.getString(
-            R.string.ShortForecastListFragment_transition_name_item,
+            R.string.ShortForecastFragment_transition_name_item,
             position
         )
         val item = getItem(position)

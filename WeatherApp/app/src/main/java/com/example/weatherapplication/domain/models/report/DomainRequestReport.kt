@@ -1,12 +1,12 @@
 package com.example.weatherapplication.domain.models.report
 
-import com.example.weatherapplication.presentation.models.report.ReportPeriod
+import com.example.weatherapplication.presentation.models.report.nested_request_report.ReportingPeriod
 
 data class DomainRequestReport(
     val cityName: String = "", // заглушка
     val latitude: Double,
     val longitude: Double,
-    val reportPeriod: ReportPeriod = ReportPeriod.ONE_MONTH, // заглушка
-    var day: Int = 0, // заглушка
-    var month: Int = 0 // заглушка
+    val reportingPeriod: ReportingPeriod = ReportingPeriod.ONE_MONTH, // заглушка
+    val day: Int = 0, // заглушка
+    val month: Int = 0 // заглушка
 )

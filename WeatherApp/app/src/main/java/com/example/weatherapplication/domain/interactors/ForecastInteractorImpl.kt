@@ -1,7 +1,6 @@
 package com.example.weatherapplication.domain.interactors
 
 import android.content.Context
-import android.util.Log
 import androidx.work.*
 import com.example.weatherapplication.domain.interactors.interactors_interface.ForecastInteractor
 import com.example.weatherapplication.domain.models.city.DomainCity
@@ -12,7 +11,6 @@ import com.example.weatherapplication.presentation.common.AppState
 import com.example.weatherapplication.workers.UpdateForecastWorker
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -40,8 +38,6 @@ class ForecastInteractorImpl @Inject constructor(
 
     private fun getListCity(): Observable<List<DomainCity>> {
         return repository.getListCity()
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
     }
 
     private fun saveTimeUpdate() {
@@ -78,8 +74,6 @@ class ForecastInteractorImpl @Inject constructor(
 
     private fun requestForecast(listDomainCity: List<DomainCity>): Observable<List<DomainForecast>> {
         return Observable.fromIterable(listDomainCity)
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
             .flatMap { domainCityDto ->
                 repository.requestForecast(domainCity = domainCityDto)
             }
@@ -88,8 +82,6 @@ class ForecastInteractorImpl @Inject constructor(
 
     private fun saveForecastToDatabase(listDomainForecast: List<DomainForecast>): Completable {
         return Observable.fromIterable(listDomainForecast)
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
             .flatMapCompletable { domainForecastDto ->
                 repository.addForecastInDatabase(domainForecastDto)
             }
@@ -97,8 +89,6 @@ class ForecastInteractorImpl @Inject constructor(
 
     override fun getListForecastFromDatabase(): Observable<List<DomainForecast>> {
         return repository.getListForecastFromDatabase()
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
             .debounce(500, TimeUnit.MILLISECONDS)
     }
 

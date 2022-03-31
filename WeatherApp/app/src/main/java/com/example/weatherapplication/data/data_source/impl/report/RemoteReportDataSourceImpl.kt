@@ -2,8 +2,8 @@ package com.example.weatherapplication.data.data_source.impl.report
 
 import com.example.weatherapplication.data.data_source.interf.report.RemoteReportDataSource
 import com.example.weatherapplication.data.networking.api.ReportApi
-import com.example.weatherapplication.data.networking.models.report.request.RemoteRequestReportDto
-import com.example.weatherapplication.data.networking.models.report.response.RemoteResponseReportDto
+import com.example.weatherapplication.data.networking.models.report.RemoteRequestReportDto
+import com.example.weatherapplication.data.networking.models.report.RemoteResponseReportDto
 import io.reactivex.Observable
 import javax.inject.Inject
 

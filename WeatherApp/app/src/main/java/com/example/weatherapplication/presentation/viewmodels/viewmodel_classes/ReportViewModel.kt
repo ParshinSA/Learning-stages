@@ -7,10 +7,11 @@ import com.example.weatherapplication.domain.interactors.interactors_interface.R
 import com.example.weatherapplication.domain.models.report.DomainRequestReport
 import com.example.weatherapplication.presentation.common.SingleLiveEvent
 import com.example.weatherapplication.presentation.models.city.UiCity
-import com.example.weatherapplication.presentation.models.report.ReportPeriod
-import com.example.weatherapplication.presentation.models.report.request.UiRequestReport
-import com.example.weatherapplication.presentation.models.report.request.convertToDomainRequestReport
+import com.example.weatherapplication.presentation.models.report.UiRequestReport
+import com.example.weatherapplication.presentation.models.report.convertToDomainRequestReport
+import com.example.weatherapplication.presentation.models.report.nested_request_report.ReportingPeriod
 import com.example.weatherapplication.presentation.viewmodels.BaseViewModel
+import io.reactivex.schedulers.Schedulers
 
 class ReportViewModel(
     private val interactor: ReportInteractor,
@@ -32,19 +33,22 @@ class ReportViewModel(
     val errorMessage: LiveData<String>
         get() = errorMessageMutableLiveData
 
-    fun generateReport(uiCity: UiCity, reportPeriod: ReportPeriod) {
+    fun generateReport(uiCity: UiCity, reportingPeriod: ReportingPeriod) {
         isLoadingMutableLiveData.postValue(true)
 
-        val uiRequestReport = createUiRequestReport(uiCity, reportPeriod)
+        val uiRequestReport = createUiRequestReport(uiCity, reportingPeriod)
         compositeDisposable.add(
-            interactor.generateReport(uiRequestReport).subscribe({
-                generateReportIsCompletedSingleLiveEvent.postValue(true)
-                isLoadingMutableLiveData.postValue(false)
-            }, {
-                Log.d(TAG, "generateReport: error $it")
-                isLoadingMutableLiveData.postValue(false)
-            }
-            ))
+            interactor.generateReport(uiRequestReport)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({
+                    generateReportIsCompletedSingleLiveEvent.postValue(true)
+                    isLoadingMutableLiveData.postValue(false)
+                }, {
+                    Log.d(TAG, "generateReport: error $it")
+                    isLoadingMutableLiveData.postValue(false)
+                }
+                ))
     }
 
     fun openReport() {
@@ -55,13 +59,13 @@ class ReportViewModel(
 
     private fun createUiRequestReport(
         uiCity: UiCity,
-        reportPeriod: ReportPeriod
+        reportingPeriod: ReportingPeriod
     ): DomainRequestReport {
         return UiRequestReport(
             cityName = uiCity.cityName,
             latitude = uiCity.latitude,
             longitude = uiCity.longitude,
-            reportPeriod = reportPeriod
+            reportingPeriod = reportingPeriod
         ).convertToDomainRequestReport()
     }
 

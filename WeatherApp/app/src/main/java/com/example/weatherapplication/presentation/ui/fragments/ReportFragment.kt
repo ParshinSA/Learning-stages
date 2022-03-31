@@ -16,7 +16,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.FragmentWeatherReportBinding
 import com.example.weatherapplication.presentation.models.city.UiCity
-import com.example.weatherapplication.presentation.models.report.ReportPeriod
+import com.example.weatherapplication.presentation.models.report.nested_request_report.ReportingPeriod
 import com.example.weatherapplication.presentation.ui.AppApplication
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_classes.ReportViewModel
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_factory.ReportViewModelFactory
@@ -126,7 +126,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
 
             reportViewModel.generateReport(
                 currentCity,
-                ReportPeriod.values().filter { it.stringQuantity == userChoice }[0]
+                ReportingPeriod.values().filter { it.stringQuantity == userChoice }[0]
             )
         }
     }
@@ -157,7 +157,7 @@ class ReportFragment : Fragment(R.layout.fragment_weather_report) {
             ArrayAdapter(
                 requireContext(),
                 R.layout.item_period_list,
-                ReportPeriod.values().map { it.stringQuantity }
+                ReportingPeriod.values().map { it.stringQuantity }
             )
         )
     }

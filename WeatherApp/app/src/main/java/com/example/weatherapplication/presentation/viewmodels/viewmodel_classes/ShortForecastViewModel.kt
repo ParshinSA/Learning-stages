@@ -7,12 +7,13 @@ import com.example.weatherapplication.R
 import com.example.weatherapplication.domain.interactors.interactors_interface.ForecastInteractor
 import com.example.weatherapplication.domain.models.forecast.DomainForecast
 import com.example.weatherapplication.presentation.common.SingleLiveEvent
-import com.example.weatherapplication.presentation.models.forecast.details_forecast.UiDetailsForecast
-import com.example.weatherapplication.presentation.models.forecast.details_forecast.convertToUiDetailsForecast
-import com.example.weatherapplication.presentation.models.forecast.short_forecast.UiShortForecast
-import com.example.weatherapplication.presentation.models.forecast.short_forecast.convertToUiShortForecast
+import com.example.weatherapplication.presentation.models.forecast.UiDetailsForecast
+import com.example.weatherapplication.presentation.models.forecast.UiShortForecast
+import com.example.weatherapplication.presentation.models.forecast.convertToUiDetailsForecast
+import com.example.weatherapplication.presentation.models.forecast.convertToUiShortForecast
 import com.example.weatherapplication.presentation.ui.common.ResourcesProvider
 import com.example.weatherapplication.presentation.viewmodels.BaseViewModel
+import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,6 +37,7 @@ class ShortForecastViewModel(
     init {
         compositeDisposable.add(
             interactor.getListForecastFromDatabase()
+                .subscribeOn(Schedulers.io())
                 .subscribe({ listDomainForecast ->
                     Log.d(TAG, "listDomain $listDomainForecast: ")
                     if (listDomainForecast.isEmpty()) {
@@ -44,15 +46,8 @@ class ShortForecastViewModel(
                         this.listDomainForecast = listDomainForecast
                         val listShortForecast =
                             listDomainForecast.map { it.convertToUiShortForecast() }
-
-                        Log.d(
-                            TAG,
-                            "update forecastListMutableLiveData: completed $listShortForecast"
-                        )
-
                         forecastListMutableLiveData.postValue(listShortForecast)
                     }
-
                 },
                     {
                         Log.d(TAG, "update forecastListMutableLiveData: error $it")
@@ -73,7 +68,7 @@ class ShortForecastViewModel(
         val lastTimeUpdate = interactor.getLastUpdateTime().time
         val dateFormat = Date(lastTimeUpdate)
         return SimpleDateFormat(
-            resourcesProvider.getString(R.string.ShortForecastListFragment_time_format_ddMMMMHHmmss),
+            resourcesProvider.getString(R.string.ShortForecastFragment_time_format_ddMMMMHHmmss),
             Locale("ru")
         ).format(dateFormat)
     }

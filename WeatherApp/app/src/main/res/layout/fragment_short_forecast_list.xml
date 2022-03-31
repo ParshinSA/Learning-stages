@@ -13,7 +13,7 @@
         android:background="@color/myPrimary"
         app:titleTextColor="@color/darkColorText"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/ShortForecastListFragment_text_title_toolbar" />
+        app:title="@string/ShortForecastFragment_text_title_toolbar" />
 
     <TextView
         android:id="@+id/tvTextHeader"

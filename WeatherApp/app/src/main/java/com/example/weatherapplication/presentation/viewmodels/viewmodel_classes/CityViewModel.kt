@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.weatherapplication.domain.interactors.interactors_interface.CityInteractor
 import com.example.weatherapplication.domain.models.city.DomainCity
-import com.example.weatherapplication.domain.models.city.DomainRequestSearchByCityNameDto
+import com.example.weatherapplication.domain.models.city.DomainRequestSearchByCityName
+import com.example.weatherapplication.presentation.ui.common.ResourcesProvider
 import com.example.weatherapplication.presentation.viewmodels.BaseViewModel
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class CityViewModel(
@@ -20,35 +22,46 @@ class CityViewModel(
 
     fun searchCity(userInput: Observable<String>) {
         compositeDisposable.add(
-            userInput
-                .filter { it.length >= 3 }
-                .debounce(350, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .subscribe { filteredUserInput ->
-                    compositeDisposable.add(
-                        interactor.searchByCityName(
-                            DomainRequestSearchByCityNameDto(
-                                filteredUserInput
-                            )
-                        )
-                            .subscribe({ listCity ->
-                                Log.d(TAG, "searchCity: complete $listCity")
-                                resultSearchListMutableLiveData.postValue(listCity)
-                            }, {
-                                Log.d(TAG, "searchCity: error $it")
-                            })
-                    )
-                }
+            filterUserInput(userInput)
+                .subscribe({ filteredUserInput ->
+                    search(filteredUserInput)
+                },
+                    {
+                        Log.d(TAG, "filterUserInput: error  $it")
+                    })
         )
+    }
+
+    private fun search(filteredUserInput: String) {
+        compositeDisposable.add(
+            interactor.searchByCityName(
+                DomainRequestSearchByCityName(filteredUserInput)
+            )
+                .subscribe({ listCity ->
+                    Log.d(TAG, "searchCity: complete $listCity")
+                    resultSearchListMutableLiveData.postValue(listCity)
+                }, {
+                    Log.d(TAG, "searchCity: error $it")
+                })
+        )
+    }
+
+    private fun filterUserInput(userInput: Observable<String>): Observable<String> {
+        return userInput
+            .filter { it.length >= 3 }
+            .debounce(350, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
     }
 
     fun addCity(domainCity: DomainCity) {
         compositeDisposable.add(
-            interactor.addCityInDatabase(domainCity = domainCity).subscribe({
-                Log.d(TAG, "addCity: complete")
-            }, {
-                Log.d(TAG, "addCity: error $it")
-            })
+            interactor.addCityInDatabase(domainCity = domainCity)
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    Log.d(TAG, "addCity: complete")
+                }, {
+                    Log.d(TAG, "addCity: error $it")
+                })
         )
     }
 

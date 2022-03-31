@@ -2,8 +2,8 @@ package com.example.weatherapplication.data.data_source.impl.custom_city
 
 import com.example.weatherapplication.data.data_source.interf.custom_cities.RemoteCityDataSource
 import com.example.weatherapplication.data.networking.api.SearchCityApi
-import com.example.weatherapplication.data.networking.models.city.request.RemoteRequestSearchByCityNameDto
-import com.example.weatherapplication.data.networking.models.city.response.RemoteResponseCityDto
+import com.example.weatherapplication.data.networking.models.city.RemoteRequestSearchByCityNameDto
+import com.example.weatherapplication.data.networking.models.city.RemoteResponseCityDto
 import io.reactivex.Observable
 import javax.inject.Inject
 
