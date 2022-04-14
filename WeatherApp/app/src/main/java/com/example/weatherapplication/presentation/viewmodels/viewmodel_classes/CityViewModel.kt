@@ -6,30 +6,37 @@ import androidx.lifecycle.MutableLiveData
 import com.example.weatherapplication.domain.interactors.interactors_interface.CityInteractor
 import com.example.weatherapplication.domain.models.city.DomainCity
 import com.example.weatherapplication.domain.models.city.DomainRequestSearchByCityName
-import com.example.weatherapplication.presentation.ui.common.ResourcesProvider
 import com.example.weatherapplication.presentation.viewmodels.BaseViewModel
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 class CityViewModel(
     private val interactor: CityInteractor
 ) : BaseViewModel() {
 
-    private val resultSearchListMutableLiveData = MutableLiveData<List<DomainCity>>(emptyList())
-    val resultCityLiveData: LiveData<List<DomainCity>>
-        get() = resultSearchListMutableLiveData
+    private val userInputPublisher = PublishSubject.create<String>()
 
-    fun searchCity(userInput: Observable<String>) {
+    init {
         compositeDisposable.add(
-            filterUserInput(userInput)
-                .subscribe({ filteredUserInput ->
-                    search(filteredUserInput)
-                },
+            filterUserInput(userInputPublisher)
+                .subscribe(
+                    { filteredUserInput ->
+                        search(filteredUserInput)
+                    },
                     {
                         Log.d(TAG, "filterUserInput: error  $it")
                     })
         )
+    }
+
+    private val resultSearchListMutableLiveData = MutableLiveData<List<DomainCity>>(emptyList())
+    val resultCityLiveData: LiveData<List<DomainCity>>
+        get() = resultSearchListMutableLiveData
+
+    fun searchCity(userInput: String) {
+        userInputPublisher.onNext(userInput)
     }
 
     private fun search(filteredUserInput: String) {

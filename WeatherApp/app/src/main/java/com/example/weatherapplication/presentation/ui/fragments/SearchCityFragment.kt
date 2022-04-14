@@ -20,9 +20,7 @@ import com.example.weatherapplication.presentation.ui.common.ItemDecoration
 import com.example.weatherapplication.presentation.ui.common.SearchCityAdapterRV
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_classes.CityViewModel
 import com.example.weatherapplication.presentation.viewmodels.viewmodel_factory.SearchCityViewModelFactory
-import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
-
 
 class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
 
@@ -82,20 +80,16 @@ class SearchCityFragment : Fragment(R.layout.fragment_search_city) {
     }
 
     private fun addTextChangeListener(searchView: SearchView) {
-        customViewModel.searchCity(
-            PublishSubject.create { subscriber ->
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(userInput: String?): Boolean {
-                        return false
-                    }
-
-                    override fun onQueryTextChange(userInput: String?): Boolean {
-                        userInput?.let { subscriber.onNext(userInput) }
-                        return false
-                    }
-                })
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(userInput: String?): Boolean {
+                return false
             }
-        )
+
+            override fun onQueryTextChange(userInput: String?): Boolean {
+                userInput?.let { customViewModel.searchCity(userInput =it) }
+                return false
+            }
+        })
     }
 
     private fun initRv() {
