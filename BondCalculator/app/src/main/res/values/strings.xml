@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">BondCalculator</string>
+    <string name="app_name">Bond Calculator</string>
+
+<!--    Bottom_nav_menu-->
+    <string name="titleSelection">Подбор</string>
+    <string name="title_charts">Графики</string>
+    <string name="title_composition">Состав</string>
 </resources>
