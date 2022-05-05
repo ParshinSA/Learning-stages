@@ -3,11 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/bg_view_pager_charts.xml" value="0.2890625" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/ic_books.xml" value="0.15885416666666666" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/activity_app.xml" value="0.27291666666666664" />
-        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_charts.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_charts.xml" value="0.33" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_composition.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_payouts.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_portfolio.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_purchase_history.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_selection.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_text_info_deposit.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/menu/bottom_nav_menu.xml" value="0.27291666666666664" />
       </map>
     </option>

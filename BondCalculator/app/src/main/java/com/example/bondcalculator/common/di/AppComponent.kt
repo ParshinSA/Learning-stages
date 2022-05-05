@@ -1,10 +1,7 @@
 package com.example.bondcalculator.common.di
 
 import android.content.Context
-import com.example.bondcalculator.common.di.modules.DataSourceModule
-import com.example.bondcalculator.common.di.modules.InteractorModule
-import com.example.bondcalculator.common.di.modules.NetworkModule
-import com.example.bondcalculator.common.di.modules.RepositoryModule
+import com.example.bondcalculator.common.di.modules.*
 import com.example.bondcalculator.presentation.ui.selection.SelectionFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -16,7 +13,9 @@ import javax.inject.Singleton
         NetworkModule::class,
         InteractorModule::class,
         RepositoryModule::class,
-        DataSourceModule::class
+        DataSourceModule::class,
+        BondsModule::class,
+        CalculateYieldModule::class
     ]
 )
 interface AppComponent {

@@ -14,12 +14,12 @@
     <fragment
         android:id="@+id/nameMenuAndControlCharts"
         android:name="com.example.bondcalculator.presentation.ui.charts.ChartsFragment"
-        android:label="@string/title_charts"
+        android:label="@string/titleCharts"
         tools:layout="@layout/fragment_charts" />
 
     <fragment
         android:id="@+id/nameMenuAndControlComposition"
         android:name="com.example.bondcalculator.presentation.ui.composition.CompositionFragment"
-        android:label="@string/title_composition"
+        android:label="@string/titleComposition"
         tools:layout="@layout/fragment_composition" />
 </navigation>

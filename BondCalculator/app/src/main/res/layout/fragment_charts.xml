@@ -4,13 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/fragmentsPadding"
     tools:context=".presentation.ui.charts.ChartsFragment">
 
-
-    <TextView
+    <fragment
+        android:id="@+id/infoContainer"
+        android:name="com.example.bondcalculator.presentation.ui.charts.nested.fragments.TextInfoDepositFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_charts"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/tabLayoutCharts"
+        app:layout_constraintTop_toTopOf="parent"></fragment>
+
+    <TableLayout
+        android:id="@+id/tabLayoutCharts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/viewPager2Fragments"
+        app:layout_constraintTop_toBottomOf="@id/infoContainer" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager2Fragments"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_view_pager_charts"
+        app:layout_constraintBottom_toTopOf="@+id/buttonApplyBid"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutCharts"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <Button
+        android:id="@+id/buttonApplyBid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="оставить заявку"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

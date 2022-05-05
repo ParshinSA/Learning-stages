@@ -4,12 +4,148 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/fragmentsPadding"
     tools:context=".presentation.ui.selection.SelectionFragment">
 
     <TextView
+        android:id="@+id/textViewTxtInvestmentTerm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/textViewTxtInvestmentTerm"
+        android:textSize="@dimen/xmlTxtTextSize"
+        app:layout_constraintEnd_toStartOf="@id/textViewValueInvestmentTerm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewValueInvestmentTerm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/xmlValueTextSize"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewTxtInvestmentTerm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewTxtInvestmentTerm"
+        tools:text="30 лет" />
+
+    <SeekBar
+        android:id="@+id/seekBarInvestmentTerm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/titleSelection"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="@dimen/marginTopInsideSections"
+        android:max="60"
+        android:min="1"
+        app:layout_constraintTop_toBottomOf="@id/textViewTxtInvestmentTerm" />
+
+    <TextView
+        android:id="@+id/textViewTxtInvestmentCurrency"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTopBetweenSections"
+        android:text="@string/textViewTxtInvestmentCurrency"
+        android:textSize="@dimen/xmlTxtTextSize"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarInvestmentTerm" />
+
+    <Button
+        android:id="@+id/buttonInvestmentCurrencyRUB"
+        style="@style/styleButtonSelectionFragment"
+        android:layout_marginEnd="4dp"
+        android:text="@string/buttonTxtInvestmentCurrencyRUB"
+        app:layout_constraintEnd_toStartOf="@+id/buttonInvestmentCurrencyUSD"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTxtInvestmentCurrency" />
+
+    <Button
+        android:id="@+id/buttonInvestmentCurrencyUSD"
+        style="@style/styleButtonSelectionFragment"
+        android:text="@string/buttonTxtInvestmentCurrencyUSD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonInvestmentCurrencyRUB"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTxtInvestmentCurrency" />
+
+    <TextView
+        android:id="@+id/textViewTxtInvestmentAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTopBetweenSections"
+        android:text="@string/textViewTxtInvestmentAmount"
+        android:textSize="@dimen/xmlTxtTextSize"
+        app:layout_constraintEnd_toStartOf="@id/textViewValueInvestmentTerm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonInvestmentCurrencyRUB" />
+
+    <TextView
+        android:id="@+id/textViewValueInvestmentAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/xmlValueTextSize"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewTxtInvestmentAmount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewTxtInvestmentAmount"
+        tools:text="2000000 руб." />
+
+    <SeekBar
+        android:id="@+id/seekBarInvestmentAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTopInsideSections"
+        android:max="2000000"
+        app:layout_constraintTop_toBottomOf="@id/textViewTxtInvestmentAmount" />
+
+    <Button
+        android:id="@+id/buttonInvestmentAccountIIS"
+        style="@style/styleButtonSelectionFragment"
+        android:layout_marginEnd="4dp"
+        android:text="@string/buttonTxtInvestmentAccountIIS"
+        app:layout_constraintEnd_toStartOf="@+id/buttonInvestmentAccountNormal"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarInvestmentAmount" />
+
+    <Button
+        android:id="@+id/buttonInvestmentAccountNormal"
+        style="@style/styleButtonSelectionFragment"
+        android:text="@string/buttonTxtInvestmentAccountNormal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonInvestmentAccountIIS"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarInvestmentAmount" />
+
+    <CheckBox
+        android:id="@+id/checkBoxRegularReplenishment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTopBetweenSections"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonInvestmentAccountIIS" />
+
+    <TextView
+        android:id="@+id/textViewTxtRegularReplenishment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/textViewTxtRegularReplenishment"
+        android:textSize="@dimen/xmlTxtTextSize"
+        app:layout_constraintBaseline_toBaselineOf="@id/checkBoxRegularReplenishment"
+        app:layout_constraintStart_toEndOf="@id/checkBoxRegularReplenishment" />
+
+    <TextView
+        android:id="@+id/textViewTxtAmountRegularReplenishment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTopInsideSections"
+        android:textSize="@dimen/xmlValueTextSize"
+        app:layout_constraintStart_toStartOf="@+id/textViewTxtRegularReplenishment"
+        app:layout_constraintTop_toBottomOf="@id/textViewTxtRegularReplenishment" />
+
+    <Button
+        android:id="@+id/buttonCollectPortfolio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonTxtCollectPortfolio"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTxtAmountRegularReplenishment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
