@@ -29,7 +29,7 @@ fun Long.toSeconds(): Long {
     return this / 1000
 }
 
-fun DomainBondAndCalendar.shiftCalendar(currentDate: Long): DomainBondAndCalendar {
+fun DomainBondAndCalendar.checkCalendar(currentDate: Long): DomainBondAndCalendar {
 
     return if (currentDate + ONE_YEAR_SECONDS < this.repayment) {
         Log.d("TAG portfolio", "shiftCalendar: return this")

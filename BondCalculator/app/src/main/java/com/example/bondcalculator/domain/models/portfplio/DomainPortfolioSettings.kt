@@ -7,7 +7,7 @@ import com.example.bondcalculator.presentation.models.TypeInvestmentCurrency
 data class DomainPortfolioSettings(
     val currency: TypeInvestmentCurrency,
     val account: TypeInvestmentAccount,
-    val term: Long,
+    val term: Int,
     val isReplenishment: Boolean,
     val startBalance: Double,
     val exchangeRateUsdToRub: Double,

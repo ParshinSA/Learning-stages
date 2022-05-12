@@ -130,7 +130,7 @@ class SelectionViewModel(
         return DomainPortfolioSettings(
             currency = selectedCurrency,
             account = selectedAccount,
-            term = presentDay + (investmentTermValueLiveDta.value!! * ONE_YEAR_SECONDS),
+            term = investmentTermValueLiveDta.value!!,
             isReplenishment = isReplenish,
             startBalance = getBalance(),
             exchangeRateUsdToRub = exchangeRateUsdToRub,

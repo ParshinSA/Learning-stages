@@ -6,6 +6,10 @@ import javax.inject.Inject
 class DomainBalanceImpl @Inject constructor() : DomainBalance {
     private var currentBalance: Double = 0.0
 
+    override fun checkPurchaseAvailability(price: Double): Boolean {
+        return price >= currentBalance
+    }
+
     override fun increment(amountMoney: Double) {
         currentBalance = (currentBalance + amountMoney).roundDouble()
     }

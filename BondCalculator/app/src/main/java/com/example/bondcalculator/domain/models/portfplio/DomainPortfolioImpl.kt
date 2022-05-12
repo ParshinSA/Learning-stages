@@ -1,7 +1,7 @@
 package com.example.bondcalculator.domain.models.portfplio
 
 import android.util.Log
-import com.example.bondcalculator.common.shiftCalendar
+import com.example.bondcalculator.common.checkCalendar
 import com.example.bondcalculator.common.toDateString
 import com.example.bondcalculator.domain.models.account.DomainBankAccount
 import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
@@ -43,7 +43,7 @@ class DomainPortfolioImpl @Inject constructor(
         fun checkTopListAndBalance() {
             if (stop) return
             bondTopList.forEachIndexed { index, bond ->
-                val newBond = bond.shiftCalendar(currentDate)
+                val newBond = bond.checkCalendar(currentDate)
                 val price = bondFormulas.getTotalPrice(newBond, currentDate) * bond.lotSize
                 val balance = bankAccount.getBalance()
                 if (balance < price) {

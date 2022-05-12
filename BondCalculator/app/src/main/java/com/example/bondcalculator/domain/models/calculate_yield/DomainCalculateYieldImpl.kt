@@ -1,9 +1,6 @@
 package com.example.bondcalculator.domain.models.calculate_yield
 
-import com.example.bondcalculator.common.DEFAULT_REPLENISHMENT_MONTH_AMOUNT
-import com.example.bondcalculator.common.ONE_DAY_SECONDS
-import com.example.bondcalculator.common.toDateString
-import com.example.bondcalculator.common.toDayTimeStamp
+import com.example.bondcalculator.common.*
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolio
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSettings
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioYield
@@ -23,7 +20,8 @@ class DomainCalculateYieldImpl @Inject constructor(
             // дата начала расчета
             val startDate = System.currentTimeMillis().toDayTimeStamp()
             // дата конца расчета
-            val endDate = portfolioSettings.term
+            val endDate = startDate + (portfolioSettings.term * ONE_YEAR_SECONDS)
+
 
             // запуск итерации с шагом в один день
             for (currentDate in startDate..endDate step ONE_DAY_SECONDS) {
