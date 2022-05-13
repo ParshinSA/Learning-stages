@@ -7,4 +7,5 @@ interface DomainPurchasedBonds {
     fun removeBond(bond: DomainBondAndCalendar)
     fun addBond(bond: DomainBondAndCalendar)
     fun getPurchasedBondsHistory(): Map<DomainBondAndCalendar, Int>
+    fun clear()
 }

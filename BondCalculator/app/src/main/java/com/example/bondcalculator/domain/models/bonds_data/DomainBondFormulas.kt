@@ -6,4 +6,5 @@ interface DomainBondFormulas {
     fun getPriceToMaturity(bond: DomainBondAndCalendar, currentDate: Long): Double
     fun getCouponPay(bond: DomainBondAndCalendar, currentDate: Long): Double
     fun getAmortPay(bond: DomainBondAndCalendar, currentDate: Long): Double
+    fun getAccumulateCoupon(bond: DomainBondAndCalendar, currentDate: Long): Double
 }

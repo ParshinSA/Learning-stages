@@ -11,6 +11,7 @@ import com.example.bondcalculator.domain.models.bonds_data.DomainRequestBondList
 import com.example.bondcalculator.domain.models.exchange_rate.DomainExchangeRateUsdToRub
 import com.example.bondcalculator.domain.models.payment_calendar.DomainPaymentCalendar
 import com.example.bondcalculator.domain.models.payment_calendar.DomainRequestPaymentCalendar
+import java.util.*
 
 fun RemoteResponseExchangeRateDto.toDomainExchangeRateUsdToRub(): DomainExchangeRateUsdToRub {
     return DomainExchangeRateUsdToRub(
@@ -92,8 +93,8 @@ fun RemoteResponseBondListDto.toDomainBondData(): List<DomainBond> {
 }
 
 fun RemoteResponseCouponInfoDto.toDomainCouponInfo(): DomainPaymentCalendar {
-    val amortizationPayment = hashMapOf<Long, Double>()
-    val couponPayment = hashMapOf<Long, Double>()
+    val amortizationPayment = TreeMap<Long, Double>()
+    val couponPayment = TreeMap<Long, Double>()
 
     with(this.amortizationInfo) {
         for (dataList in listParameterData) {

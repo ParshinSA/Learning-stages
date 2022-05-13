@@ -28,6 +28,11 @@ class DomainPurchasedBondsImpl @Inject constructor() : DomainPurchasedBonds {
         return purchasedBondsHistory
     }
 
+    override fun clear() {
+        purchasedBonds.clear()
+        purchasedBondsHistory.clear()
+    }
+
     private fun addInPurchaseHistory(bond: DomainBondAndCalendar) {
         purchasedBondsHistory[bond] = purchasedBonds.getValue(bond)
     }

@@ -7,7 +7,7 @@ class DomainBalanceImpl @Inject constructor() : DomainBalance {
     private var currentBalance: Double = 0.0
 
     override fun checkPurchaseAvailability(price: Double): Boolean {
-        return price >= currentBalance
+        return price <= currentBalance
     }
 
     override fun increment(amountMoney: Double) {
@@ -20,5 +20,9 @@ class DomainBalanceImpl @Inject constructor() : DomainBalance {
 
     override fun getBalance(): Double {
         return currentBalance
+    }
+
+    override fun clear(){
+        currentBalance = 0.0
     }
 }

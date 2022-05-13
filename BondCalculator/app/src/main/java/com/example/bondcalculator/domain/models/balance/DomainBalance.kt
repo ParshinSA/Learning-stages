@@ -5,4 +5,5 @@ interface DomainBalance {
     fun decrement(amountMoney: Double)
     fun getBalance(): Double
     fun checkPurchaseAvailability(price: Double): Boolean
+    fun clear()
 }

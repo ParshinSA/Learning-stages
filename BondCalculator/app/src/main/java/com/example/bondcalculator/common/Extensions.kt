@@ -32,11 +32,11 @@ fun Long.toSeconds(): Long {
 fun DomainBondAndCalendar.checkCalendar(currentDate: Long): DomainBondAndCalendar {
 
     return if (currentDate + ONE_YEAR_SECONDS < this.repayment) {
-        Log.d("TAG portfolio", "shiftCalendar: return this")
+        Log.d("TAG portfolio", "checkCalendar: return this")
         this
     } else {
-        Log.d("TAG portfolio", "shiftCalendar: return new bond")
-        val newAmortizationPaymentCalendar = hashMapOf<Long, Double>()
+        Log.d("TAG portfolio", "checkCalendar: return new bond")
+        val newAmortizationPaymentCalendar = TreeMap<Long, Double>()
         val stepAmortizationPayment: Long =
             currentDate - this.paymentCalendar.amortizationPayment.keys.toList().minOrNull()!!
 
@@ -44,7 +44,7 @@ fun DomainBondAndCalendar.checkCalendar(currentDate: Long): DomainBondAndCalenda
             newAmortizationPaymentCalendar[(date + stepAmortizationPayment)] = value
         }
 
-        val newCouponPaymentCalendar = hashMapOf<Long, Double>()
+        val newCouponPaymentCalendar = TreeMap<Long, Double>()
         val stepCouponPayment: Long =
             currentDate - this.paymentCalendar.couponPayment.keys.toList().sorted()[0]
 

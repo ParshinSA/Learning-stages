@@ -8,7 +8,7 @@ import javax.inject.Inject
 class DomainBondFormulasImpl @Inject constructor() : DomainBondFormulas {
 
     // накопленный купон
-    private fun getAccumulateCoupon(bond: DomainBondAndCalendar, currentDate: Long): Double {
+    override fun getAccumulateCoupon(bond: DomainBondAndCalendar, currentDate: Long): Double {
         val dateLastCouponPayment =
             bond.paymentCalendar.couponPayment.keys.last { it <= currentDate }
         val nextCoupon = getNextCoupon(bond, currentDate)
@@ -45,10 +45,11 @@ class DomainBondFormulasImpl @Inject constructor() : DomainBondFormulas {
             .roundDouble()
     }
 
-    // купон
+    // следующий купон
     private fun getNextCoupon(bond: DomainBondAndCalendar, currentDate: Long): Double {
         val keyDate = bond.paymentCalendar.couponPayment.keys.firstOrNull() { it >= currentDate }
-        return bond.paymentCalendar.couponPayment.getOrDefault(keyDate, 0.0)
+        return if (keyDate == null) 0.0
+        else bond.paymentCalendar.couponPayment[keyDate]!!
     }
 
     // текущий номинал
@@ -62,12 +63,14 @@ class DomainBondFormulasImpl @Inject constructor() : DomainBondFormulas {
 
     override fun getCouponPay(bond: DomainBondAndCalendar, currentDate: Long): Double {
         val keyDate = bond.paymentCalendar.couponPayment.keys.firstOrNull() { it == currentDate }
-        return bond.paymentCalendar.couponPayment.getOrDefault(keyDate, 0.0)
+        return if (keyDate == null) 0.0
+        else bond.paymentCalendar.couponPayment[keyDate]!!
     }
 
     override fun getAmortPay(bond: DomainBondAndCalendar, currentDate: Long): Double {
         val keyDate =
             bond.paymentCalendar.amortizationPayment.keys.firstOrNull() { it == currentDate }
-        return bond.paymentCalendar.amortizationPayment.getOrDefault(keyDate, 0.0)
+        return if (keyDate == null) 0.0
+        else bond.paymentCalendar.amortizationPayment[keyDate]!!
     }
 }

@@ -116,7 +116,8 @@ class SelectionViewModel(
                 }
                 .subscribeOn(Schedulers.computation())
                 .subscribe({ result ->
-                    Log.d(TAG, "collectPortfolio: COMPLETE")
+                    Log.d(TAG, "collectPortfolio: COMPLETE " +
+                            "\nresult $result")
                 }, {
                     error("ERROR $it")
                 })
@@ -124,8 +125,6 @@ class SelectionViewModel(
     }
 
     private fun getPortfolioData(bondYtmCalendarList: List<DomainBondAndCalendar>): DomainPortfolioSettings {
-        val presentDay =
-            System.currentTimeMillis().toDayTimeStamp()
 
         return DomainPortfolioSettings(
             currency = selectedCurrency,

@@ -4,8 +4,8 @@ import com.example.bondcalculator.domain.models.account.DomainBankAccount
 import com.example.bondcalculator.domain.models.account.DomainBankAccountImpl
 import com.example.bondcalculator.domain.models.balance.DomainBalance
 import com.example.bondcalculator.domain.models.balance.DomainBalanceImpl
-import com.example.bondcalculator.domain.models.calculate_yield.DomainCalculateYield
-import com.example.bondcalculator.domain.models.calculate_yield.DomainCalculateYieldImpl
+import com.example.bondcalculator.domain.models.calculate_yield_2.CalculateYield2
+import com.example.bondcalculator.domain.models.calculate_yield_2.CalculateYield2Impl
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolio
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioImpl
 import com.example.bondcalculator.domain.models.purchased_bonds.DomainPurchasedBonds
@@ -24,9 +24,12 @@ interface CalculateYieldModule {
     @Binds
     fun bindBalanceImpl_to_Inteface(balanceImpl: DomainBalanceImpl): DomainBalance
 
+    //    @Binds
+//    @Suppress("FunctionName")
+//    fun bindCalculateYield_to_Interface(calculateYieldImpl: DomainCalculateYieldImpl): DomainCalculateYield
     @Binds
     @Suppress("FunctionName")
-    fun bindCalculateYield_to_Interface(calculateYieldImpl: DomainCalculateYieldImpl): DomainCalculateYield
+    fun bindCalculateYield_to_Interface(calculateYieldImpl: CalculateYield2Impl): CalculateYield2
 
     @Suppress("FunctionName")
     @Binds

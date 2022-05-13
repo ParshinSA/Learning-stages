@@ -1,13 +1,14 @@
 package com.example.bondcalculator.domain.interactors
 
 import com.example.bondcalculator.common.COUNT_TOP_BOUND
+import com.example.bondcalculator.common.MIN_PRICE_PERCENT
 import com.example.bondcalculator.common.ONE_YEAR_SECONDS
 import com.example.bondcalculator.common.toDayTimeStamp
 import com.example.bondcalculator.domain.interactors.intf.SelectedDataInteractor
 import com.example.bondcalculator.domain.models.bonds_data.DomainBond
 import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
 import com.example.bondcalculator.domain.models.bonds_data.DomainRequestBondList
-import com.example.bondcalculator.domain.models.calculate_yield.DomainCalculateYield
+import com.example.bondcalculator.domain.models.calculate_yield_2.CalculateYield2
 import com.example.bondcalculator.domain.models.exchange_rate.DomainExchangeRateUsdToRub
 import com.example.bondcalculator.domain.models.payment_calendar.DomainRequestPaymentCalendar
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSettings
@@ -20,11 +21,11 @@ import javax.inject.Inject
 class SelectedDataInteractorImpl @Inject constructor(
     private val bondDataRepository: BondDataRepository,
     private val exchangeRateRepository: ExchangeRateRepository,
-    private val calculateYieldPortfolio: DomainCalculateYield,
+    private val calculateYieldPortfolio: CalculateYield2,
 ) : SelectedDataInteractor {
 
     override fun calculateYieldPortfolio(portfolioSettings: DomainPortfolioSettings): Observable<DomainPortfolioYield> {
-        return calculateYieldPortfolio.calculatePortfolioYield(portfolioSettings)
+        return calculateYieldPortfolio.execute(portfolioSettings)
     }
 
     override fun getProfitableBonds(request: DomainRequestBondList): Observable<List<DomainBondAndCalendar>> {
@@ -43,6 +44,7 @@ class SelectedDataInteractorImpl @Inject constructor(
             .map { bondList ->
                 val currentDate = System.currentTimeMillis().toDayTimeStamp()
                 bondList
+                    .filter { it.pricePercent < MIN_PRICE_PERCENT }
                     .filter { it.repayment > currentDate + ONE_YEAR_SECONDS }
                     .filter { it.couponPercent > 0 }
             }
