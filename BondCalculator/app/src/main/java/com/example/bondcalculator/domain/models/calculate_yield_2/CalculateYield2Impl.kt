@@ -101,7 +101,7 @@ class CalculateYield2Impl @Inject constructor(
         Log.d(TAG, "byBondProcess: ")
         var purchaseAttemptCounter = 0
 
-        val bondList = getBondTopList()
+        val bondList = getBondTopList().shuffled()
         while (purchaseAttemptCounter < bondList.size) {
             for (bond in bondList) {
                 val newBond = bond.checkCalendar(currentDate)
@@ -120,6 +120,7 @@ class CalculateYield2Impl @Inject constructor(
         return if (purchasedBonds.getPurchasedBonds().isEmpty()) {
             portfolioSettings.bondTopList
         } else {
+            purchasedBonds.checkMaturity(currentDate)
             purchasedBonds.getPurchasedBonds().keys.toList()
         }
     }
@@ -181,16 +182,10 @@ class CalculateYield2Impl @Inject constructor(
             }
 
             if (generalPaymentList.containsKey(date)) {
-                Log.d(TAG, "addInGeneralPaymentCalendar: +date ${date.toDateString()}, $date")
-                Log.d(TAG, "addInGeneralPaymentCalendar: before ${generalPaymentList[date]}")
                 val currentPayment = generalPaymentList.getValue(date)
-                generalPaymentList[date] = currentPayment + amountMoney
-                Log.d(TAG, "addInGeneralPaymentCalendar: after ${generalPaymentList[date]}")
+                generalPaymentList[date] = (currentPayment + amountMoney).roundDouble()
             } else {
-                Log.d(TAG, "addInGeneralPaymentCalendar: new date ${date.toDateString()}, $date")
-                Log.d(TAG, "addInGeneralPaymentCalendar: before ${generalPaymentList[date]}")
                 generalPaymentList[date] = amountMoney
-                Log.d(TAG, "addInGeneralPaymentCalendar: after ${generalPaymentList[date]}")
             }
         }
     }

@@ -8,4 +8,5 @@ interface DomainPurchasedBonds {
     fun addBond(bond: DomainBondAndCalendar)
     fun getPurchasedBondsHistory(): Map<DomainBondAndCalendar, Int>
     fun clear()
+    fun checkMaturity(date: Long)
 }

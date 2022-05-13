@@ -36,4 +36,11 @@ class DomainPurchasedBondsImpl @Inject constructor() : DomainPurchasedBonds {
     private fun addInPurchaseHistory(bond: DomainBondAndCalendar) {
         purchasedBondsHistory[bond] = purchasedBonds.getValue(bond)
     }
+
+    override fun checkMaturity(date: Long) {
+        val copyPurchasedBonds = purchasedBonds.keys.toList()
+        copyPurchasedBonds.forEach { bond ->
+            if (bond.repayment < date) removeBond(bond)
+        }
+    }
 }

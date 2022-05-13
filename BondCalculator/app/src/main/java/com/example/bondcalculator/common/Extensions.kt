@@ -36,20 +36,20 @@ fun DomainBondAndCalendar.checkCalendar(currentDate: Long): DomainBondAndCalenda
         this
     } else {
         Log.d("TAG portfolio", "checkCalendar: return new bond")
-        val newAmortizationPaymentCalendar = TreeMap<Long, Double>()
-        val stepAmortizationPayment: Long =
-            currentDate - this.paymentCalendar.amortizationPayment.keys.toList().minOrNull()!!
 
-        for ((date, value) in this.paymentCalendar.amortizationPayment) {
-            newAmortizationPaymentCalendar[(date + stepAmortizationPayment)] = value
-        }
-
-        val newCouponPaymentCalendar = TreeMap<Long, Double>()
-        val stepCouponPayment: Long =
+        val stepPayment: Long =
             currentDate - this.paymentCalendar.couponPayment.keys.toList().sorted()[0]
 
+        val newAmortizationPaymentCalendar = TreeMap<Long, Double>()
+        val newCouponPaymentCalendar = TreeMap<Long, Double>()
+
+        for ((date, value) in this.paymentCalendar.amortizationPayment) {
+            newAmortizationPaymentCalendar[(date + stepPayment)] = value
+        }
+
+
         for ((date, value) in this.paymentCalendar.couponPayment) {
-            newCouponPaymentCalendar[(date + stepCouponPayment)] = value
+            newCouponPaymentCalendar[(date + stepPayment)] = value
         }
 
         val repayment = newAmortizationPaymentCalendar.keys.toList().maxOrNull()!!
