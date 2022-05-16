@@ -54,7 +54,6 @@ class CalculateYield2Impl @Inject constructor(
     }
 
     private fun calculate(): DomainPortfolioYield {
-
         while (true) {
             val previousDate = currentDate
             updateCurrentDate()
@@ -79,7 +78,7 @@ class CalculateYield2Impl @Inject constructor(
 
     /**
      * bond.key - данные по текущей облигации
-     * bond.key - кол-во текущих облигаций
+     * bond.value - кол-во текущих облигаций
      * */
     private fun sellAll() {
         Log.d(TAG, "sellAll: ")
