@@ -88,11 +88,8 @@ class CalculateYield2Impl @Inject constructor(
                 ((formulas.getPriceToMaturity(bond.key, endDate) * bond.key.lotSize) * bond.value)
                     .roundDouble()
 
-            Log.d(TAG, "sellAll: bond $bond")
-            Log.d(TAG, "sellAll: price $price")
             purchasedBonds.removeBond(bond.key)
             balance.increment(price)
-            Log.d(TAG, "sellAll: balance ${balance.getBalance()}")
         }
     }
 
@@ -116,6 +113,7 @@ class CalculateYield2Impl @Inject constructor(
     }
 
     private fun getBondTopList(): List<DomainBondAndCalendar> {
+        Log.d(TAG, "getBondTopList: ")
         return if (purchasedBonds.getPurchasedBonds().isEmpty()) {
             portfolioSettings.bondTopList
         } else {
@@ -157,7 +155,6 @@ class CalculateYield2Impl @Inject constructor(
 
     private fun byBond(bond: DomainBondAndCalendar, price: Double) {
         Log.d(TAG, "byBond: ")
-        Log.d(TAG, "byBond: bond $bond")
         val couponPaymentCalendar = bond.paymentCalendar.couponPayment
         val amortizationPaymentCalendar = bond.paymentCalendar.amortizationPayment
 

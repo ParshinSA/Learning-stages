@@ -27,7 +27,6 @@ class SelectionViewModel(
                 .subscribeOn(Schedulers.newThread())
                 .subscribe({ usdToRub ->
                     exchangeRateUsdToRub = usdToRub.value
-                    Log.d(TAG, "setCurrentDataInPortfolio: $usdToRub")
                 },
                     {
                         error("error getExchangeRate $it")
