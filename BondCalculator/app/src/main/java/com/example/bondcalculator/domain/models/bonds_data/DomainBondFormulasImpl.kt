@@ -10,7 +10,7 @@ class DomainBondFormulasImpl @Inject constructor() : DomainBondFormulas {
     // накопленный купон
     override fun getAccumulateCoupon(bond: DomainBondAndCalendar, currentDate: Long): Double {
         val dateLastCouponPayment =
-            bond.paymentCalendar.couponPayment.keys.last { it <= currentDate }
+            bond.paymentCalendar.couponPayment.keys.lastOrNull() { it <= currentDate } ?: return 0.0
         val nextCoupon = getNextCoupon(bond, currentDate)
         // количество дней с последней даты выплаты купона
         val numberDay = (currentDate - dateLastCouponPayment) / ONE_DAY_SECONDS

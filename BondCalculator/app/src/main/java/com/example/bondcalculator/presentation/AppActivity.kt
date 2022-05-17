@@ -1,6 +1,8 @@
 package com.example.bondcalculator.presentation
 
 import android.os.Bundle
+import android.util.Log
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -26,4 +28,9 @@ class AppActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
+
+
+    companion object {
+        private val TAG = this::class.qualifiedName
+    }
 }

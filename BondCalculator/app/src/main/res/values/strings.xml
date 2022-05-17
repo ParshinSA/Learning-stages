@@ -1,5 +1,9 @@
 <resources>
+<!--    Common     START-->
     <string name="app_name">Bond Calculator</string>
+    <string name="dialog_attention">Внимание!</string>
+    <string name="dialog_unknown_error">Что-то пошло не так</string>
+<!--    Common     END-->
 
 
     <!--    fragment selection  START   -->

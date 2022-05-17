@@ -8,7 +8,7 @@ import com.example.bondcalculator.domain.interactors.intf.SelectedDataInteractor
 import com.example.bondcalculator.domain.models.bonds_data.DomainBond
 import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
 import com.example.bondcalculator.domain.models.bonds_data.DomainRequestBondList
-import com.example.bondcalculator.domain.models.calculate_yield_2.CalculateYield2
+import com.example.bondcalculator.domain.models.calculate_yield.CalculateYield
 import com.example.bondcalculator.domain.models.exchange_rate.DomainExchangeRateUsdToRub
 import com.example.bondcalculator.domain.models.payment_calendar.DomainRequestPaymentCalendar
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSettings
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class SelectedDataInteractorImpl @Inject constructor(
     private val bondDataRepository: BondDataRepository,
     private val exchangeRateRepository: ExchangeRateRepository,
-    private val calculateYieldPortfolio: CalculateYield2,
+    private val calculateYieldPortfolio: CalculateYield,
 ) : SelectedDataInteractor {
 
     override fun calculateYieldPortfolio(portfolioSettings: DomainPortfolioSettings): Observable<DomainPortfolioYield> {

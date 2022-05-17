@@ -10,6 +10,8 @@ import com.example.bondcalculator.domain.interactors.intf.SelectedDataInteractor
 import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
 import com.example.bondcalculator.domain.models.bonds_data.DomainRequestBondList
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSettings
+import com.example.bondcalculator.presentation.common.ResourcesProvider
+import com.example.bondcalculator.presentation.common.SingleLiveEvent
 import com.example.bondcalculator.presentation.models.TypeBoard.TQOB
 import com.example.bondcalculator.presentation.models.TypeBoard.TQOD
 import com.example.bondcalculator.presentation.models.TypeInvestmentAccount
@@ -18,7 +20,8 @@ import com.example.bondcalculator.presentation.models.TypeInvestmentCurrency.USD
 import io.reactivex.schedulers.Schedulers
 
 class SelectionViewModel(
-    private val interactor: SelectedDataInteractor
+    private val interactor: SelectedDataInteractor,
+    private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
     init {
@@ -57,6 +60,12 @@ class SelectionViewModel(
     private val investmentAmountValueMutLiveData =
         MutableLiveData(DEFAULT_INVESTMENT_AMOUNT_SEEKBAR)
     val investmentAmountValueLiveDta: LiveData<Int> get() = investmentAmountValueMutLiveData
+
+    private val errorMessageMutLiveData = SingleLiveEvent<String>()
+    val errorMessageLiveData: LiveData<String> get() = errorMessageMutLiveData
+
+    private val isLoadingMutLiveData = MutableLiveData(false)
+    val isLoadingLiveData: LiveData<Boolean> get() = isLoadingMutLiveData
 
     fun setValueInvestmentTerm(value: Int) {
         investmentTermValueMutLiveData.value = value
@@ -108,6 +117,7 @@ class SelectionViewModel(
         compositeDisposable.add(
             interactor.getProfitableBonds(getRequest())
                 .map { bondAndCalendarList ->
+                    isLoadingMutLiveData.postValue(true)
                     getPortfolioData(bondAndCalendarList)
                 }
                 .flatMap { portfolioData ->
@@ -115,10 +125,14 @@ class SelectionViewModel(
                 }
                 .subscribeOn(Schedulers.computation())
                 .subscribe({ result ->
-                    Log.d(TAG, "collectPortfolio: COMPLETE " +
-                            "\nresult $result")
+                    isLoadingMutLiveData.postValue(false)
+                    Log.d(TAG, "collectPortfolio: COMPLETE result $result")
                 }, {
-                    error("ERROR $it")
+                    isLoadingMutLiveData.postValue(false)
+                    errorMessageMutLiveData.postValue(
+                        resourcesProvider.getString(R.string.dialog_unknown_error)
+                    )
+                    Log.d(TAG, "collectPortfolio: ERROR $it")
                 })
         )
     }
@@ -134,13 +148,11 @@ class SelectionViewModel(
             exchangeRateUsdToRub = exchangeRateUsdToRub,
             bondTopList = bondYtmCalendarList
         )
-
     }
 
     private fun getRequest(): DomainRequestBondList {
         return DomainRequestBondList(if (selectedCurrency == RUB) TQOB.name else TQOD.name)
     }
-
 
     companion object {
         private val TAG = this::class.qualifiedName

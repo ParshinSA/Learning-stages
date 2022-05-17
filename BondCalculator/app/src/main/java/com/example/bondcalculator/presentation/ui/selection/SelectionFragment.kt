@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.SeekBar
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.bondcalculator.R
@@ -28,6 +31,8 @@ class SelectionFragment : Fragment() {
 
     private var _binding: FragmentSelectionBinding? = null
     private val binding get() = _binding!!
+
+    private var myDialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -139,6 +144,31 @@ class SelectionFragment : Fragment() {
             )
         }
 
+        viewModel.errorMessageLiveData.observe(viewLifecycleOwner) { message ->
+            showDialogError(message)
+        }
+
+        viewModel.isLoadingLiveData.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) requireActivity().window.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+            else requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            changeStateProgressBar(isLoading)
+        }
+    }
+
+    private fun changeStateProgressBar(state: Boolean) {
+        isBlockScreenTouch(state)
+        binding.progressBarIsLoading.isVisible = state
+    }
+
+    private fun isBlockScreenTouch(state: Boolean) {
+        if (state) requireActivity().window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+        else requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
     private fun seekBarListener(seekBar: SeekBar, actionSeekbar: (SeekBar) -> Unit) {
@@ -167,12 +197,22 @@ class SelectionFragment : Fragment() {
         (requireContext().applicationContext as AppApplication).appComponent.inject(this)
     }
 
-    companion object {
-        private val TAG = this::class.qualifiedName
+    private fun showDialogError(message: String) {
+        myDialog = AlertDialog.Builder(requireContext())
+            .setTitle(this.getString(R.string.dialog_attention))
+            .setMessage(message)
+            .create()
+        myDialog!!.show()
     }
 
     override fun onDestroy() {
         _binding = null
+        myDialog = null
         super.onDestroy()
     }
+
+    companion object {
+        private val TAG = this::class.qualifiedName
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.example.bondcalculator.domain.models.calculate_yield_2
+package com.example.bondcalculator.domain.models.calculate_yield
 
 import android.util.Log
 import com.example.bondcalculator.common.*
@@ -12,11 +12,11 @@ import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
-class CalculateYield2Impl @Inject constructor(
+class CalculateYieldImpl @Inject constructor(
     private val formulas: DomainBondFormulas,
     private val purchasedBonds: DomainPurchasedBonds,
     private val balance: DomainBalance
-) : CalculateYield2 {
+) : CalculateYield {
 
     private lateinit var portfolioSettings: DomainPortfolioSettings
 
