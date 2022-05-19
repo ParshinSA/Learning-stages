@@ -1,0 +1,55 @@
+<resources>
+<!--    Common     START-->
+    <string name="app_name">Bond Calculator</string>
+    <string name="dialog_attention">Внимание!</string>
+    <string name="dialog_unknown_error">Что-то пошло не так</string>
+<!--    Common     END-->
+
+
+    <!--    fragment selection  START   -->
+    <string name="textViewTxtInvestmentTerm">Срок инвестиций:</string>
+    <string name="textViewTxtInvestmentCurrency">Валюта инвестиций</string>
+    <string name="buttonTxtInvestmentCurrencyRUB">RUB</string>
+    <string name="buttonTxtInvestmentCurrencyUSD">USD</string>
+    <string name="textViewTxtInvestmentAmount">Сумма инвестиций:</string>
+    <string name="valueInvestmentAmount">%1$d руб.</string>
+    <string name="buttonTxtInvestmentAccountIIS">ИИС</string>
+    <string name="buttonTxtInvestmentAccountNormal">Обычный счет</string>
+    <string name="textViewTxtRegularReplenishment">Регулярное пополнение</string>
+    <string name="textViewTxtAmountRegularReplenishment">%1d руб/мес</string>
+    <string name="buttonTxtCollectPortfolio">Собрать \nпортфель</string>
+
+    <plurals name="valueInvestmentTerm">
+        <item quantity="one">%1$d год</item><!--1-->
+        <item quantity="few">%1$d года</item><!--2..4-->
+        <item quantity="many">%1$d лет</item><!--5..9 + 0-->
+    </plurals>
+    <!--    fragment selection  END     -->
+
+
+    <!--    fragment charts  START  -->
+    <string name="textViewTxtInvestmentToday">Инвестиции сегодня:</string>
+    <string name="textViewTxtValYearYield">Доходность %1$d годовых</string>
+    <string name="textViewTxtAfter">Через</string>
+    <string name="textViewTxtWillBe">будет</string>
+    <string name="textViewTxtYield">Прибыль</string>
+
+    <plurals name="textViewValueAfter">
+        <item quantity="one">%1$d год</item><!--1-->
+        <item quantity="few">%1$d года</item><!--2..4-->
+        <item quantity="many">%1$d лет</item><!--5..9 + 0-->
+    </plurals>
+    <!--    fragment charts  END    -->
+
+
+    <!--    fragment composition START   -->
+    <!--    fragment composition END     -->
+
+
+    <!--    bottom navigation menu START    -->
+    <string name="titleSelection">Подбор</string>
+    <string name="titleCharts">Графики</string>
+    <string name="titleComposition">Состав</string>
+    <!--    bottom navigation menu END      -->
+
+</resources>
