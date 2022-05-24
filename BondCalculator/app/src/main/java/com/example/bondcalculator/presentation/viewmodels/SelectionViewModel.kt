@@ -1,7 +1,6 @@
 package com.example.bondcalculator.presentation.viewmodels
 
 import android.util.Log
-import android.widget.Button
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bondcalculator.R
@@ -24,41 +23,29 @@ import io.reactivex.schedulers.Schedulers
 class SelectionViewModel(
     private val interactor: SelectedFrgInteractor,
     private val resourcesProvider: ResourcesProvider,
-    downloadProgress: DownloadProgress
+    private val downloadProgress: DownloadProgress
 ) : BaseViewModel() {
-
-    init {
-        compositeDisposable.add(
-            interactor.getExchangerRateUsdToRub()
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    { usdToRub ->
-                        exchangeRateUsdToRub = usdToRub.value
-                    },
-                    { error ->
-                        error("error getExchangeRate $error")
-                    }
-                )
-        )
-    }
-
-    init {
-        compositeDisposable.add(
-            downloadProgress.getProgressData()
-                .subscribe(
-                    { progressData ->
-                        listenerDownloadProgressMutLiveData.postValue(progressData)
-                    }, { error ->
-                        error("subscribeDownloadProgress: ERROR progress $error")
-                    }
-                )
-        )
-    }
 
     private var exchangeRateUsdToRub = 0.0
     private var selectedCurrency = RUB
     private var selectedAccount = TypeInvestmentAccount.IIS
     private var isReplenish = false
+
+    init {
+        compositeDisposable.add(
+            interactor.getExchangerRateUsdToRub()
+                .subscribeOn(Schedulers.io())
+                .subscribe({ usdToRub ->
+                    exchangeRateUsdToRub = usdToRub.value
+                }, {
+                    Log.d(TAG, "ERROR: $it")
+                    errorMessageSingleLiveEvent.postValue(
+                        resourcesProvider.getString(R.string.dialog_error_update_exchange_rate)
+                    )
+                }
+                )
+        )
+    }
 
     private val colorButtonRubMutLiveData = MutableLiveData(DEFAULT_COLOR_SELECTED_BUTTON)
     val colorButtonRubLiveData: LiveData<Int> get() = colorButtonRubMutLiveData
@@ -108,10 +95,10 @@ class SelectionViewModel(
         }
     }
 
-    fun clickButton(button: Button) {
+    fun clickButton(buttonId: Int) {
         changeSettingsPortfolio()
         try {
-            when (button.id) {
+            when (buttonId) {
                 R.id.buttonInvestmentCurrencyRUB -> {
                     colorButtonRubMutLiveData.value = R.color.selectedButton
                     colorButtonUsdMutLiveData.value = R.color.unSelectedButton
@@ -135,9 +122,8 @@ class SelectionViewModel(
                 else -> error("")
             }
         } catch (t: Throwable) {
-            Log.d(TAG, "clickButton: Incorrect button id -> ${button.id} ")
             errorMessageSingleLiveEvent.postValue(
-                resourcesProvider.getString(R.string.dialog_unknown_error)
+                resourcesProvider.getString(R.string.dialog_error_incorrect_id_button)
             )
         }
     }
@@ -149,9 +135,7 @@ class SelectionViewModel(
     }
 
     fun collectPortfolio() {
-        Log.d(TAG, "collectPortfolio: ")
-        isLoadingMutLiveData.postValue(true)
-
+        startLoading()
         compositeDisposable.add(
             interactor.getProfitableBonds(getRequest())
                 .map { bondAndCalendarList ->
@@ -165,6 +149,7 @@ class SelectionViewModel(
                     isThereCalculateDataMutLiveData.postValue(true)
                     interactor.saveCalculate(result)
 
+                    // временно здесь
                     val listShortName = result.purchaseHistory.map { it.key.shortName }.toSet()
                     val counter = mutableMapOf<String, Int>()
 
@@ -179,13 +164,33 @@ class SelectionViewModel(
                     Log.d(TAG, "collectPortfolio: COMPLETE result $counter")
                 }, {
                     errorMessageSingleLiveEvent.postValue(
-                        resourcesProvider.getString(R.string.dialog_unknown_error)
+                        resourcesProvider.getString(R.string.dialog_error_calculate_portfolio)
                     )
-                    Log.d(TAG, "collectPortfolio: ERROR $it")
-                },{
-                    isLoadingMutLiveData.postValue(false)
+                }, {
+                    stopLoading()
                 })
         )
+    }
+
+    private fun startLoading() {
+        isLoadingMutLiveData.postValue(true)
+
+        compositeDisposable.add(
+            downloadProgress.start()
+                .subscribe({ progressData ->
+                    listenerDownloadProgressMutLiveData.postValue(progressData)
+                }, {
+                    errorMessageSingleLiveEvent.postValue(
+                        resourcesProvider.getString(R.string.dialog_error_incorrect_id_button)
+                    )
+                }
+                )
+        )
+    }
+
+    private fun stopLoading() {
+        isLoadingMutLiveData.postValue(false)
+        downloadProgress.stop()
     }
 
     private fun getPortfolioData(bondYtmCalendarList: List<DomainBondAndCalendar>): DomainPortfolioSettings {

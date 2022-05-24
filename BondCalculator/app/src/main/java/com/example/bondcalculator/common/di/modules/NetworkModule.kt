@@ -10,11 +10,13 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import javax.inject.Singleton
 
 @Module
 class NetworkModule {
 
     @Provides
+    @Singleton
     fun provideSecuritiesDataApi(retrofit: Retrofit): SecuritiesDataApi {
         return retrofit
             .newBuilder()
@@ -24,6 +26,7 @@ class NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideExchangeRateApi(retrofit: Retrofit): ExchangeRateApi {
         return retrofit
             .newBuilder()
@@ -33,11 +36,12 @@ class NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(URL_CBR_RU)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .baseUrl(URL_CBR_RU)
             .build()
     }
 

@@ -1,19 +1,24 @@
 package com.example.bondcalculator.domain.models.download_progress
 
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DownloadProgressImpl @Inject constructor() : DownloadProgress {
 
-    private val progress = BehaviorSubject.create<ProgressData>()
+    private var progress: PublishSubject<ProgressData>? = null
 
-    override fun setProgressData(progressData: ProgressData) {
-        progress.onNext(progressData)
+    override fun start(): PublishSubject<ProgressData> {
+        progress = PublishSubject.create()
+        return progress!!
     }
 
-    override fun getProgressData(): BehaviorSubject<ProgressData> {
-        return progress
+    override fun setProgressData(progressData: ProgressData) {
+        progress?.onNext(progressData)
+    }
+
+    override fun stop() {
+        progress?.onComplete()
     }
 }
