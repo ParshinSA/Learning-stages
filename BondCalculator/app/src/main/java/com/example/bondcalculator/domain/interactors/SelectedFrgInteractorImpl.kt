@@ -14,6 +14,7 @@ import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSetting
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioYield
 import com.example.bondcalculator.domain.repositories_intf.SelectedFrgRepository
 import io.reactivex.Observable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class SelectedFrgInteractorImpl @Inject constructor(
@@ -27,7 +28,7 @@ class SelectedFrgInteractorImpl @Inject constructor(
 
     override fun getProfitableBonds(request: DomainRequestBondList): Observable<List<DomainBondAndCalendar>> {
         return requestBoundsList(request)
-            .flatMap { bondList ->
+            .flatMapObservable { bondList ->
                 chooseTopBondList(bondList)
             }
             .flatMap { bondTopList ->
@@ -35,8 +36,7 @@ class SelectedFrgInteractorImpl @Inject constructor(
             }
     }
 
-
-    private fun requestBoundsList(request: DomainRequestBondList): Observable<List<DomainBond>> {
+    private fun requestBoundsList(request: DomainRequestBondList): Single<List<DomainBond>> {
         return repository.requestBondList(request)
             .map { bondList ->
                 val currentDate = System.currentTimeMillis().toDayTimeStamp()
@@ -53,6 +53,7 @@ class SelectedFrgInteractorImpl @Inject constructor(
                 with(bond) {
                     val request = DomainRequestPaymentCalendar(secId)
                     repository.requestCouponInfo(request)
+                        .toObservable()
                         .map { couponPaymentCalendar ->
                             DomainBondAndCalendar(
                                 secId = secId,

@@ -2,9 +2,12 @@
 <!--    Common     START-->
     <string name="app_name">Bond Calculator</string>
     <string name="dialog_attention">Внимание!</string>
-    <string name="dialog_unknown_error">Что-то пошло не так</string>
+    <string name="dialog_error_unknown">Что-то пошло не так</string>
+    <string name="dialog_error_calculate_portfolio">Ошибка при расчетах портфеля</string>
+    <string name="dialog_error_incorrect_id_button">Неизвестный идентификатор кнопки</string>
+    <string name="dialog_error_update_progress_data">Ошибка обновления данных прогресса</string>
+    <string name="dialog_error_update_exchange_rate">Ошибка обновления курса валюты</string>
 <!--    Common     END-->
-
 
     <!--    fragment selection  START   -->
     <string name="textViewTxtInvestmentTerm">Срок инвестиций:</string>

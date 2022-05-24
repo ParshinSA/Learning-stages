@@ -4,6 +4,7 @@ import com.example.bondcalculator.domain.models.download_progress.DownloadProgre
 import com.example.bondcalculator.domain.models.download_progress.DownloadProgressImpl
 import dagger.Binds
 import dagger.Module
+import javax.inject.Singleton
 
 @Module
 interface CommonModule {

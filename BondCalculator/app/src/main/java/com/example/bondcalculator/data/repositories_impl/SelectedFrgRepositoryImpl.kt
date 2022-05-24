@@ -12,6 +12,7 @@ import com.example.bondcalculator.domain.models.payment_calendar.DomainRequestPa
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioYield
 import com.example.bondcalculator.domain.repositories_intf.SelectedFrgRepository
 import io.reactivex.Observable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class SelectedFrgRepositoryImpl @Inject constructor(
@@ -25,12 +26,12 @@ class SelectedFrgRepositoryImpl @Inject constructor(
             .map { it.toDomainExchangeRateUsdToRub() }
     }
 
-    override fun requestBondList(request: DomainRequestBondList): Observable<List<DomainBond>> {
+    override fun requestBondList(request: DomainRequestBondList): Single<List<DomainBond>> {
         return bondDataDataSource.requestBondList(request.toRemoteRequestBondData())
             .map { it.toDomainBondData() }
     }
 
-    override fun requestCouponInfo(request: DomainRequestPaymentCalendar): Observable<DomainPaymentCalendar> {
+    override fun requestCouponInfo(request: DomainRequestPaymentCalendar): Single<DomainPaymentCalendar> {
         return bondDataDataSource.requestCouponInfo(request.toRemoteRequestCouponInfo())
             .map { it.toDomainCouponInfo() }
     }

@@ -109,7 +109,7 @@ class SelectionFragment : Fragment() {
 
     private fun buttonListener(button: Button) {
         button.setOnClickListener {
-            viewModel.clickButton(button)
+            viewModel.clickButton(button.id)
         }
     }
 
