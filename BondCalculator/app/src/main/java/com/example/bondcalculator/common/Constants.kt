@@ -20,3 +20,6 @@ const val MIN_PRICE_PERCENT = 90
 
 const val SHARED_PREFS_NAME = "SHARED_PREFS_NAME"
 const val KEY_SAVE_CALCULATE_IN_SP = "KEY_SAVE_CALCULATE_IN_SP"
+
+const val URL_CBR_RU = "https://www.cbr-xml-daily.ru/"
+const val URL_MOEX_COM = "https://iss.moex.com/"

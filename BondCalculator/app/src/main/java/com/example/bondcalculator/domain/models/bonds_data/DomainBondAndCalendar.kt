@@ -1,8 +1,10 @@
 package com.example.bondcalculator.domain.models.bonds_data
 
+import android.os.Parcelable
 import com.example.bondcalculator.domain.models.payment_calendar.DomainPaymentCalendar
+import kotlinx.android.parcel.Parcelize
 
-
+@Parcelize
 data class DomainBondAndCalendar(
     val secId: String,
     val shortName: String, // наименование облигации
@@ -12,4 +14,4 @@ data class DomainBondAndCalendar(
     val repayment: Long, // дата погашения (выплата номинал и последнего купона)
     val couponPeriod: Int, // периодичность купонных выплат
     val paymentCalendar: DomainPaymentCalendar, // запланированный календарь выплат
-)
+) : Parcelable

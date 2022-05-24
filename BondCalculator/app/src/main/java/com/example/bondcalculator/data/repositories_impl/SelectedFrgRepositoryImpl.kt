@@ -36,10 +36,6 @@ class SelectedFrgRepositoryImpl @Inject constructor(
     }
 
     override fun saveCalculate(calculate: DomainPortfolioYield) {
-        sharedPreferenceDataSource.saveCalculate(calculate)
-    }
-
-    override fun getCalculate(): DomainPortfolioYield {
-        return sharedPreferenceDataSource.getCalculate()
+        sharedPreferenceDataSource.saveCalculatePortfolioYield(calculate)
     }
 }

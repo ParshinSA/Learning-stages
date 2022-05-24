@@ -2,6 +2,7 @@ package com.example.bondcalculator.common.di
 
 import android.content.Context
 import com.example.bondcalculator.common.di.modules.*
+import com.example.bondcalculator.presentation.ui.charts.ChartsFragment
 import com.example.bondcalculator.presentation.ui.selection.SelectionFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -22,6 +23,7 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun inject(fragment: SelectionFragment)
+    fun inject(fragment: ChartsFragment)
 
     @Component.Builder
     interface Builder {

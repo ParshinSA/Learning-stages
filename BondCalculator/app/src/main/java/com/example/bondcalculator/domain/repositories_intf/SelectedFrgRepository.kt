@@ -12,6 +12,5 @@ interface SelectedFrgRepository {
     fun getExchangeRateUsdToRub(): Observable<DomainExchangeRateUsdToRub>
     fun requestBondList(request: DomainRequestBondList): Observable<List<DomainBond>>
     fun requestCouponInfo(request: DomainRequestPaymentCalendar): Observable<DomainPaymentCalendar>
-    fun getCalculate(): DomainPortfolioYield
     fun saveCalculate(calculate: DomainPortfolioYield)
 }

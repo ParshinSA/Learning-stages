@@ -1,5 +1,7 @@
 package com.example.bondcalculator.common.di.modules
 
+import com.example.bondcalculator.common.URL_CBR_RU
+import com.example.bondcalculator.common.URL_MOEX_COM
 import com.example.bondcalculator.data.networking.api.ExchangeRateApi
 import com.example.bondcalculator.data.networking.api.SecuritiesDataApi
 import dagger.Module
@@ -16,7 +18,7 @@ class NetworkModule {
     fun provideSecuritiesDataApi(retrofit: Retrofit): SecuritiesDataApi {
         return retrofit
             .newBuilder()
-            .baseUrl("https://iss.moex.com/")
+            .baseUrl(URL_MOEX_COM)
             .build()
             .create()
     }
@@ -25,7 +27,7 @@ class NetworkModule {
     fun provideExchangeRateApi(retrofit: Retrofit): ExchangeRateApi {
         return retrofit
             .newBuilder()
-            .baseUrl("https://www.cbr-xml-daily.ru/")
+            .baseUrl(URL_CBR_RU)
             .build()
             .create()
     }
@@ -33,7 +35,7 @@ class NetworkModule {
     @Provides
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://default.com/")
+            .baseUrl(URL_CBR_RU)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

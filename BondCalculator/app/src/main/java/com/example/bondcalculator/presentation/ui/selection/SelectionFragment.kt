@@ -2,7 +2,6 @@ package com.example.bondcalculator.presentation.ui.selection
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +18,11 @@ import com.example.bondcalculator.common.DEFAULT_INVESTMENT_TERM_SEEKBAR
 import com.example.bondcalculator.common.DEFAULT_MIN_INVESTMENT_AMOUNT_SEEKBAR
 import com.example.bondcalculator.common.DEFAULT_REPLENISHMENT_MONTH_AMOUNT
 import com.example.bondcalculator.databinding.FragmentSelectionBinding
-import com.example.bondcalculator.domain.models.download_progress.DownloadProgress
+import com.example.bondcalculator.domain.models.download_progress.ProgressData
 import com.example.bondcalculator.presentation.AppActivity
 import com.example.bondcalculator.presentation.AppApplication
 import com.example.bondcalculator.presentation.viewmodels.SelectionViewModel
 import com.example.bondcalculator.presentation.viewmodels.factory.SelectionViewModelFactory
-import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class SelectionFragment : Fragment() {
@@ -32,9 +30,6 @@ class SelectionFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: SelectionViewModelFactory
     private val viewModel: SelectionViewModel by viewModels { viewModelFactory }
-
-    @Inject
-    lateinit var downloadProgress: DownloadProgress
 
     private var _binding: FragmentSelectionBinding? = null
     private val binding get() = _binding!!
@@ -128,27 +123,19 @@ class SelectionFragment : Fragment() {
         }
 
         viewModel.colorButtonRubLiveData.observe(viewLifecycleOwner) { colorId ->
-            binding.buttonInvestmentCurrencyRUB.setBackgroundColor(
-                resources.getColor(colorId, null)
-            )
+            setBackgroundColorButton(binding.buttonInvestmentCurrencyRUB, colorId)
         }
 
         viewModel.colorButtonUsdLiveData.observe(viewLifecycleOwner) { colorId ->
-            binding.buttonInvestmentCurrencyUSD.setBackgroundColor(
-                resources.getColor(colorId, null)
-            )
+            setBackgroundColorButton(binding.buttonInvestmentCurrencyUSD, colorId)
         }
 
         viewModel.colorButtonIisLiveData.observe(viewLifecycleOwner) { colorId ->
-            binding.buttonInvestmentAccountIIS.setBackgroundColor(
-                resources.getColor(colorId, null)
-            )
+            setBackgroundColorButton(binding.buttonInvestmentAccountIIS, colorId)
         }
 
         viewModel.colorButtonNormalLiveData.observe(viewLifecycleOwner) { colorId ->
-            binding.buttonInvestmentAccountNormal.setBackgroundColor(
-                resources.getColor(colorId, null)
-            )
+            setBackgroundColorButton(binding.buttonInvestmentAccountNormal, colorId)
         }
 
         viewModel.errorMessageLiveData.observe(viewLifecycleOwner) { message ->
@@ -162,27 +149,25 @@ class SelectionFragment : Fragment() {
         viewModel.isThereCalculateDataLiveData.observe(viewLifecycleOwner) { isThereData ->
             changeStateChartsAndCompositionNavButton(isThereData)
         }
+
+        viewModel.listenerDownloadProgressLiveData.observe(viewLifecycleOwner) { progressData ->
+            changeDataProgressBar(progressData)
+        }
+    }
+
+    private fun changeDataProgressBar(progressData: ProgressData?) {
+        binding.progressBarIsLoading.max = progressData?.maxProgress ?: 0
+        binding.progressBarIsLoading.progress = progressData?.currentProgress ?: 0
+    }
+
+    private fun setBackgroundColorButton(button: Button, colorId: Int) {
+        button.setBackgroundColor(resources.getColor(colorId, null))
     }
 
     private fun changeStateDownloadComponents(state: Boolean) {
         changeBackgroundFragment(state)
-        changeStateProgressBar(state)
         changeStateBlockScreenTouch(state)
-        subscribeDownloadProgress(state)
-    }
-
-    private fun subscribeDownloadProgress(state: Boolean) {
-        var dispose: Disposable? = null
-        if (state) {
-            dispose = downloadProgress.getProgressData().subscribe(
-                { progressData ->
-                    binding.progressBarIsLoading.max = progressData.maxProgress
-                    binding.progressBarIsLoading.progress = progressData.currentProgress
-                }, {
-                    Log.d(TAG, "subscribeDownloadProgress: ERROR progress")
-                }
-            )
-        } else dispose?.dispose()
+        changeStateProgressBar(state)
     }
 
     private fun changeStateChartsAndCompositionNavButton(state: Boolean) {

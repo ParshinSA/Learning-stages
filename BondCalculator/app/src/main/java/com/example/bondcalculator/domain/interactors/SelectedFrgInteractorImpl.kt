@@ -74,6 +74,10 @@ class SelectedFrgInteractorImpl @Inject constructor(
         return repository.getExchangeRateUsdToRub()
     }
 
+    override fun saveCalculate(result: DomainPortfolioYield) {
+        repository.saveCalculate(result)
+    }
+
     private fun chooseTopBondList(bondList: List<DomainBond>): Observable<List<DomainBond>> {
         return Observable.create { subscription ->
             var top = bondList.sortedBy(DomainBond::yieldPercent)

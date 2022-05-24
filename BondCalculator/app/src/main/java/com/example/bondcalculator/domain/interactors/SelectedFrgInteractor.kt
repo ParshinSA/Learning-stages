@@ -11,4 +11,5 @@ interface SelectedFrgInteractor {
     fun getExchangerRateUsdToRub(): Observable<DomainExchangeRateUsdToRub>
     fun getProfitableBonds(request: DomainRequestBondList): Observable<List<DomainBondAndCalendar>>
     fun calculateYieldPortfolio(portfolioSettings: DomainPortfolioSettings): Observable<DomainPortfolioYield>
+    fun saveCalculate(result: DomainPortfolioYield)
 }

@@ -35,6 +35,7 @@ class CalculateYieldImpl @Inject constructor(
             portfolioSettings = settings
             settingsCalculate()
             subscription.onNext(calculate())
+            subscription.onComplete()
         }
     }
 
