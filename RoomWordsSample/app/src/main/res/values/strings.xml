@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">RoomWordsSample</string>
-    <string name="btn_text_save">save</string>
-    <string name="edt_text_enter_word">Enter word</string>
-    <string name="A_z_А_я_1_9">абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
-</resources>
