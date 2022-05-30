@@ -6,10 +6,11 @@ import com.example.bondcalculator.domain.models.exchange_rate.DomainExchangeRate
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSettings
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioYield
 import io.reactivex.Observable
+import io.reactivex.Single
 
 interface SelectedFrgInteractor {
-    fun getExchangerRateUsdToRub(): Observable<DomainExchangeRateUsdToRub>
+    fun getExchangerRateUsdToRub(): Single<DomainExchangeRateUsdToRub>
     fun getProfitableBonds(request: DomainRequestBondList): Observable<List<DomainBondAndCalendar>>
-    fun calculateYieldPortfolio(portfolioSettings: DomainPortfolioSettings): Observable<DomainPortfolioYield>
-    fun saveCalculate(result: DomainPortfolioYield)
+    fun calculatePortfolioYield(portfolioSettings: DomainPortfolioSettings): Observable<DomainPortfolioYield>
+    fun analysisPortfolioYield(data: DomainPortfolioYield)
 }

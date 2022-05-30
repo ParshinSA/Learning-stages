@@ -13,15 +13,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/tabLayoutCharts"
-        app:layout_constraintTop_toTopOf="parent"></fragment>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TableLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutCharts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/viewPager2Fragments"
-        app:layout_constraintTop_toBottomOf="@id/infoContainer" />
+        app:layout_constraintTop_toBottomOf="@id/infoContainer"
+        app:tabGravity="start"
+        app:tabIndicatorColor="@color/black"
+        app:tabTextAppearance="@style/MyTabLayoutTextAppearance" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager2Fragments"
@@ -36,7 +39,7 @@
         android:id="@+id/buttonApplyBid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="оставить заявку"
+        android:text="@string/buttonTxtSubmitYourApplication"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

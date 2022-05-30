@@ -1,6 +1,7 @@
 package com.example.bondcalculator.presentation.ui.composition
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ class CompositionFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG, "onCreateView: ")
         _binding = FragmentCompositionBinding.inflate(inflater, container, false)
         initComponents()
         return binding.root
@@ -26,7 +28,12 @@ class CompositionFragment : Fragment() {
     }
 
     override fun onDestroy() {
+        Log.d(TAG, "onDestroy: ")
         _binding = null
         super.onDestroy()
+    }
+
+    companion object {
+        private const val TAG = "CompositionFragment"
     }
 }

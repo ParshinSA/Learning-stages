@@ -4,13 +4,14 @@ import com.example.bondcalculator.data.data_source.intf.RemoteExchangeRateDataDa
 import com.example.bondcalculator.data.networking.api.ExchangeRateApi
 import com.example.bondcalculator.data.networking.models.exchange_rate.RemoteResponseExchangeRateDto
 import io.reactivex.Observable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class RemoteExchangeRateDataDataSourceImpl @Inject constructor(
     private val exchangeRateApi: ExchangeRateApi
 ) : RemoteExchangeRateDataDataSource {
 
-    override fun getExchangeRate(): Observable<RemoteResponseExchangeRateDto> {
+    override fun getExchangeRate(): Single<RemoteResponseExchangeRateDto> {
         return exchangeRateApi.getExchangeRate()
     }
 }

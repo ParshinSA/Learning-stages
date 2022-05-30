@@ -1,25 +1,25 @@
-package com.example.bondcalculator.domain.models.calculate_yield
+package com.example.bondcalculator.domain.instruction.calculate_portfolio_yield
 
 import android.util.Log
 import com.example.bondcalculator.common.*
-import com.example.bondcalculator.domain.models.balance.DomainBalance
+import com.example.bondcalculator.domain.instruction.balance.Balance
+import com.example.bondcalculator.domain.instruction.dond_formulas.BondFormulas
+import com.example.bondcalculator.domain.instruction.download_progress.DownloadProgress
+import com.example.bondcalculator.domain.instruction.purchased_bonds.DomainPurchasedBonds
 import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
-import com.example.bondcalculator.domain.models.bonds_data.DomainBondFormulas
-import com.example.bondcalculator.domain.models.download_progress.DownloadProgress
-import com.example.bondcalculator.domain.models.download_progress.ProgressData
+import com.example.bondcalculator.domain.models.download_progress.DomainDownloadProgressData
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSettings
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioYield
-import com.example.bondcalculator.domain.models.purchased_bonds.DomainPurchasedBonds
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
-class CalculateYieldImpl @Inject constructor(
-    private val formulas: DomainBondFormulas,
+class CalculatePortfolioYieldImpl @Inject constructor(
+    private val formulas: BondFormulas,
     private val purchasedBonds: DomainPurchasedBonds,
-    private val balance: DomainBalance,
+    private val balance: Balance,
     private val downloadProgress: DownloadProgress
-) : CalculateYield {
+) : CalculatePortfolioYield {
 
     private lateinit var portfolioSettings: DomainPortfolioSettings
 
@@ -77,9 +77,13 @@ class CalculateYieldImpl @Inject constructor(
         }
 
         return DomainPortfolioYield(
+            startDateCalculate = startDate,
+            endDateCalculate = endDate,
             startBalance = portfolioSettings.startBalance,
             resultBalance = balance.getBalance(),
-            purchaseHistory = purchasedBonds.getPurchasedBondsHistory().toMap()
+            purchaseHistory = purchasedBonds.getPurchasedBondsHistory(),
+            buyHistory = balance.getBuyHistory(),
+            generalPaymentList = generalPaymentList
         )
     }
 
@@ -87,7 +91,7 @@ class CalculateYieldImpl @Inject constructor(
         val currentProgress = (currentDate - startDate).toInt()
         val maxProgress = (endDate - startDate).toInt()
         downloadProgress.setProgressData(
-            ProgressData(
+            DomainDownloadProgressData(
                 maxProgress = maxProgress,
                 currentProgress = currentProgress
             )
@@ -143,7 +147,7 @@ class CalculateYieldImpl @Inject constructor(
     private fun updateCurrentDate() {
         Log.d(TAG, "updateCurrentDate: ")
         val paymentCalendar = generalPaymentList.keys
-        val nexDatePayment = paymentCalendar.firstOrNull() { date ->
+        val nexDatePayment = paymentCalendar.firstOrNull { date ->
             date > currentDate
         }
 
@@ -180,7 +184,7 @@ class CalculateYieldImpl @Inject constructor(
         addInGeneralPaymentCalendar(amortizationPaymentCalendar)
 
         purchasedBonds.addBond(bond)
-        balance.decrement(price)
+        balance.decrement(currentDate, price)
     }
 
     /**
@@ -205,6 +209,6 @@ class CalculateYieldImpl @Inject constructor(
     }
 
     companion object {
-        private val TAG = "portfolio"
+        private const val TAG = "CalculatePortfolioYieldImpl"
     }
 }

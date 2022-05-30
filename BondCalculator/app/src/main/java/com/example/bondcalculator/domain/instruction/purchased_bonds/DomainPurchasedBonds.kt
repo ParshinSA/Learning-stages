@@ -1,4 +1,4 @@
-package com.example.bondcalculator.domain.models.purchased_bonds
+package com.example.bondcalculator.domain.instruction.purchased_bonds
 
 import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
 

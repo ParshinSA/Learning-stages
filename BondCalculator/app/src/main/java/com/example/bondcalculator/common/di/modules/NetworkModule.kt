@@ -16,7 +16,6 @@ import javax.inject.Singleton
 class NetworkModule {
 
     @Provides
-    @Singleton
     fun provideSecuritiesDataApi(retrofit: Retrofit): SecuritiesDataApi {
         return retrofit
             .newBuilder()
@@ -26,7 +25,6 @@ class NetworkModule {
     }
 
     @Provides
-    @Singleton
     fun provideExchangeRateApi(retrofit: Retrofit): ExchangeRateApi {
         return retrofit
             .newBuilder()
@@ -36,11 +34,10 @@ class NetworkModule {
     }
 
     @Provides
-    @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(URL_CBR_RU)
             .build()
     }

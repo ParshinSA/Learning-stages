@@ -1,6 +1,8 @@
-package com.example.bondcalculator.domain.models.bonds_data
+package com.example.bondcalculator.domain.instruction.dond_formulas
 
-interface DomainBondFormulas {
+import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
+
+interface BondFormulas {
     fun getTotalPrice(bond: DomainBondAndCalendar, currentDate: Long): Double
     fun getMaturityPrice(bond: DomainBondAndCalendar, currentDate: Long): Double
     fun getPriceToMaturity(bond: DomainBondAndCalendar, currentDate: Long): Double
