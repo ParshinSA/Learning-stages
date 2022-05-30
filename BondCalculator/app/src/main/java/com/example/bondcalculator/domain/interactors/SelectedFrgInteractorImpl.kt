@@ -4,10 +4,11 @@ import com.example.bondcalculator.common.COUNT_TOP_BOUND
 import com.example.bondcalculator.common.MIN_PRICE_PERCENT
 import com.example.bondcalculator.common.ONE_YEAR_SECONDS
 import com.example.bondcalculator.common.toDayTimeStamp
+import com.example.bondcalculator.domain.instruction.analysis_portfolio_yield.AnalysisPortfolioYield
+import com.example.bondcalculator.domain.instruction.calculate_portfolio_yield.CalculatePortfolioYield
 import com.example.bondcalculator.domain.models.bonds_data.DomainBond
 import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
 import com.example.bondcalculator.domain.models.bonds_data.DomainRequestBondList
-import com.example.bondcalculator.domain.models.calculate_yield.CalculateYield
 import com.example.bondcalculator.domain.models.exchange_rate.DomainExchangeRateUsdToRub
 import com.example.bondcalculator.domain.models.payment_calendar.DomainRequestPaymentCalendar
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSettings
@@ -19,11 +20,12 @@ import javax.inject.Inject
 
 class SelectedFrgInteractorImpl @Inject constructor(
     private val repository: SelectedFrgRepository,
-    private val calculateYieldPortfolio: CalculateYield,
+    private val calculatePortfolioYield: CalculatePortfolioYield,
+    private val analysisPortfolioYield: AnalysisPortfolioYield
 ) : SelectedFrgInteractor {
 
-    override fun calculateYieldPortfolio(portfolioSettings: DomainPortfolioSettings): Observable<DomainPortfolioYield> {
-        return calculateYieldPortfolio.execute(portfolioSettings)
+    override fun calculatePortfolioYield(portfolioSettings: DomainPortfolioSettings): Observable<DomainPortfolioYield> {
+        return calculatePortfolioYield.execute(portfolioSettings)
     }
 
     override fun getProfitableBonds(request: DomainRequestBondList): Observable<List<DomainBondAndCalendar>> {
@@ -71,12 +73,29 @@ class SelectedFrgInteractorImpl @Inject constructor(
             .buffer(bondYtmTopList.size)
     }
 
-    override fun getExchangerRateUsdToRub(): Observable<DomainExchangeRateUsdToRub> {
+    override fun getExchangerRateUsdToRub(): Single<DomainExchangeRateUsdToRub> {
         return repository.getExchangeRateUsdToRub()
     }
 
-    override fun saveCalculate(result: DomainPortfolioYield) {
-        repository.saveCalculate(result)
+    override fun analysisPortfolioYield(data: DomainPortfolioYield) {
+        analysisAndSaveForPortfolioFrg(data)
+        analysisAndSaveForPayoutsFrg(data)
+        analysisAndSaveForPurchaseHistory(data)
+    }
+
+    private fun analysisAndSaveForPurchaseHistory(data: DomainPortfolioYield) {
+        val dataForPurchaseHistoryFrg = analysisPortfolioYield.analysisForPurchaseHistoryFrg(data)
+        repository.saveDataForPurchaseHistoryFrg(dataForPurchaseHistoryFrg)
+    }
+
+    private fun analysisAndSaveForPayoutsFrg(data: DomainPortfolioYield) {
+        val dataForPayoutsFrg = analysisPortfolioYield.analysisForPayoutsFrg(data)
+        repository.saveDataForPayoutsFrg(dataForPayoutsFrg)
+    }
+
+    private fun analysisAndSaveForPortfolioFrg(data: DomainPortfolioYield) {
+        val dataForPortfolioFrg = analysisPortfolioYield.analysisForPortfolioFrg(data)
+        repository.saveDataForPortfolioFrg(dataForPortfolioFrg)
     }
 
     private fun chooseTopBondList(bondList: List<DomainBond>): Observable<List<DomainBond>> {
@@ -92,7 +111,4 @@ class SelectedFrgInteractorImpl @Inject constructor(
         }
     }
 
-    companion object {
-        private val TAG = this::class.qualifiedName
-    }
 }

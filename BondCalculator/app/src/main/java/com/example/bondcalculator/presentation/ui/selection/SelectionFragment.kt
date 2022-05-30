@@ -18,7 +18,7 @@ import com.example.bondcalculator.common.DEFAULT_INVESTMENT_TERM_SEEKBAR
 import com.example.bondcalculator.common.DEFAULT_MIN_INVESTMENT_AMOUNT_SEEKBAR
 import com.example.bondcalculator.common.DEFAULT_REPLENISHMENT_MONTH_AMOUNT
 import com.example.bondcalculator.databinding.FragmentSelectionBinding
-import com.example.bondcalculator.domain.models.download_progress.ProgressData
+import com.example.bondcalculator.domain.models.download_progress.DomainDownloadProgressData
 import com.example.bondcalculator.presentation.AppActivity
 import com.example.bondcalculator.presentation.AppApplication
 import com.example.bondcalculator.presentation.viewmodels.SelectionViewModel
@@ -44,7 +44,7 @@ class SelectionFragment : Fragment() {
 
         _binding = FragmentSelectionBinding.inflate(inflater, container, false)
         savedInstanceState ?: setDefaultValues()
-        actionFragment()
+        actionInFragment()
         return binding.root
     }
 
@@ -61,7 +61,7 @@ class SelectionFragment : Fragment() {
             )
     }
 
-    private fun actionFragment() {
+    private fun actionInFragment() {
         inject()
         observeData()
         investmentTermListener()
@@ -155,7 +155,7 @@ class SelectionFragment : Fragment() {
         }
     }
 
-    private fun changeDataProgressBar(progressData: ProgressData?) {
+    private fun changeDataProgressBar(progressData: DomainDownloadProgressData?) {
         binding.progressBarIsLoading.max = progressData?.maxProgress ?: 0
         binding.progressBarIsLoading.progress = progressData?.currentProgress ?: 0
     }
@@ -237,7 +237,7 @@ class SelectionFragment : Fragment() {
     }
 
     companion object {
-        private val TAG = this::class.qualifiedName
+        private const val TAG = "SelectionFragment"
     }
 
 }

@@ -1,9 +1,6 @@
 package com.example.bondcalculator.common.di.modules
 
-import com.example.bondcalculator.domain.interactors.ChartsFrgInteractor
-import com.example.bondcalculator.domain.interactors.ChartsFrgInteractorImpl
-import com.example.bondcalculator.domain.interactors.SelectedFrgInteractor
-import com.example.bondcalculator.domain.interactors.SelectedFrgInteractorImpl
+import com.example.bondcalculator.domain.interactors.*
 import dagger.Binds
 import dagger.Module
 
@@ -16,11 +13,22 @@ interface InteractorModule {
         interactor: SelectedFrgInteractorImpl
     ): SelectedFrgInteractor
 
+
     @Binds
     @Suppress("FunctionName")
-    fun bindChartsFrgInteractorImpl_to_interface(
-        interactor: ChartsFrgInteractorImpl
-    ): ChartsFrgInteractor
+    fun bindPortfolioFrgInteractorImpl_to_interface(
+        interactor: PortfolioFrgInteractorImpl
+    ): PortfolioFrgInteractor
 
+    @Binds
+    @Suppress("FunctionName")
+    fun bindPayoutsFrgInteractorImpl_to_interface(
+        interactor: PayoutsFrgInteractorImpl
+    ): PayoutsFrgInteractor
 
+    @Binds
+    @Suppress("FunctionName")
+    fun bindPurchaseHistoryInteractorImpl_to_interface(
+        interactor: PurchaseHistoryFrgInteractorImpl
+    ): PurchaseHistoryFrgInteractor
 }

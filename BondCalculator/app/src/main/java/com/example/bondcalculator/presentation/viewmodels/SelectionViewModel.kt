@@ -5,11 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bondcalculator.R
 import com.example.bondcalculator.common.*
+import com.example.bondcalculator.domain.instruction.download_progress.DownloadProgress
 import com.example.bondcalculator.domain.interactors.SelectedFrgInteractor
 import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
 import com.example.bondcalculator.domain.models.bonds_data.DomainRequestBondList
-import com.example.bondcalculator.domain.models.download_progress.DownloadProgress
-import com.example.bondcalculator.domain.models.download_progress.ProgressData
+import com.example.bondcalculator.domain.models.download_progress.DomainDownloadProgressData
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSettings
 import com.example.bondcalculator.presentation.common.ResourcesProvider
 import com.example.bondcalculator.presentation.common.SingleLiveEvent
@@ -75,28 +75,22 @@ class SelectionViewModel(
     private val isThereCalculateDataMutLiveData = MutableLiveData(false)
     val isThereCalculateDataLiveData: LiveData<Boolean> get() = isThereCalculateDataMutLiveData
 
-    private val listenerDownloadProgressMutLiveData = MutableLiveData<ProgressData>()
-    val listenerDownloadProgressLiveData: LiveData<ProgressData> get() = listenerDownloadProgressMutLiveData
+    private val listenerDownloadProgressMutLiveData = MutableLiveData<DomainDownloadProgressData>()
+    val listenerDownloadProgressLiveData: LiveData<DomainDownloadProgressData> get() = listenerDownloadProgressMutLiveData
 
     fun setValueInvestmentTerm(value: Int) {
-        changeSettingsPortfolio()
         investmentTermValueMutLiveData.value = value
     }
 
     fun setValueInvestmentAmount(value: Int) {
-        changeSettingsPortfolio()
         investmentAmountValueMutLiveData.value = value
     }
 
     fun isReplenishBalance(state: Boolean) {
-        if (state != isReplenish) {
-            changeSettingsPortfolio()
-            isReplenish = state
-        }
+        isReplenish = state
     }
 
     fun clickButton(buttonId: Int) {
-        changeSettingsPortfolio()
         try {
             when (buttonId) {
                 R.id.buttonInvestmentCurrencyRUB -> {
@@ -142,27 +136,14 @@ class SelectionViewModel(
                     getPortfolioData(bondAndCalendarList)
                 }
                 .flatMap { portfolioData ->
-                    interactor.calculateYieldPortfolio(portfolioData)
+                    interactor.calculatePortfolioYield(portfolioData)
                 }
                 .subscribeOn(Schedulers.computation())
                 .subscribe({ result ->
                     isThereCalculateDataMutLiveData.postValue(true)
-                    interactor.saveCalculate(result)
-
-                    // временно здесь
-                    val listShortName = result.purchaseHistory.map { it.key.shortName }.toSet()
-                    val counter = mutableMapOf<String, Int>()
-
-                    listShortName.forEach { shortName ->
-                        result.purchaseHistory.forEach { (bond, amount) ->
-                            if (bond.shortName == shortName)
-                                if (counter.containsKey(shortName))
-                                    counter[shortName] = counter.getValue(shortName) + amount
-                                else counter[shortName] = amount
-                        }
-                    }
-                    Log.d(TAG, "collectPortfolio: COMPLETE result $counter")
+                    interactor.analysisPortfolioYield(result)
                 }, {
+                    Log.d(TAG, "collectPortfolio: ERROR $it")
                     errorMessageSingleLiveEvent.postValue(
                         resourcesProvider.getString(R.string.dialog_error_calculate_portfolio)
                     )
@@ -203,10 +184,6 @@ class SelectionViewModel(
             exchangeRateUsdToRub = exchangeRateUsdToRub,
             bondTopList = bondYtmCalendarList
         )
-    }
-
-    private fun changeSettingsPortfolio() {
-        isThereCalculateDataMutLiveData.postValue(false)
     }
 
     private fun getRequest(): DomainRequestBondList {

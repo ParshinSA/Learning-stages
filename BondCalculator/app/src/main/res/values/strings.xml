@@ -7,6 +7,7 @@
     <string name="dialog_error_incorrect_id_button">Неизвестный идентификатор кнопки</string>
     <string name="dialog_error_update_progress_data">Ошибка обновления данных прогресса</string>
     <string name="dialog_error_update_exchange_rate">Ошибка обновления курса валюты</string>
+    <string name="dialog_error_get_data_from_shared_prefs">Ошибка получения данных из памяти</string>
 <!--    Common     END-->
 
     <!--    fragment selection  START   -->
@@ -36,6 +37,7 @@
     <string name="textViewTxtAfter">Через</string>
     <string name="textViewTxtWillBe">будет</string>
     <string name="textViewTxtYield">Прибыль</string>
+    <string name="buttonTxtSubmitYourApplication">Оставить заявку</string>
 
     <plurals name="textViewValueAfter">
         <item quantity="one">%1$d год</item><!--1-->

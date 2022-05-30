@@ -1,11 +1,12 @@
-package com.example.bondcalculator.domain.models.bonds_data
+package com.example.bondcalculator.domain.instruction.dond_formulas
 
 import com.example.bondcalculator.common.ONE_DAY_SECONDS
 import com.example.bondcalculator.common.ONE_HUNDRED_PERCENT
 import com.example.bondcalculator.common.roundDouble
+import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
 import javax.inject.Inject
 
-class DomainBondFormulasImpl @Inject constructor() : DomainBondFormulas {
+class BondFormulasImpl @Inject constructor() : BondFormulas {
 
     // накопленный купон
     override fun getAccumulateCoupon(bond: DomainBondAndCalendar, currentDate: Long): Double {
