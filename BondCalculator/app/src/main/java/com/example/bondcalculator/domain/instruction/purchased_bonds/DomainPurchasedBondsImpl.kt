@@ -8,11 +8,7 @@ class DomainPurchasedBondsImpl @Inject constructor() : DomainPurchasedBonds {
     private val purchasedBondsHistory = mutableMapOf<DomainBondAndCalendar, Int>()
 
     override fun addBond(bond: DomainBondAndCalendar) {
-        if (purchasedBonds.containsKey(bond)) {
-            purchasedBonds[bond] = purchasedBonds.getValue(bond) + 1
-        } else {
-            purchasedBonds[bond] = 1
-        }
+        purchasedBonds[bond] = (purchasedBonds[bond] ?: 0) + 1
     }
 
     override fun removeBond(bond: DomainBondAndCalendar) {

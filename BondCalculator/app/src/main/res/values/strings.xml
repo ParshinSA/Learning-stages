@@ -46,6 +46,15 @@
     </plurals>
     <!--    fragment charts  END    -->
 
+    <!--    fragment payouts START-->
+    <string name="textViewTxtBondRedemption">Погашение облигаций</string>
+    <string name="textViewTxtCouponYield">Купонный доход</string>
+    <!--    fragment payouts END-->
+    
+    <!--    fragment purchase history START-->
+    <string name="textViewTxtBuyBonds">Стоимость облигаций</string>
+    <string name="textViewTxtPaymentMoney">Выплаты</string>
+    <!--    fragment purchase history END-->
 
     <!--    fragment composition START   -->
     <!--    fragment composition END     -->

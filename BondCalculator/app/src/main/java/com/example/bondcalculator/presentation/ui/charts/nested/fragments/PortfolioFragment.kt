@@ -1,7 +1,6 @@
 package com.example.bondcalculator.presentation.ui.charts.nested.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.example.bondcalculator.R
 import com.example.bondcalculator.databinding.FragmentPortfolioBinding
 import com.example.bondcalculator.domain.models.analysis_portfolio_yield.DomainDataForPortfolioFrg
 import com.example.bondcalculator.presentation.AppApplication
-import com.example.bondcalculator.presentation.ui.charts.nested.NameNestedFragment
+import com.example.bondcalculator.presentation.ui.charts.nested.common.NameNestedFragment
 import com.example.bondcalculator.presentation.ui.charts.nested.viewmodels.PortfolioViewModel
 import com.example.bondcalculator.presentation.ui.charts.nested.viewmodels.viewmodels_factory.PortfolioViewModelFactory
 import javax.inject.Inject
@@ -35,7 +34,6 @@ class PortfolioFragment : Fragment(), NameNestedFragment {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "onCreateView: ")
         _binding = FragmentPortfolioBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -67,7 +65,6 @@ class PortfolioFragment : Fragment(), NameNestedFragment {
         binding.linearLayoutContainerView.weightSum = weightSum.toFloat()
 
         for ((shortName, counter) in data.counterBonds) {
-            Log.d(TAG, "settingsView: ")
             createView(counter, shortName)
         }
     }
@@ -84,7 +81,6 @@ class PortfolioFragment : Fragment(), NameNestedFragment {
         }
 
         val newTextView = TextView(requireContext()).apply {
-            Log.d(TAG, "createView: $shortName")
             text = shortName
             setTextColor(newColor)
 
@@ -115,7 +111,6 @@ class PortfolioFragment : Fragment(), NameNestedFragment {
         binding.linearLayoutContainerName.removeAllViews()
         binding.linearLayoutContainerView.removeAllViews()
 
-        Log.d(TAG, "onDestroy:")
         _binding = null
         myDialog = null
         super.onDestroy()
@@ -126,7 +121,6 @@ class PortfolioFragment : Fragment(), NameNestedFragment {
     }
 
     companion object {
-        private const val TAG = "PortfolioFragment"
         private const val NAME = "Портфель"
     }
 

@@ -1,4 +1,4 @@
-package com.example.bondcalculator.presentation.ui.charts.nested
+package com.example.bondcalculator.presentation.ui.charts.nested.common
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

@@ -1,7 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPayoutsInfoList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewColorCouponYield"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <ImageView
+        android:id="@+id/imageViewColorBondRedemption"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:background="@color/colorPercentRedemptionYield"
+        app:layout_constraintBottom_toBottomOf="@id/textViewTxtBondRedemption"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/textViewTxtBondRedemption" />
+
+    <TextView
+        android:id="@+id/textViewTxtBondRedemption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/marginColorAndTextPayouts"
+        android:text="@string/textViewTxtBondRedemption"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewColorBondRedemption" />
+
+    <ImageView
+        android:id="@+id/imageViewColorCouponYield"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:background="@color/colorPercentCouponYield"
+        app:layout_constraintBottom_toBottomOf="@id/textViewTxtCouponYield"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/textViewTxtCouponYield" />
+
+    <TextView
+        android:id="@+id/textViewTxtCouponYield"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/marginColorAndTextPayouts"
+        android:text="@string/textViewTxtCouponYield"
+        app:layout_constraintBottom_toTopOf="@id/textViewTxtBondRedemption"
+        app:layout_constraintStart_toEndOf="@+id/imageViewColorCouponYield" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

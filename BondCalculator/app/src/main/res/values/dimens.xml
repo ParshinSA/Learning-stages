@@ -7,4 +7,6 @@
     <dimen name="buttonWidthSelectionFragment">160dp</dimen>
     <dimen name="buttonHeightSelectionFragment">50dp</dimen>
 
+
+    <dimen name="marginColorAndTextPayouts">16dp</dimen>
 </resources>
