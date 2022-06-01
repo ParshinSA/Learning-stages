@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.bondcalculator.databinding.FragmentChartsBinding
-import com.example.bondcalculator.presentation.ui.charts.nested.MyViewPager2Adapter
-import com.example.bondcalculator.presentation.ui.charts.nested.NameNestedFragment
+import com.example.bondcalculator.presentation.ui.charts.nested.common.MyViewPager2Adapter
+import com.example.bondcalculator.presentation.ui.charts.nested.common.NameNestedFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ChartsFragment : Fragment() {
@@ -50,7 +50,6 @@ class ChartsFragment : Fragment() {
     private fun initViewPager2() {
         adapter = MyViewPager2Adapter(this)
         binding.viewPager2Fragments.adapter = adapter
-
     }
 
     override fun onDestroy() {

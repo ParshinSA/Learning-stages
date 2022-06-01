@@ -16,4 +16,11 @@
     <color name="progressBarBlindTrue">#805D5D5E</color>
     <color name="progressBarBlindFalse">#00000000</color>
 
+    <color name="colorPercentRedemptionYield">#FFB300</color>
+    <color name="colorPercentCouponYield">#00ACC1</color>
+
+    <color name="colorPercentBuyBonds">#00ACC1</color>
+    <color name="colorPercentPaymentMoney">#FFB300</color>
+    <color name="colorPercentMoneyFromPastPeriods">#43A047</color>
+
 </resources>

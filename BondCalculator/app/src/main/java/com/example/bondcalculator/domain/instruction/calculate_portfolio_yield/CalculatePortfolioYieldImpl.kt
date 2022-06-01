@@ -8,6 +8,7 @@ import com.example.bondcalculator.domain.instruction.download_progress.DownloadP
 import com.example.bondcalculator.domain.instruction.purchased_bonds.DomainPurchasedBonds
 import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
 import com.example.bondcalculator.domain.models.download_progress.DomainDownloadProgressData
+import com.example.bondcalculator.domain.models.payment_calendar.DomainPaymentCalendar
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSettings
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioYield
 import io.reactivex.Observable
@@ -98,44 +99,36 @@ class CalculatePortfolioYieldImpl @Inject constructor(
         )
     }
 
-    /**
-     * bond.key - данные по текущей облигации
-     * bond.value - кол-во текущих облигаций
-     * */
     private fun sellAll() {
-        Log.d(TAG, "sellAll: ")
         val copyPurchasedBondsList = purchasedBonds.getPurchasedBonds().toMap()
-        for (bond in copyPurchasedBondsList) {
+        for ((bond, amount) in copyPurchasedBondsList) {
             val price =
-                ((formulas.getPriceToMaturity(bond.key, endDate) * bond.key.lotSize) * bond.value)
+                ((formulas.getPriceToMaturity(bond, endDate) * bond.lotSize) * amount)
                     .roundDouble()
 
-            purchasedBonds.removeBond(bond.key)
+            purchasedBonds.removeBond(bond)
             balance.increment(price)
         }
     }
 
     private fun byBondProcess() {
-        Log.d(TAG, "byBondProcess: ")
         var purchaseAttemptCounter = 0
 
         val bondList = getBondTopList().shuffled()
         while (purchaseAttemptCounter < bondList.size) {
             for (bond in bondList) {
-                val newBond = bond.checkCalendar(currentDate)
+                val newBond = checkCalendar(bond, currentDate)
                 val price = formulas.getTotalPrice(newBond, currentDate) * newBond.lotSize
                 if (balance.checkPurchaseAvailability(price)) {
                     byBond(newBond, price)
                 } else {
                     purchaseAttemptCounter++
-                    Log.d(TAG, "byBondProcess: counter $purchaseAttemptCounter")
                 }
             }
         }
     }
 
     private fun getBondTopList(): List<DomainBondAndCalendar> {
-        Log.d(TAG, "getBondTopList: ")
         return if (purchasedBonds.getPurchasedBonds().isEmpty()) {
             portfolioSettings.bondTopList
         } else {
@@ -145,7 +138,6 @@ class CalculatePortfolioYieldImpl @Inject constructor(
     }
 
     private fun updateCurrentDate() {
-        Log.d(TAG, "updateCurrentDate: ")
         val paymentCalendar = generalPaymentList.keys
         val nexDatePayment = paymentCalendar.firstOrNull { date ->
             date > currentDate
@@ -159,13 +151,10 @@ class CalculatePortfolioYieldImpl @Inject constructor(
 
     private fun makePayment() {
         val payment = generalPaymentList[currentDate] ?: 0.0
-        Log.d(TAG, "makePayment: payment $payment ")
         balance.increment(payment)
-        Log.d(TAG, "makePayment: balance ${balance.getBalance()}")
     }
 
     private fun createReplenishmentCalendar() {
-        Log.d(TAG, "createReplenishmentCalendar: ")
         for (currentDay in startDate..endDate step ONE_DAY_SECONDS) {
             val numberCurrentDay = currentDay.toDateString("dd")
 
@@ -193,7 +182,6 @@ class CalculatePortfolioYieldImpl @Inject constructor(
      * если нет, то добавить текущую дату с текущей выплатой
      * */
     private fun addInGeneralPaymentCalendar(paymentCalendar: TreeMap<Long, Double>) {
-        Log.d(TAG, "addInGeneralPaymentCalendar: ")
         for ((date, amountMoney) in paymentCalendar) {
             if (date !in currentDate + 1..endDate) {
                 continue
@@ -205,6 +193,47 @@ class CalculatePortfolioYieldImpl @Inject constructor(
             } else {
                 generalPaymentList[date] = amountMoney
             }
+        }
+    }
+
+    private fun checkCalendar(bond: DomainBondAndCalendar, currentDate: Long): DomainBondAndCalendar {
+
+        return if (currentDate + ONE_YEAR_SECONDS < bond.repayment) bond else {
+            val oldStartCouponPayments =
+                bond.paymentCalendar.couponPayment.keys.toList().sorted()[0]
+
+            val newStartYear = currentDate.toDateString("yyyy")
+            val newStartDayMonth = oldStartCouponPayments.toDateString("MM-dd")
+            val newStartCouponPayments = "$newStartYear-$newStartDayMonth".toTimeStampSeconds()
+            val shiftPayment: Long = newStartCouponPayments - oldStartCouponPayments
+
+            val newAmortizationPaymentCalendar = TreeMap<Long, Double>()
+            val newCouponPaymentCalendar = TreeMap<Long, Double>()
+
+            for ((date, value) in bond.paymentCalendar.amortizationPayment) {
+                newAmortizationPaymentCalendar[(date + shiftPayment)] = value
+            }
+
+
+            for ((date, value) in bond.paymentCalendar.couponPayment) {
+                newCouponPaymentCalendar[(date + shiftPayment)] = value
+            }
+
+            val repayment = newAmortizationPaymentCalendar.keys.toList().maxOrNull()!!
+
+            DomainBondAndCalendar(
+                secId = bond.secId,
+                shortName = bond.shortName,
+                couponValuePercent = bond.couponValuePercent,
+                pricePercent = bond.pricePercent,
+                lotSize = bond.lotSize,
+                repayment = repayment,
+                couponPeriod = bond.couponPeriod,
+                paymentCalendar = DomainPaymentCalendar(
+                    amortizationPayment = newAmortizationPaymentCalendar,
+                    couponPayment = newCouponPaymentCalendar
+                )
+            )
         }
     }
 

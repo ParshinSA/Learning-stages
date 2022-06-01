@@ -6,6 +6,7 @@ import com.example.bondcalculator.domain.models.analysis_portfolio_yield.DomainD
 import com.example.bondcalculator.domain.models.analysis_portfolio_yield.DomainDataForPortfolioFrg
 import com.example.bondcalculator.domain.models.analysis_portfolio_yield.DomainDataForPurchaseHistoryFrg
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioYield
+import java.util.*
 import javax.inject.Inject
 
 class AnalysisPortfolioYieldImpl @Inject constructor() : AnalysisPortfolioYield {
@@ -31,47 +32,78 @@ class AnalysisPortfolioYieldImpl @Inject constructor() : AnalysisPortfolioYield 
     override fun analysisForPayoutsFrg(
         data: DomainPortfolioYield
     ): DomainDataForPayoutsFrg {
-        val allYearsInCalculatePeriod = allYears(data)
+        val allYears = allYears(data)
 
         val couponPaymentsStepYear = mutableMapOf<String, Double>()
         val amortizationPaymentsStepYear = mutableMapOf<String, Double>()
 
         for ((bond, counterBond) in data.purchaseHistory) {
+
             bond.paymentCalendar.couponPayment.forEach { (date, payment) ->
                 val convertDate = date.toDateString("yyyy")
 
-                if (allYearsInCalculatePeriod.contains(convertDate)) {
+                if (allYears.contains(convertDate)) {
+                    couponPaymentsStepYear[convertDate] =
+                        (couponPaymentsStepYear[convertDate] ?: 0.0) +
+                                (payment * bond.lotSize * counterBond)
+                }
+            }
 
-                    if (couponPaymentsStepYear.containsKey(convertDate)) {
-                        couponPaymentsStepYear[convertDate] =
-                            couponPaymentsStepYear.getValue(convertDate) + (payment * bond.lotSize * counterBond)
-                    } else couponPaymentsStepYear[convertDate] =
-                        payment * bond.lotSize * counterBond
+            bond.paymentCalendar.amortizationPayment.forEach { (date, payment) ->
+                val convertDate = date.toDateString("yyyy")
 
-                    if (amortizationPaymentsStepYear.containsKey(convertDate)) {
-                        amortizationPaymentsStepYear[convertDate] =
-                            amortizationPaymentsStepYear.getValue(convertDate) + (payment * bond.lotSize * counterBond)
-                    } else amortizationPaymentsStepYear[convertDate] =
-                        payment * bond.lotSize * counterBond
+                if (allYears.contains(convertDate)) {
+                    amortizationPaymentsStepYear[convertDate] =
+                        (amortizationPaymentsStepYear[convertDate] ?: 0.0) +
+                                (payment * bond.lotSize * counterBond)
                 }
             }
         }
         return DomainDataForPayoutsFrg(
-            allYearsInCalculatePeriod = allYearsInCalculatePeriod,
+            allYearsInCalculatePeriod = allYears,
             couponPaymentsStepYear = couponPaymentsStepYear,
             amortizationPaymentsStepYear = amortizationPaymentsStepYear
         )
     }
 
     override fun analysisForPurchaseHistoryFrg(data: DomainPortfolioYield): DomainDataForPurchaseHistoryFrg {
+        val allYears = allYears(data)
+
+        val couponPaymentsStepYear = TreeMap<String, Double>()
+        val amortizationPaymentsStepYear = TreeMap<String, Double>()
+
+        for ((bond, counterBond) in data.purchaseHistory) {
+
+            bond.paymentCalendar.couponPayment.forEach { (date, payment) ->
+                val convertDate = date.toDateString("yyyy")
+
+                if (allYears.contains(convertDate)) {
+                    couponPaymentsStepYear[convertDate] =
+                        (couponPaymentsStepYear[convertDate] ?: 0.0) +
+                                (payment * bond.lotSize * counterBond)
+                }
+            }
+
+            bond.paymentCalendar.amortizationPayment.forEach { (date, payment) ->
+                val convertDate = date.toDateString("yyyy")
+
+                if (allYears.contains(convertDate)) {
+                    amortizationPaymentsStepYear[convertDate] =
+                        (amortizationPaymentsStepYear[convertDate] ?: 0.0) +
+                                (payment * bond.lotSize * counterBond)
+                }
+            }
+        }
+
         return DomainDataForPurchaseHistoryFrg(
             allYearsInCalculatePeriod = allYears(data),
-            buyHistory =data.buyHistory,
-            paymentsHistory = data.generalPaymentList
+            startBalance = data.startBalance,
+            couponPaymentsStepYear = couponPaymentsStepYear,
+            amortizationPaymentsStepYear = amortizationPaymentsStepYear
         )
     }
 
-    private fun allYears(data: DomainPortfolioYield): Set<String>{
+    private fun allYears(data: DomainPortfolioYield): Set<String> {
         val allYearsInCalculatePeriod = mutableSetOf<String>()
 
         for (date in data.startDateCalculate..data.endDateCalculate step ONE_YEAR_SECONDS / 2)

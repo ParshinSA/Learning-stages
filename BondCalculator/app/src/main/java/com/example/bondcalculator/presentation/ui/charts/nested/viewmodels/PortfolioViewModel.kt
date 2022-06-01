@@ -19,7 +19,6 @@ class PortfolioViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val listColor = mutableListOf<Int>()
-    private val previousData: DomainDataForPortfolioFrg? = null
 
     private val dataMutLiveData = SingleLiveEvent<DomainDataForPortfolioFrg>()
     val dataLiveData: LiveData<DomainDataForPortfolioFrg> get() = dataMutLiveData
