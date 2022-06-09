@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class PortfolioFrgInteractorImpl @Inject constructor(
     private val repository: PortfolioFrgRepository
-): PortfolioFrgInteractor {
+) : PortfolioFrgInteractor {
 
     override fun getDataForPortfolioFrg(): Single<DomainDataForPortfolioFrg> {
         return repository.getDataForPortfolioFrg()

@@ -4,6 +4,7 @@ import com.example.bondcalculator.domain.models.payment_calendar.DomainPaymentCa
 
 data class DomainBondAndCalendar(
     val secId: String,
+    val nominal: Double,
     val shortName: String, // наименование облигации
     val couponValuePercent: Double, // размер купона в % от номинала
     val pricePercent: Double, // цена в % от номинала

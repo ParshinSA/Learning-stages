@@ -5,15 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/fragmentsPadding"
-    tools:context=".presentation.ui.charts.ChartsFragment">
+    tools:context=".presentation.fragments.ChartsFragment">
 
     <fragment
-        android:id="@+id/infoContainer"
-        android:name="com.example.bondcalculator.presentation.ui.charts.nested.fragments.TextInfoDepositFragment"
+        android:id="@+id/fragmentInfoContainer"
+        android:name="com.example.bondcalculator.presentation.fragments.TextInfoDepositFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/tabLayoutCharts"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_text_info_deposit" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutCharts"
@@ -21,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/viewPager2Fragments"
-        app:layout_constraintTop_toBottomOf="@id/infoContainer"
+        app:layout_constraintTop_toBottomOf="@id/fragmentInfoContainer"
         app:tabGravity="start"
         app:tabIndicatorColor="@color/black"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance" />
@@ -30,13 +31,13 @@
         android:id="@+id/viewPager2Fragments"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/bg_view_pager_charts"
-        app:layout_constraintBottom_toTopOf="@+id/buttonApplyBid"
+        android:background="@drawable/bg_view_borders"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSubmitApplication"
         app:layout_constraintTop_toBottomOf="@+id/tabLayoutCharts"
         tools:layout_editor_absoluteX="16dp" />
 
     <Button
-        android:id="@+id/buttonApplyBid"
+        android:id="@+id/buttonSubmitApplication"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/buttonTxtSubmitYourApplication"

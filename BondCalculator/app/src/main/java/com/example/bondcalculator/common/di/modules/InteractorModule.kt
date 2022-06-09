@@ -28,7 +28,19 @@ interface InteractorModule {
 
     @Binds
     @Suppress("FunctionName")
-    fun bindPurchaseHistoryInteractorImpl_to_interface(
+    fun bindPurchaseHistoryFrgInteractorImpl_to_interface(
         interactor: PurchaseHistoryFrgInteractorImpl
     ): PurchaseHistoryFrgInteractor
+
+    @Binds
+    @Suppress("FunctionName")
+    fun bindCompositionFrgInteractorImpl_to_interface(
+        interactor: CompositionFrgInteractorImpl
+    ): CompositionFrgInteractor
+
+    @Binds
+    @Suppress("FunctionName")
+    fun bindTextInfoDepositFrgInteractorImpl_to_interface(
+        interactor: TextInfoDepositFrgInteractorImpl
+    ): TextInfoDepositFrgInteractor
 }

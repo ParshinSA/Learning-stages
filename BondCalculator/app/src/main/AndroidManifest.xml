@@ -15,7 +15,7 @@
         android:theme="@style/Theme.BondCalculator">
         <activity
             android:screenOrientation="portrait"
-            android:name=".presentation.AppActivity"
+            android:name="com.example.bondcalculator.presentation.activities.AppActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

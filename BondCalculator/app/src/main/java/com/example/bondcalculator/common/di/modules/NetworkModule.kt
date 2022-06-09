@@ -16,6 +16,7 @@ import javax.inject.Singleton
 class NetworkModule {
 
     @Provides
+    @Singleton
     fun provideSecuritiesDataApi(retrofit: Retrofit): SecuritiesDataApi {
         return retrofit
             .newBuilder()
@@ -25,6 +26,7 @@ class NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideExchangeRateApi(retrofit: Retrofit): ExchangeRateApi {
         return retrofit
             .newBuilder()

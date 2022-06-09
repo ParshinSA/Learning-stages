@@ -1,11 +1,11 @@
 package com.example.bondcalculator.common.di.modules
 
-import com.example.bondcalculator.data.data_source.impl.RemoteBondDataDataSourceImpl
-import com.example.bondcalculator.data.data_source.impl.RemoteExchangeRateDataDataSourceImpl
-import com.example.bondcalculator.data.data_source.intf.RemoteBondDataDataSource
-import com.example.bondcalculator.data.data_source.intf.RemoteExchangeRateDataDataSource
-import com.example.bondcalculator.data.memory.SharedPreferenceDataSource
-import com.example.bondcalculator.data.memory.SharedPreferenceDataSourceImpl
+import com.example.bondcalculator.data.data_sourse.remote.impl.RemoteBondDataDataSourceImpl
+import com.example.bondcalculator.data.data_sourse.remote.impl.RemoteExchangeRateDataDataSourceImpl
+import com.example.bondcalculator.data.data_sourse.remote.intf.RemoteBondDataDataSource
+import com.example.bondcalculator.data.data_sourse.remote.intf.RemoteExchangeRateDataDataSource
+import com.example.bondcalculator.data.data_sourse.memory.SharedPreferenceDataSource
+import com.example.bondcalculator.data.data_sourse.memory.SharedPreferenceDataSourceImpl
 import dagger.Binds
 import dagger.Module
 

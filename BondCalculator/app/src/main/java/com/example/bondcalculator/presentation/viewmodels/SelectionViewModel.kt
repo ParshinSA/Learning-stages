@@ -12,7 +12,6 @@ import com.example.bondcalculator.domain.models.bonds_data.DomainRequestBondList
 import com.example.bondcalculator.domain.models.download_progress.DomainDownloadProgressData
 import com.example.bondcalculator.domain.models.portfplio.DomainPortfolioSettings
 import com.example.bondcalculator.presentation.common.ResourcesProvider
-import com.example.bondcalculator.presentation.common.SingleLiveEvent
 import com.example.bondcalculator.presentation.models.TypeBoard.TQOB
 import com.example.bondcalculator.presentation.models.TypeBoard.TQOD
 import com.example.bondcalculator.presentation.models.TypeInvestmentAccount
@@ -34,14 +33,12 @@ class SelectionViewModel(
     init {
         compositeDisposable.add(
             interactor.getExchangerRateUsdToRub()
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .subscribe({ usdToRub ->
                     exchangeRateUsdToRub = usdToRub.value
                 }, {
-                    Log.d(TAG, "ERROR: $it")
-                    errorMessageSingleLiveEvent.postValue(
-                        resourcesProvider.getString(R.string.dialog_error_update_exchange_rate)
-                    )
+                    Log.d("TAG", "ERROR: $it")
+                    errorMessage(resourcesProvider.getString(R.string.dialog_error_update_exchange_rate))
                 }
                 )
         )
@@ -65,9 +62,6 @@ class SelectionViewModel(
     private val investmentAmountValueMutLiveData =
         MutableLiveData(DEFAULT_INVESTMENT_AMOUNT_SEEKBAR)
     val investmentAmountValueLiveDta: LiveData<Int> get() = investmentAmountValueMutLiveData
-
-    private val errorMessageSingleLiveEvent = SingleLiveEvent<String>()
-    val errorMessageLiveData: LiveData<String> get() = errorMessageSingleLiveEvent
 
     private val isLoadingMutLiveData = MutableLiveData(false)
     val isLoadingLiveData: LiveData<Boolean> get() = isLoadingMutLiveData
@@ -116,9 +110,7 @@ class SelectionViewModel(
                 else -> error("")
             }
         } catch (t: Throwable) {
-            errorMessageSingleLiveEvent.postValue(
-                resourcesProvider.getString(R.string.dialog_error_incorrect_id_button)
-            )
+            errorMessage(resourcesProvider.getString(R.string.dialog_error_incorrect_id_button))
         }
     }
 
@@ -143,10 +135,8 @@ class SelectionViewModel(
                     isThereCalculateDataMutLiveData.postValue(true)
                     interactor.analysisPortfolioYield(result)
                 }, {
-                    Log.d(TAG, "collectPortfolio: ERROR $it")
-                    errorMessageSingleLiveEvent.postValue(
-                        resourcesProvider.getString(R.string.dialog_error_calculate_portfolio)
-                    )
+                    Log.d("TAG", "collectPortfolio: ERROR $it")
+                    errorMessage(resourcesProvider.getString(R.string.dialog_error_calculate_portfolio))
                 }, {
                     stopLoading()
                 })
@@ -161,9 +151,8 @@ class SelectionViewModel(
                 .subscribe({ progressData ->
                     listenerDownloadProgressMutLiveData.postValue(progressData)
                 }, {
-                    errorMessageSingleLiveEvent.postValue(
-                        resourcesProvider.getString(R.string.dialog_error_incorrect_id_button)
-                    )
+                    Log.d("TAG", "startLoading: $it")
+                    errorMessage(resourcesProvider.getString(R.string.dialog_error_unknown))
                 }
                 )
         )
@@ -196,6 +185,6 @@ class SelectionViewModel(
     }
 
     companion object {
-        private val TAG = this::class.qualifiedName
+        private const val TAG = "SelectionViewModel"
     }
 }

@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nameMenuAndControlSelection"
-        android:name="com.example.bondcalculator.presentation.ui.selection.SelectionFragment"
+        android:name="com.example.bondcalculator.presentation.fragments.SelectionFragment"
         android:label="@string/titleSelection"
         tools:layout="@layout/fragment_selection" />
 
     <fragment
         android:id="@+id/nameMenuAndControlCharts"
-        android:name="com.example.bondcalculator.presentation.ui.charts.ChartsFragment"
+        android:name="com.example.bondcalculator.presentation.fragments.ChartsFragment"
         android:label="@string/titleCharts"
         tools:layout="@layout/fragment_charts" />
 
     <fragment
         android:id="@+id/nameMenuAndControlComposition"
-        android:name="com.example.bondcalculator.presentation.ui.composition.CompositionFragment"
+        android:name="com.example.bondcalculator.presentation.fragments.CompositionFragment"
         android:label="@string/titleComposition"
         tools:layout="@layout/fragment_composition" />
 </navigation>
