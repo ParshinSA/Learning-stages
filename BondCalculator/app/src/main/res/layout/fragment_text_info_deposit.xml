@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/bg_view_pager_charts"
+    android:background="@drawable/bg_view_borders"
 
     android:layout_height="match_parent">
 
@@ -88,11 +88,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/textViewTxtYield"
-        app:layout_constraintEnd_toStartOf="@+id/textViewValueYield"
+        app:layout_constraintEnd_toStartOf="@+id/textViewValueProfit"
         app:layout_constraintTop_toBottomOf="@+id/textViewValueWillBe" />
 
     <TextView
-        android:id="@+id/textViewValueYield"
+        android:id="@+id/textViewValueProfit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/xmlValueTextSize"

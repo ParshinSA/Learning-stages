@@ -7,6 +7,10 @@
     <dimen name="buttonWidthSelectionFragment">160dp</dimen>
     <dimen name="buttonHeightSelectionFragment">50dp</dimen>
 
-
     <dimen name="marginColorAndTextPayouts">16dp</dimen>
+    <dimen name="imageViewColorWidth">10dp</dimen>
+    <dimen name="imageViewColorHeight">10dp</dimen>
+
+    <dimen name="marginItemRecyclerView">4dp</dimen>
+    <dimen name="paddingItemRecyclerView">4dp</dimen>
 </resources>

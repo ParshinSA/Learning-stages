@@ -2,7 +2,6 @@ package com.example.bondcalculator.data.networking.api
 
 import com.example.bondcalculator.data.networking.models.bonds_data.RemoteResponseBondListDto
 import com.example.bondcalculator.data.networking.models.payment_calendar.RemoteResponseCouponInfoDto
-import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path

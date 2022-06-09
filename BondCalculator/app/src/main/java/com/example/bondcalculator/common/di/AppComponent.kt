@@ -1,12 +1,9 @@
 package com.example.bondcalculator.common.di
 
 import android.content.Context
+import androidx.fragment.app.Fragment
 import com.example.bondcalculator.common.di.modules.*
-import com.example.bondcalculator.presentation.ui.charts.ChartsFragment
-import com.example.bondcalculator.presentation.ui.charts.nested.fragments.PayoutsFragment
-import com.example.bondcalculator.presentation.ui.charts.nested.fragments.PortfolioFragment
-import com.example.bondcalculator.presentation.ui.charts.nested.fragments.PurchaseHistoryFragment
-import com.example.bondcalculator.presentation.ui.selection.SelectionFragment
+import com.example.bondcalculator.presentation.fragments.*
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -29,6 +26,8 @@ interface AppComponent {
     fun inject(fragment: PortfolioFragment)
     fun inject(fragment: PayoutsFragment)
     fun inject(fragment: PurchaseHistoryFragment)
+    fun inject(fragment: CompositionFragment)
+    fun inject(fragment: TextInfoDepositFragment)
 
     @Component.Builder
     interface Builder {

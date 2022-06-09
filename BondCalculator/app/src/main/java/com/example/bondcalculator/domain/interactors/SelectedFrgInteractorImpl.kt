@@ -59,6 +59,7 @@ class SelectedFrgInteractorImpl @Inject constructor(
                         .map { couponPaymentCalendar ->
                             DomainBondAndCalendar(
                                 secId = secId,
+                                nominal = nominal,
                                 shortName = shortName,
                                 couponValuePercent = couponPercent,
                                 pricePercent = pricePercent,
@@ -80,10 +81,22 @@ class SelectedFrgInteractorImpl @Inject constructor(
     override fun analysisPortfolioYield(data: DomainPortfolioYield) {
         analysisAndSaveForPortfolioFrg(data)
         analysisAndSaveForPayoutsFrg(data)
-        analysisAndSaveForPurchaseHistory(data)
+        analysisAndSaveForPurchaseHistoryFrg(data)
+        analysisAndSaveForTextInfoDepositFrg(data)
+        analysisAndSaveForCompositionFrg(data)
     }
 
-    private fun analysisAndSaveForPurchaseHistory(data: DomainPortfolioYield) {
+    private fun analysisAndSaveForCompositionFrg(data: DomainPortfolioYield) {
+        val dataForCompositionFrg = analysisPortfolioYield.analysisForCompositionFrg(data)
+        repository.saveDataForCompositionFrg(dataForCompositionFrg)
+    }
+
+    private fun analysisAndSaveForTextInfoDepositFrg(data: DomainPortfolioYield) {
+        val dataForTextInfoDepositFrg = analysisPortfolioYield.analysisForTextInfoDepositFrg(data)
+        repository.saveDataForTextInfoDepositFrg(dataForTextInfoDepositFrg)
+    }
+
+    private fun analysisAndSaveForPurchaseHistoryFrg(data: DomainPortfolioYield) {
         val dataForPurchaseHistoryFrg = analysisPortfolioYield.analysisForPurchaseHistoryFrg(data)
         repository.saveDataForPurchaseHistoryFrg(dataForPurchaseHistoryFrg)
     }

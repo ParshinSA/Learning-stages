@@ -1,8 +1,7 @@
 package com.example.bondcalculator.common
 
-import android.util.Log
-import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
-import com.example.bondcalculator.domain.models.payment_calendar.DomainPaymentCalendar
+import androidx.fragment.app.Fragment
+import com.example.bondcalculator.presentation.AppApplication
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.round

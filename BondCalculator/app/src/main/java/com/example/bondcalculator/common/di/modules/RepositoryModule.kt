@@ -1,13 +1,7 @@
 package com.example.bondcalculator.common.di.modules
 
-import com.example.bondcalculator.data.repositories_impl.PayoutsFrgRepositoryImpl
-import com.example.bondcalculator.data.repositories_impl.PortfolioFrgRepositoryImpl
-import com.example.bondcalculator.data.repositories_impl.PurchaseHistoryFrgRepositoryImpl
-import com.example.bondcalculator.data.repositories_impl.SelectedFrgRepositoryImpl
-import com.example.bondcalculator.domain.repositories_intf.PayoutsFrgRepository
-import com.example.bondcalculator.domain.repositories_intf.PortfolioFrgRepository
-import com.example.bondcalculator.domain.repositories_intf.PurchaseHistoryFrgRepository
-import com.example.bondcalculator.domain.repositories_intf.SelectedFrgRepository
+import com.example.bondcalculator.data.repositories_impl.*
+import com.example.bondcalculator.domain.repositories_intf.*
 import dagger.Binds
 import dagger.Module
 
@@ -37,4 +31,16 @@ interface RepositoryModule {
     fun bindPurchaseHistoryFrgRepositoryImpl_to_interface(
         repository: PurchaseHistoryFrgRepositoryImpl
     ): PurchaseHistoryFrgRepository
+
+    @Binds
+    @Suppress("FunctionName")
+    fun bindCompositionFrgRepositoryImpl_to_interface(
+        interactor: CompositionFrgRepositoryImpl
+    ): CompositionFrgRepository
+
+    @Binds
+    @Suppress("FunctionName")
+    fun bindTextInfoDepositFrgRepositoryImpl_to_interface(
+        interactor: TextInfoDepositFrgRepositoryImpl
+    ): TextInfoDepositFrgRepository
 }

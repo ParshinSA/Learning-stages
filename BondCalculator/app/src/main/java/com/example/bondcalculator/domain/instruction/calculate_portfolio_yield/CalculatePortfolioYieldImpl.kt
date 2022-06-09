@@ -5,7 +5,7 @@ import com.example.bondcalculator.common.*
 import com.example.bondcalculator.domain.instruction.balance.Balance
 import com.example.bondcalculator.domain.instruction.dond_formulas.BondFormulas
 import com.example.bondcalculator.domain.instruction.download_progress.DownloadProgress
-import com.example.bondcalculator.domain.instruction.purchased_bonds.DomainPurchasedBonds
+import com.example.bondcalculator.domain.instruction.purchased_bonds.PurchasedBonds
 import com.example.bondcalculator.domain.models.bonds_data.DomainBondAndCalendar
 import com.example.bondcalculator.domain.models.download_progress.DomainDownloadProgressData
 import com.example.bondcalculator.domain.models.payment_calendar.DomainPaymentCalendar
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class CalculatePortfolioYieldImpl @Inject constructor(
     private val formulas: BondFormulas,
-    private val purchasedBonds: DomainPurchasedBonds,
+    private val purchasedBonds: PurchasedBonds,
     private val balance: Balance,
     private val downloadProgress: DownloadProgress
 ) : CalculatePortfolioYield {
@@ -80,10 +80,10 @@ class CalculatePortfolioYieldImpl @Inject constructor(
         return DomainPortfolioYield(
             startDateCalculate = startDate,
             endDateCalculate = endDate,
+            term = portfolioSettings.term,
             startBalance = portfolioSettings.startBalance,
             resultBalance = balance.getBalance(),
             purchaseHistory = purchasedBonds.getPurchasedBondsHistory(),
-            buyHistory = balance.getBuyHistory(),
             generalPaymentList = generalPaymentList
         )
     }
@@ -196,7 +196,10 @@ class CalculatePortfolioYieldImpl @Inject constructor(
         }
     }
 
-    private fun checkCalendar(bond: DomainBondAndCalendar, currentDate: Long): DomainBondAndCalendar {
+    private fun checkCalendar(
+        bond: DomainBondAndCalendar,
+        currentDate: Long
+    ): DomainBondAndCalendar {
 
         return if (currentDate + ONE_YEAR_SECONDS < bond.repayment) bond else {
             val oldStartCouponPayments =
@@ -223,6 +226,7 @@ class CalculatePortfolioYieldImpl @Inject constructor(
 
             DomainBondAndCalendar(
                 secId = bond.secId,
+                nominal = bond.nominal,
                 shortName = bond.shortName,
                 couponValuePercent = bond.couponValuePercent,
                 pricePercent = bond.pricePercent,

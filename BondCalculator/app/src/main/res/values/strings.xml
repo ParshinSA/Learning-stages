@@ -1,5 +1,5 @@
 <resources>
-<!--    Common     START-->
+    <!--    Common     START-->
     <string name="app_name">Bond Calculator</string>
     <string name="dialog_attention">Внимание!</string>
     <string name="dialog_error_unknown">Что-то пошло не так</string>
@@ -8,7 +8,7 @@
     <string name="dialog_error_update_progress_data">Ошибка обновления данных прогресса</string>
     <string name="dialog_error_update_exchange_rate">Ошибка обновления курса валюты</string>
     <string name="dialog_error_get_data_from_shared_prefs">Ошибка получения данных из памяти</string>
-<!--    Common     END-->
+    <!--    Common     END-->
 
     <!--    fragment selection  START   -->
     <string name="textViewTxtInvestmentTerm">Срок инвестиций:</string>
@@ -20,7 +20,7 @@
     <string name="buttonTxtInvestmentAccountIIS">ИИС</string>
     <string name="buttonTxtInvestmentAccountNormal">Обычный счет</string>
     <string name="textViewTxtRegularReplenishment">Регулярное пополнение</string>
-    <string name="textViewTxtAmountRegularReplenishment">%1d руб/мес</string>
+    <string name="textViewTxtAmountRegularReplenishment">%1$d руб/мес</string>
     <string name="buttonTxtCollectPortfolio">Собрать \nпортфель</string>
 
     <plurals name="valueInvestmentTerm">
@@ -30,35 +30,40 @@
     </plurals>
     <!--    fragment selection  END     -->
 
-
     <!--    fragment charts  START  -->
-    <string name="textViewTxtInvestmentToday">Инвестиции сегодня:</string>
-    <string name="textViewTxtValYearYield">Доходность %1$d годовых</string>
-    <string name="textViewTxtAfter">Через</string>
-    <string name="textViewTxtWillBe">будет</string>
-    <string name="textViewTxtYield">Прибыль</string>
     <string name="buttonTxtSubmitYourApplication">Оставить заявку</string>
-
-    <plurals name="textViewValueAfter">
-        <item quantity="one">%1$d год</item><!--1-->
-        <item quantity="few">%1$d года</item><!--2..4-->
-        <item quantity="many">%1$d лет</item><!--5..9 + 0-->
-    </plurals>
     <!--    fragment charts  END    -->
 
     <!--    fragment payouts START-->
     <string name="textViewTxtBondRedemption">Погашение облигаций</string>
     <string name="textViewTxtCouponYield">Купонный доход</string>
     <!--    fragment payouts END-->
-    
+
     <!--    fragment purchase history START-->
-    <string name="textViewTxtBuyBonds">Стоимость облигаций</string>
-    <string name="textViewTxtPaymentMoney">Выплаты</string>
+    <string name="textViewTxtPercentBuyBonds">Стоимость облигаций</string>
+    <string name="textViewTxtPercentPaymentMoney">Выплаты</string>
+    <string name="textViewTxtPercentMoneyFromPastPeriods">Деньги с прошлых периодов</string>
     <!--    fragment purchase history END-->
 
     <!--    fragment composition START   -->
+    <string name="textViewTxtCounterBonds">%1$d шт.</string>
+    <string name="textViewTxtPriceBond">%1$d / %2$s %%</string>
+    <string name="textViewTxtCounterPercentPortfolio">%1$d %% портфеля</string>
     <!--    fragment composition END     -->
 
+    <!--    fragment TextInfoDeposit START   -->
+    <string name="textViewTxtInvestmentToday">Инвестиции сегодня:</string>
+    <string name="textViewTxtValYearYield">Доходность %1$d %% годовых</string>
+    <string name="textViewTxtAfter">Через</string>
+    <string name="textViewTxtWillBe">будет</string>
+    <string name="textViewTxtYield">Прибыль</string>
+
+    <plurals name="textViewValueAfter">
+        <item quantity="one">%1$d год</item><!--1-->
+        <item quantity="few">%1$d года</item><!--2..4-->
+        <item quantity="many">%1$d лет</item><!--5..9 + 0-->
+    </plurals>
+    <!--    fragment TextInfoDeposit END     -->
 
     <!--    bottom navigation menu START    -->
     <string name="titleSelection">Подбор</string>

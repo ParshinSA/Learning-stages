@@ -7,4 +7,4 @@ data class DomainDataForPurchaseHistoryFrg(
     val allYearsInCalculatePeriod: Set<String>,
     val couponPaymentsStepYear: TreeMap<String, Double>,
     val amortizationPaymentsStepYear: TreeMap<String, Double>
-    )
+)

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:elevation="4dp"
     android:padding="@dimen/fragmentsPadding"
-    tools:context=".presentation.ui.selection.SelectionFragment">
+    tools:context=".presentation.fragments.SelectionFragment">
 
     <TextView
         android:id="@+id/textViewTxtInvestmentTerm"
@@ -150,7 +150,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTxtAmountRegularReplenishment" />
 
-    не<ProgressBar
+    не
+
+    <ProgressBar
         android:id="@+id/progressBarIsLoading"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"

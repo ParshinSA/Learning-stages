@@ -3,19 +3,31 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/bg_bond_redemption.xml" value="0.2890625" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/bg_buy_bonds.xml" value="0.2890625" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/bg_money_from_past_periods.xml" value="0.2890625" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/bg_payment_money.xml" value="0.2890625" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/bg_percent_coupon_yield.xml" value="0.15885416666666666" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/bg_percent_redemption_yield.xml" value="0.2890625" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/bg_view_pager_charts.xml" value="0.2890625" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/ic_arrow_upward.xml" value="0.2890625" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/ic_books.xml" value="0.15885416666666666" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/drawable/test_bg.xml" value="0.2890625" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/activity_app.xml" value="0.27291666666666664" />
-        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_charts.xml" value="0.33" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_charts.xml" value="0.25" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_composition.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_payouts.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_portfolio.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_purchase_history.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_selection.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/fragment_text_info_deposit.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/item_composition_rv.xml" value="0.33" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/item_pauouts_info_list.xml" value="0.1" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/item_payouts_rv.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/item_purchase_history_info_list.xml" value="0.22" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/item_purchase_history_rv.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/item_text_info_deposit_list.xml" value="0.25" />
+        <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/layout/test.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/PARSHIN/Desktop/Repositories/Learning-stages/BondCalculator/app/src/main/res/menu/bottom_nav_menu.xml" value="0.27291666666666664" />
       </map>
     </option>
