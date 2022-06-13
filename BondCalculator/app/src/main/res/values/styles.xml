@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="styleButtonSelectionFragment">
+        <item name="android:layout_width">@dimen/buttonWidthSelectionFragment</item>
+        <item name="android:layout_height">@dimen/buttonHeightSelectionFragment</item>
+        <item name="android:layout_marginTop">@dimen/marginTopInsideSections</item>
+    </style>
+
+    <style name="MyTabLayoutTextAppearance" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="styleCompositionTextInfo">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:background">@drawable/bg_view_borders</item>
+    </style>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/fragmentsPadding"
+    tools:context=".presentation.fragments.ChartsFragment">
+
+    <fragment
+        android:id="@+id/fragmentInfoContainer"
+        android:name="com.example.bondcalculator.presentation.fragments.TextInfoDepositFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/tabLayoutCharts"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_text_info_deposit" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutCharts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/viewPager2Fragments"
+        app:layout_constraintTop_toBottomOf="@id/fragmentInfoContainer"
+        app:tabGravity="start"
+        app:tabIndicatorColor="@color/black"
+        app:tabTextAppearance="@style/MyTabLayoutTextAppearance" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager2Fragments"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_view_borders"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSubmitApplication"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutCharts"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <Button
+        android:id="@+id/buttonSubmitApplication"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonTxtSubmitYourApplication"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/marginItemRecyclerView"
+    android:background="@drawable/bg_view_borders"
+    android:padding="@dimen/paddingItemRecyclerView">
+
+    <ImageView
+        android:id="@+id/imageViewImageBond"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/image_analysis_bond"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.15" />
+
+    <TextView
+        android:id="@+id/textViewNameBond"
+        style="@style/styleCompositionTextInfo"
+        app:layout_constraintBottom_toTopOf="@+id/textViewCounterBonds"
+        app:layout_constraintEnd_toStartOf="@+id/textViewPriceBond"
+        app:layout_constraintStart_toEndOf="@+id/imageViewImageBond"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="ОФЗ 23654" />
+
+    <TextView
+        android:id="@+id/textViewPriceBond"
+        style="@style/styleCompositionTextInfo"
+        app:layout_constraintBottom_toTopOf="@+id/textViewCounterPercentPortfolio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewNameBond"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1000 / 97.5 %" />
+
+    <TextView
+        android:id="@+id/textViewCounterBonds"
+        style="@style/styleCompositionTextInfo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textViewCounterPercentPortfolio"
+        app:layout_constraintStart_toEndOf="@+id/imageViewImageBond"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNameBond"
+        tools:text="7 шт." />
+
+    <TextView
+        android:id="@+id/textViewCounterPercentPortfolio"
+        style="@style/styleCompositionTextInfo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewCounterBonds"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNameBond"
+        tools:text="32%" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

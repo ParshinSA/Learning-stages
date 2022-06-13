@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPurchaseHistoryInfoList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewPercentMoneyFromPastPeriods"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <ImageView
+        android:id="@+id/imageViewColorPercentMoneyFromPastPeriods"
+        android:layout_width="@dimen/imageViewColorWidth"
+        android:layout_height="@dimen/imageViewColorHeight"
+        android:background="@drawable/bg_money_from_past_periods"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewPercentMoneyFromPastPeriods"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/textViewPercentMoneyFromPastPeriods" />
+
+    <TextView
+        android:id="@+id/textViewPercentMoneyFromPastPeriods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/marginColorAndTextPayouts"
+        android:text="@string/textViewTxtPercentBuyBonds"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTxtPercentPaymentMoney"
+        app:layout_constraintStart_toEndOf="@+id/imageViewColorPercentMoneyFromPastPeriods" />
+
+    <ImageView
+        android:id="@+id/imageViewColorPercentPaymentMoney"
+        android:layout_width="@dimen/imageViewColorWidth"
+        android:layout_height="@dimen/imageViewColorHeight"
+        android:background="@drawable/bg_payment_money"
+        app:layout_constraintBottom_toBottomOf="@id/textViewTxtPercentPaymentMoney"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/textViewTxtPercentPaymentMoney" />
+
+    <TextView
+        android:id="@+id/textViewTxtPercentPaymentMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/marginColorAndTextPayouts"
+        android:text="@string/textViewTxtPercentPaymentMoney"
+        app:layout_constraintBottom_toTopOf="@id/textViewTxtPercentBuyBonds"
+        app:layout_constraintStart_toEndOf="@+id/imageViewColorPercentPaymentMoney" />
+
+    <ImageView
+        android:id="@+id/imageViewColorPercentBuyBonds"
+        android:layout_width="@dimen/imageViewColorWidth"
+        android:layout_height="@dimen/imageViewColorHeight"
+        android:background="@drawable/bg_buy_bonds"
+        app:layout_constraintBottom_toBottomOf="@id/textViewTxtPercentBuyBonds"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/textViewTxtPercentBuyBonds" />
+
+    <TextView
+        android:id="@+id/textViewTxtPercentBuyBonds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/marginColorAndTextPayouts"
+        android:text="@string/textViewTxtPercentBuyBonds"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewColorPercentBuyBonds" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
